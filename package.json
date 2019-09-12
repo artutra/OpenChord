@@ -9,7 +9,11 @@
   },
   "dependencies": {
     "react": "16.8.6",
-    "react-native": "0.60.5"
+    "react-native": "0.60.5",
+    "react-native-gesture-handler": "^1.4.1",
+    "react-native-reanimated": "^1.2.0",
+    "react-navigation": "^4.0.3",
+    "react-navigation-stack": "^1.5.5"
   },
   "devDependencies": {
     "@babel/core": "7.6.0",
