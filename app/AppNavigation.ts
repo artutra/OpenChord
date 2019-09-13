@@ -1,10 +1,15 @@
-import React from "react";
-import { createSwitchNavigator } from "react-navigation";
-import { createStackNavigator } from 'react-navigation-stack';
-import Home from './containers/Home'
+import { createBottomTabNavigator } from 'react-navigation-tabs'
+import ArtistList from "./containers/ArtistList";
+import Config from "./containers/Config";
+import PlaylistList from "./containers/PlaylistList";
+import Search from "./containers/Search";
 
-const AppNavigation = createStackNavigator({
-  Home
+const AppNavigation = createBottomTabNavigator({
+  ArtistList,
+  PlaylistList,
+  Search,
+  Config,
 });
+
 
 export default AppNavigation;
