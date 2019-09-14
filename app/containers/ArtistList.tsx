@@ -13,7 +13,7 @@ const ArtistList = (props: Props) => {
     <FlatList
       data={artists}
       renderItem={({ item}) =>{
-        return <Text onPress={() => props.navigation.navigate('ArtistView')} key={item.id!}>{item.name}</Text>
+        return <Text onPress={() => props.navigation.navigate('ArtistView', { id: item.id })} key={item.id!}>{item.name}</Text>
       }}
     />
   );

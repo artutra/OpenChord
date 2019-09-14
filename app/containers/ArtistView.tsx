@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { Text, FlatList } from "react-native";
 import { NavigationScreenProp } from "react-navigation"
+import realm, { Song, Artist } from "../db";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>
 }
 const ArtistView = (props: Props) => {
-  const [name] = useState('The Beatles')
-  const [musics] = useState([{ title: 'Yesterday', id: '1' }, { title: 'Let It Be', id: '2' }]);
+  let id = props.navigation.getParam('id')
+  let artist = realm.objectForPrimaryKey<Artist>('Artist', id)!
+  const [name] = useState(artist.name)
+  const [musics] = useState(realm.objects<Song>('Song').filtered('artist.id = $0', id));
   return (
     <FlatList
       ListHeaderComponent={() => {
@@ -15,7 +18,7 @@ const ArtistView = (props: Props) => {
       }}
       data={musics}
       renderItem={({item}) =>{
-        return <Text onPress={() => props.navigation.navigate('SongView')} key={item.id}>{item.title}</Text>
+        return <Text onPress={() => props.navigation.navigate('SongView', { id: item.id })} key={item.id!}>{item.title}</Text>
       }}
     />
   );
