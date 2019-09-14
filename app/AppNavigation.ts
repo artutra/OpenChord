@@ -5,7 +5,7 @@ import Config from "./containers/Config";
 import PlaylistList from "./containers/PlaylistList";
 import Search from "./containers/Search";
 import ArtistView from './containers/ArtistView';
-import SongView from './containers/SongVIew';
+import SongView from './containers/SongView';
 import PlaylistView from './containers/PlaylistView';
 
 const AppNavigation = createBottomTabNavigator({
