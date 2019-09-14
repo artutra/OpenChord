@@ -11,19 +11,19 @@ import ChordSheetJS from 'chordsheetjs';
 import realm, { Artist, Song } from '../db'
 
 const Config = () => {
-  function deleteAllSongs () {
+  function deleteAllSongs() {
     realm.write(() => {
       realm.delete(realm.objects('Song'))
       realm.delete(realm.objects('Artist'))
     })
   }
-  function seedSongDb () {
-    for(var i=0; i < allSongs.length; i++) {
+  function seedSongDb() {
+    for (var i = 0; i < allSongs.length; i++) {
       let s = allSongs[i]
       const parser = new ChordSheetJS.ChordProParser();
       const formatter = new ChordSheetJS.ChordProFormatter();
       const parsedSong = parser.parse(s);
-      
+
       let artist = new Artist(parsedSong.getMetaData('artist')!)
       let song = new Song(parsedSong.getMetaData('title')!, formatter.format(parsedSong), artist)
       realm.write(() => {
@@ -34,12 +34,12 @@ const Config = () => {
   return (
     <View style={styles.container}>
       {__DEV__ && (
-        <TouchableOpacity onPress={deleteAllSongs} style={styles.item}>      
+        <TouchableOpacity onPress={deleteAllSongs} style={styles.item}>
           <Text style={styles.itemTitle}> Apagar músicas </Text>
         </TouchableOpacity>
       )}
       {__DEV__ && (
-        <TouchableOpacity onPress={seedSongDb} style={styles.item}>      
+        <TouchableOpacity onPress={seedSongDb} style={styles.item}>
           <Text style={styles.itemTitle}> Popular músicas </Text>
         </TouchableOpacity>
       )}
