@@ -17,7 +17,8 @@
     "react-navigation": "^4.0.3",
     "react-navigation-stack": "^1.5.5",
     "react-navigation-tabs": "^2.5.2",
-    "realm": "^3.0.0"
+    "realm": "^3.0.0",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@babel/core": "7.6.0",
@@ -28,6 +29,7 @@
     "@types/react": "^16.9.2",
     "@types/react-native": "^0.60.13",
     "@types/react-test-renderer": "^16.9.0",
+    "@types/uuid": "^3.4.5",
     "babel-jest": "24.9.0",
     "eslint": "6.3.0",
     "jest": "24.9.0",
