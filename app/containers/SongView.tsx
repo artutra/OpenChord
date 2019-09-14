@@ -18,4 +18,8 @@ const SongView = (props: Props) => {
     <Text>{content}</Text>
   );
 }
+
+SongView.navigationOptions = (props: Props) => ({
+  title: props.navigation.getParam('title')
+});
 export default SongView
