@@ -8,6 +8,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "chordjs": "^1.1.1",
+    "chordsheetjs": "^2.9.1",
     "react": "16.8.6",
     "react-native": "0.60.5",
     "react-native-gesture-handler": "^1.4.1",
