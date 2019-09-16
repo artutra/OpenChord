@@ -14,12 +14,12 @@ const AppNavigation = createBottomTabNavigator({
     ArtistView,
     SongView
   }),
-  PlaylistList: createStackNavigator({
-    PlaylistList,
-    PlaylistView,
-    SongView
-  }),
-  Search,
+  //PlaylistList: createStackNavigator({
+  //  PlaylistList,
+  //  PlaylistView,
+  //  SongView
+  //}),
+  //Search,
   Config,
 });
 
