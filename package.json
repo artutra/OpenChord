@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "react-native start",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "build": "node node_modules/react-native/local-cli/cli.js run-android",
+    "build:bundle": "cd android && ./gradlew bundleRelease",
+    "build:release": "cd android && ./gradlew assembleRelease",
     "test": "jest",
     "lint": "eslint ."
   },
