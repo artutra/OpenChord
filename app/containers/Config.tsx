@@ -6,7 +6,7 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import allSongs from '../db/songs'
+import allSongs from '../db/songs.json'
 import ChordSheetJS from 'chordsheetjs';
 import realm, { Artist, Song } from '../db'
 
@@ -19,7 +19,7 @@ const Config = () => {
   }
   function seedSongDb() {
     for (var i = 0; i < allSongs.length; i++) {
-      let s = allSongs[i]
+      let s: string = allSongs[i]
       const parser = new ChordSheetJS.ChordProParser();
       const formatter = new ChordSheetJS.ChordProFormatter();
       const parsedSong = parser.parse(s);
