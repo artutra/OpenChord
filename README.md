@@ -11,7 +11,7 @@ A few features include:
 | Render song with chordpro format | :heavy_check_mark: |
 | Create/edit song                 | :clock2:           |
 | Transpose song                   | :clock2:           |
-| Build playlists                  | :clock2:           |
+| Manage playlists                 | :clock2:           |
 | Search saved songs               | :clock2:           |
 | Slide with touch                 | :clock2:           |
 | Slide with volume button         | :clock2:           |
@@ -25,7 +25,9 @@ A few features include:
 | Playlist presentation mode       | :clock2:           |
 
 :heavy_check_mark: = supported
+
 :clock2: = will be supported in a future version
+
 :heavy_multiplication_x: = currently no plans to support it in the near future
 
 ## Try it yourself
@@ -69,11 +71,3 @@ If you find any problems, feature requests, please open an issue or submit a fix
 
 ## License
 [GNU General Public License v3.0](LICENSE)
-
-## Supported ChordPro directives
-
-:heavy_check_mark: = supported
-
-:clock2: = will be supported in a future version
-
-:heavy_multiplication_x: = currently no plans to support it in the near future
