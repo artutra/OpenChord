@@ -3,12 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "build": "node node_modules/react-native/local-cli/cli.js run-android",
-    "build:android": "node node_modules/react-native/local-cli/cli.js run-android",
-    "build:ios": "node node_modules/react-native/local-cli/cli.js run-ios",
-    "build:bundle": "cd android && ./gradlew bundleRelease",
-    "build:release": "cd android && ./gradlew assembleRelease",
+    "start": "node_modules/.bin/ts-node merge-chordpro-files.ts debug && node node_modules/react-native/local-cli/cli.js start",
+    "build": "node_modules/.bin/ts-node merge-chordpro-files.ts debug && node node_modules/react-native/local-cli/cli.js run-android",
+    "build:android": "node_modules/.bin/ts-node merge-chordpro-files.ts debug && node node_modules/react-native/local-cli/cli.js run-android",
+    "build:ios": "node_modules/.bin/ts-node merge-chordpro-files.ts debug && node node_modules/react-native/local-cli/cli.js run-ios",
+    "build:bundle": "node_modules/.bin/ts-node merge-chordpro-files.ts && cd android && ./gradlew bundleRelease",
+    "build:release": "node_modules/.bin/ts-node merge-chordpro-files.ts && cd android && ./gradlew assembleRelease",
     "test": "jest",
     "lint": "eslint ."
   },
@@ -43,6 +43,7 @@
     "react-native-typescript-transformer": "^1.2.13",
     "react-test-renderer": "16.8.6",
     "ts-jest": "^24.0.2",
+    "ts-node": "^8.4.1",
     "typescript": "^3.6.3"
   },
   "jest": {

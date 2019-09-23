@@ -61,3 +61,10 @@ buck-out/
 # Jest
 #
 .jest/
+
+# ChordPro files
+*.cho
+!*.test.cho
+
+# Generated json file with all songs
+songs.json
