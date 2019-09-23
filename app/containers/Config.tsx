@@ -6,7 +6,7 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import allSongs from '../db/songs.json'
+import allSongs from '../assets/chordpro/songs.json'
 import ChordSheetJS from 'chordsheetjs';
 import realm, { Artist, Song } from '../db'
 
