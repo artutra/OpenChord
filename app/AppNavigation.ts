@@ -7,11 +7,16 @@ import Search from "./containers/Search";
 import ArtistView from './containers/ArtistView';
 import SongView from './containers/SongView';
 import PlaylistView from './containers/PlaylistView';
+import SongList from './containers/SongList';
 
 const AppNavigation = createBottomTabNavigator({
   ArtistList: createStackNavigator({
     ArtistList,
     ArtistView,
+    SongView
+  }),
+  SongList: createStackNavigator({
+    SongList,
     SongView
   }),
   //PlaylistList: createStackNavigator({
