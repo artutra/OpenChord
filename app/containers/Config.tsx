@@ -6,8 +6,6 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
-import allSongs from '../assets/chordpro/songs.json'
-import ChordSheetJS from 'chordsheetjs';
 import realm, { Artist, Song } from '../db'
 
 const Config = () => {
@@ -18,18 +16,7 @@ const Config = () => {
     })
   }
   function seedSongDb() {
-    for (var i = 0; i < allSongs.length; i++) {
-      let s: string = allSongs[i]
-      const parser = new ChordSheetJS.ChordProParser();
-      const formatter = new ChordSheetJS.ChordProFormatter();
-      const parsedSong = parser.parse(s);
-
-      let artist = new Artist(parsedSong.getMetaData('artist')!)
-      let song = new Song(parsedSong.getMetaData('title')!, formatter.format(parsedSong), artist)
-      realm.write(() => {
-        Song.create(song)
-      })
-    }
+    Song.populateDb()
   }
   return (
     <View style={styles.container}>
