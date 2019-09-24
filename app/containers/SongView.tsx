@@ -6,7 +6,7 @@ import ChordSheetJS from 'chordsheetjs'
 import WebView from 'react-native-webview'
 
 interface Props {
-  navigation: NavigationScreenProp<any, any>
+  navigation: NavigationScreenProp<any, { id: string, title: string }>
 }
 const SongView = (props: Props) => {
   let id = props.navigation.getParam('id')

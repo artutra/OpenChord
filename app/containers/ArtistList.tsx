@@ -47,8 +47,4 @@ const ArtistList = (props: Props) => {
   );
 }
 
-ArtistList.navigationOptions = (props: Props) => ({
-  title: 'Artists'
-});
-
 export default ArtistList

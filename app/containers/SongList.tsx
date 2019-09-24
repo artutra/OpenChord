@@ -22,8 +22,4 @@ const SongList = (props: Props) => {
   );
 }
 
-SongList.navigationOptions = (props: Props) => ({
-  title: 'Songs'
-});
-
 export default SongList

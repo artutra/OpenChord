@@ -5,7 +5,7 @@ import realm, { Song, Artist } from "../db";
 import ListItem from "../components/ListItem";
 
 interface Props {
-  navigation: NavigationScreenProp<any, any>
+  navigation: NavigationScreenProp<any, { id: string, title: string }>
 }
 const ArtistView = (props: Props) => {
   let id = props.navigation.getParam('id')
