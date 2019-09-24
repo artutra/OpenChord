@@ -15,10 +15,9 @@ const ArtistList = (props: Props) => {
   useEffect(() => {
     if (Song.shouldUpdateDb()) {
       Song.populateDb()
-
-      setIsLoading(false)
       setArtists(Artist.getAll())
     }
+    setIsLoading(false)
   }, [isLoading])
 
   function onSelectArtist(id: string, name: string) {
