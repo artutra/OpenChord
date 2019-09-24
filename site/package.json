@@ -1,0 +1,15 @@
+{
+  "name": "open-chord-site",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "homepage": "https://artutra.github.io/OpenChord",
+  "scripts": {
+    "deploy": "gh-pages -d dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gh-pages": "^2.1.1"
+  }
+}
