@@ -40,19 +40,19 @@ RUN cd /opt \
 # sdk
 RUN yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses
 RUN $ANDROID_HOME/tools/bin/sdkmanager \
-        tools \
-        platform-tools \
-        "build-tools;23.0.1" \
-        "build-tools;23.0.3" \
-        "build-tools;25.0.1" \
-        "build-tools;25.0.2" \
-        "build-tools;28.0.3" \
-        "platforms;android-23" \
-        "platforms;android-25" \
-        "platforms;android-28" \
-        "extras;android;m2repository" \
-        "extras;google;m2repository" \
-        "extras;google;google_play_services" \
+    tools \
+    platform-tools \
+    "build-tools;23.0.1" \
+    "build-tools;23.0.3" \
+    "build-tools;25.0.1" \
+    "build-tools;25.0.2" \
+    "build-tools;28.0.3" \
+    "platforms;android-23" \
+    "platforms;android-25" \
+    "platforms;android-28" \
+    "extras;android;m2repository" \
+    "extras;google;m2repository" \
+    "extras;google;google_play_services" \
     && $ANDROID_HOME/tools/bin/sdkmanager --update
 
 WORKDIR /usr/src/app
@@ -61,6 +61,8 @@ RUN npm install -g react-native-cli@2.0.1
 
 COPY package*.json ./
 COPY *.js ./
+COPY *.ts ./
+COPY *.tsx ./
 COPY *.json ./
 COPY .buckconfig ./
 COPY .flowconfig ./

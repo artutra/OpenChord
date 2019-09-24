@@ -68,3 +68,5 @@ buck-out/
 
 # Generated json file with all songs
 songs.json
+
+docker-compose.override.yml
