@@ -19,8 +19,9 @@ function readFilesSync(dir: string) {
   return files;
 }
 var assetsPath = './app/assets/chordpro'
-const files = readFilesSync(assetsPath);
-const jsonContent = JSON.stringify(files)
+const data = readFilesSync(assetsPath);
+const result = { updated_at: new Date(), data }
+const jsonContent = JSON.stringify(result)
 fs.writeFile(assetsPath + "/songs.json", jsonContent, 'utf8', function (err) {
   if (err) {
     console.log("An error occured while writing JSON Object to File.");
