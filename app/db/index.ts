@@ -29,6 +29,9 @@ export class Song {
       updated_at: 'date'
     }
   }
+  static getById(id: string) {
+    return realm.objectForPrimaryKey<Song>('Song', id)
+  }
   static shouldUpdateDb() {
     let s = this.getAll().find(() => true)
     let newSongsDate = new Date(allSongs.updated_at)
