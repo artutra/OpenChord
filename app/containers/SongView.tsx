@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
-import { Text, View } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { Song } from '../db'
 import { NavigationScreenComponent } from "react-navigation";
 import SideMenu from 'react-native-side-menu'
@@ -42,8 +42,8 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   return (
     <SideMenu
       menu={
-        <View style={{ backgroundColor: '#eee', flex: 1 }}>
-          <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: '#ccc' }}>
+        <View style={styles.sideMenuContainer}>
+          <View style={styles.toolbarContainer}>
             <TouchableIcon onPress={transposeUp} name="plus" />
             <Text>{tone}</Text>
             <TouchableIcon onPress={transposeDown} name="minus" />
@@ -71,5 +71,15 @@ SongView.navigationOptions = ({ navigation }) => {
     headerRight: <TouchableIcon onPress={navigation.getParam('openSideMenu')} name="settings" />,
   }
 }
-
+const styles = StyleSheet.create({
+  sideMenuContainer: {
+    backgroundColor: '#eee',
+    flex: 1
+  },
+  toolbarContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ccc'
+  }
+})
 export default SongView
