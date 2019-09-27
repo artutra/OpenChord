@@ -40,10 +40,11 @@ const AppNavigation = createBottomTabNavigator({
       ArtistView,
       SongView
     }),
-    navigationOptions: {
+    navigationOptions: ({ navigation }) => ({
       title: 'Artists',
+      tabBarVisible: navigation.state.index <= 0,
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="artist" />
-    }
+    })
   },
   SongList: {
     screen: createStackNavigator({
@@ -53,10 +54,11 @@ const AppNavigation = createBottomTabNavigator({
       },
       SongView
     }),
-    navigationOptions: {
+    navigationOptions: ({ navigation }) => ({
       title: 'Songs',
+      tabBarVisible: navigation.state.index <= 0,
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="playlist-music" />
-    }
+    })
   },
   //PlaylistList: createStackNavigator({
   //  PlaylistList,
