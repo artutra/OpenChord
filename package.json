@@ -8,8 +8,8 @@
     "build": "node node_modules/react-native/local-cli/cli.js run-android",
     "build:android": "node node_modules/react-native/local-cli/cli.js run-android",
     "build:ios": "node node_modules/react-native/local-cli/cli.js run-ios",
-    "build:bundle": "node_modules/.bin/ts-node merge-chordpro-files.ts && cd android && ./gradlew bundleRelease",
-    "build:release": "node_modules/.bin/ts-node merge-chordpro-files.ts && cd android && ./gradlew assembleRelease",
+    "build:bundle": "npm run build:chordpro prod && cd android && ./gradlew bundleRelease",
+    "build:release": "npm run build:chordpro prod && cd android && ./gradlew assembleRelease",
     "test": "jest",
     "lint": "eslint ."
   },

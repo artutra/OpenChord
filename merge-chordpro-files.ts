@@ -3,12 +3,18 @@ import path from 'path'
 
 function readFilesSync(dir: string) {
   const files: string[] = [];
-  const fileType = process.argv[2] == 'debug' ? 'debug' : 'prod'
   fs.readdirSync(dir).forEach(filename => {
     const name = path.parse(filename).name;
     const ext = path.parse(filename).ext;
-    let testExtension = fileType == 'debug' ? name.endsWith('.test') : !name.endsWith('.test')
-    if (ext != '.json' && testExtension) {
+    let isProduction = process.argv[2] == 'prod'
+    let isDebug = process.argv[2] == 'debug'
+    let isExtensionValid = true
+    if (isProduction) {
+      isExtensionValid = !name.endsWith('.test')
+    } else if (isDebug) {
+      isExtensionValid = name.endsWith('.test')
+    }
+    if (ext != '.json' && isExtensionValid) {
       const filepath = path.resolve(dir, filename);
       const content = fs.readFileSync(filepath, 'utf-8')
       const stat = fs.statSync(filepath);
