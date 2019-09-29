@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { View, } from "react-native";
+import React from "react"
+import { FunctionComponent } from "react";
+import { View } from "react-native";
 import Svg, {
   Circle,
   Text,
@@ -8,35 +9,38 @@ import Svg, {
 } from 'react-native-svg';
 
 interface Props {
-  height: number
-  width: number
-  chord: string
+  height?: number
+  width?: number
+  chord: Array<string>
   showTuning?: boolean
   tuning?: Array<string>
 }
-const ChordChart = (props: Props) => {
-  let chord = props.chord
+const ChordChart: FunctionComponent<Props> = (props) => {
   let {
     width = 100,
     height = 120,
     showTuning = false,
-    tuning = ['E', 'A', 'D', 'G', 'B', 'E']
+    tuning = ['E', 'A', 'D', 'G', 'B', 'E'],
+    chord
   } = props
+  if (chord == null || chord == undefined || chord.length <= 0) {
+    chord = ['x', 'x', 'x', 'x', 'x', 'x']
+  }
   let position = 0
   let lower = 100
-  Array.from(chord).forEach(c => {
+  chord.forEach(c => {
     if (c != 'x') {
       if (parseInt(c) < lower)
         lower = parseInt(c)
     }
   })
-  if (lower >= 3) {
+  if (lower == 100) {
+    position = 0
+  } else if (lower >= 3) {
     position = lower
-    let s = ''
     for (var i = 0; i < chord.length; i++) {
-      s = s + (chord[i] == 'x' ? 'x' : (parseInt(chord[i]) - (lower - 1)).toString())
+      chord[i] = chord[i] == 'x' ? 'x' : (parseInt(chord[i]) - (lower - 1)).toString()
     }
-    chord = s
   }
   let barres: any[] = [
     //{ from: 6, to: 1, fret: 1 },
@@ -82,6 +86,7 @@ const ChordChart = (props: Props) => {
 
   function drawText(x: number, y: number, msg: string) {
     return <Text
+      key={"text-" + x + y + msg}
       fill={defaultColor}
       stroke={defaultColor}
       fontSize={fontSize}
@@ -102,6 +107,7 @@ const ChordChart = (props: Props) => {
     let stringIsLoose = fretNum == 0
     if (!mute && !stringIsLoose) {
       return <Circle
+        key={"finger-" + stringNum}
         cx={x}
         cy={y1}
         r={circleRadius}
@@ -139,7 +145,7 @@ const ChordChart = (props: Props) => {
         { alignItems: 'center', justifyContent: 'center' },
       ]}
     >
-      <Svg height={props.height} width={props.width} style={{ backgroundColor: 'yellow' }}>
+      <Svg height={props.height} width={props.width}>
         {// Draw guitar bridge
           position <= 1 ?
             <Rect
@@ -159,6 +165,7 @@ const ChordChart = (props: Props) => {
           Array.from(Array(numStrings)).map((s, i) => {
             return (
               <Line
+                key={"string-" + i}
                 strokeWidth={stringWidth}
                 stroke={defaultColor}
                 x1={chartXPos + (stringSpacing * i)}
@@ -172,6 +179,7 @@ const ChordChart = (props: Props) => {
           Array.from(Array(numFrets)).map((f, i) => {
             return (
               <Line
+                key={"fret-" + i}
                 strokeWidth={fretWidth}
                 stroke={defaultColor}
                 x1={chartXPos}
@@ -182,13 +190,14 @@ const ChordChart = (props: Props) => {
             )
           })}
         {// Draw mute and loose strings icons
-          Array.from(chord).map((c, i) => {
+          chord.map((c, i) => {
             if (c == 'x') {
               return drawText(
                 chartXPos + stringSpacing * i,
                 chartYPos - fontSize, 'X')
             } else if (c == '0') {
               return <Circle
+                key={"circle-" + i}
                 cx={chartXPos + stringSpacing * i}
                 cy={chartYPos - fontSize - circleRadius}
                 r={circleRadius}
@@ -200,7 +209,7 @@ const ChordChart = (props: Props) => {
           })
         }
         {// Draw finger circles
-          Array.from(chord).map((c, i) => {
+          chord.map((c, i) => {
             return lightUp(i, c)
           })
         }
