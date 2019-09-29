@@ -1,3 +1,4 @@
+![Open Chord Icon](android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png?raw=true "OpenChord")
 # OpenChord
 Cross-platform chordpro reader app for Android and iOS written with React Native.
 
@@ -10,7 +11,7 @@ A few features include:
 |:-------------------------------- |:------------------:|
 | Render song with chordpro format | :heavy_check_mark: |
 | Create/edit song                 | :clock2:           |
-| Transpose song                   | :clock2:           |
+| Transpose song                   | :heavy_check_mark: |
 | Manage playlists                 | :clock2:           |
 | Search saved songs               | :clock2:           |
 | Slide with touch                 | :clock2:           |
@@ -42,7 +43,16 @@ git clone https://github.com/artutra/OpenChord.git
 cd OpenChord && npm install
 ```
 
-### 2. Run it on both iOS and Android
+### 2. Generate `songs.json` file
+```bash
+# Run
+npm run build:chordpro
+```
+It will merge all `.cho`, `.crd`, `.chopro`, `.chord` and `.pro` files inside `./assets/chordpro` into a single `songs.json` file that will be imported in the app.
+
+Obs: If you pass the flag `prod` (ex: `npm run build:chordpro prod`) it will only merge files that *not* contains `.test` on the name
+
+### 3. Run it on both iOS and Android
 ```bash
 # Run on iOS
 npm run build:ios
@@ -63,6 +73,7 @@ Obs: The docker container can't attatch to the device via USB. You have to build
 * [React Native v0.60](https://facebook.github.io/react-native/) - The framework for building native apps using React
 * [Realm v3.0](https://github.com/realm/realm-js) - Realm is a mobile database that runs directly inside phones, tablets or wearables
 * [React Navigation v4.0](https://reactnavigation.org) - React Native module support navigation
+* [React Native Vector Icons v6.6](https://github.com/oblador/react-native-vector-icons) - Customizable Icons for React Native with support for NavBar/TabBar/ToolbarAndroid, image source and full styling
 * [ChordSheetJS](https://github.com/martijnversluis/ChordSheetJS) - A JavaScript library for parsing and formatting chord sheets
 * [ChordPro](https://www.chordpro.org/chordpro/index.html) - A text file format to write lead sheets, songs with lyrics and chords
 
