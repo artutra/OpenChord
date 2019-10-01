@@ -1,49 +1,17 @@
 import React, { FunctionComponent } from 'react'
 import WebView from 'react-native-webview'
-import ChordSheetJS, { Song } from 'chordsheetjs'
-import Chord from 'chordjs'
 
 interface Props {
   chordProContent: string
-  tone: number
   onPressChord: (chord: string) => void
 }
-const processChord = (item: (ChordSheetJS.ChordLyricsPair | ChordSheetJS.Tag), processor: (parsedChord: Chord) => Chord) => {
-  if (item instanceof ChordSheetJS.ChordLyricsPair && item.chords) {
-    const parsedChord = Chord.parse(item.chords);
-
-    if (parsedChord) {
-      const processedChordLyricsPair = item.clone();
-      processedChordLyricsPair.chords = processor(parsedChord).toString();
-      return processedChordLyricsPair;
-    }
-  }
-  return item;
-};
-
-const transformSong = (song: Song, processor: (parsedChord: Chord) => Chord) => {
-  song.lines = song.lines.map((line) => {
-    line.items = line.items.map(item => processChord(item, processor));
-    return line;
-  });
-  return song;
-};
-
-const transformChordSheet = (chordSheet: string, delta: number) => {
-  const song = new ChordSheetJS.ChordProParser().parse(chordSheet);
-  const processedSong = transformSong(song, chord => chord.transpose(delta));
-  return new ChordSheetJS.HtmlDivFormatter().format(processedSong);
-};
 const SongRender: FunctionComponent<Props> = (props) => {
-
-  const contentHtml = transformChordSheet(props.chordProContent, props.tone)
-
   return (
     <WebView
       startInLoadingState={true}
       overScrollMode={'never'}
       scrollEnabled={false}
-      source={{ html: renderHtml(contentHtml, styles) }}
+      source={{ html: renderHtml(props.chordProContent, styles) }}
       injectedJavaScript={onClickChordPostMessage}
       onMessage={(event) => { props.onPressChord(event.nativeEvent.data) }}
     />
