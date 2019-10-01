@@ -68,7 +68,8 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     left: 0,
-    height: 180
+    height: 180,
+    zIndex: 999
   },
   closeButton: {
     alignItems: 'center',
