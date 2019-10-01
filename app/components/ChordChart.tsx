@@ -26,7 +26,7 @@ const ChordChart: FunctionComponent<Props> = (props) => {
   if (chord == null || chord == undefined || chord.length <= 0) {
     chord = ['x', 'x', 'x', 'x', 'x', 'x']
   }
-  let position = 0
+  let fretPosition = 0
   let lower = 100
   chord.forEach(c => {
     if (c != 'x') {
@@ -35,15 +35,16 @@ const ChordChart: FunctionComponent<Props> = (props) => {
     }
   })
   if (lower == 100) {
-    position = 0
+    fretPosition = 0
   } else if (lower >= 3) {
-    position = lower
+    fretPosition = lower
     for (var i = 0; i < chord.length; i++) {
       chord[i] = chord[i] == 'x' ? 'x' : (parseInt(chord[i]) - (lower - 1)).toString()
     }
   }
   let barres: any[] = [
-    //{ from: 6, to: 1, fret: 1 },
+    // { from: 6, to: 1, fret: 1 },
+    // { from: 4, to: 5, fret: 4 },
   ]
 
   let tuningContainerHeight = 20
@@ -57,9 +58,6 @@ const ChordChart: FunctionComponent<Props> = (props) => {
 
 
   let circleRadius = chartWidth / 15
-
-  let barreRadius = chartWidth / 25
-  let barShiftX = chartWidth / 28
   let bridgeStrokeWidth = Math.ceil(chartHeight / 36)
   let fontSize = Math.ceil(chartWidth / 8)
   let numStrings = chord.length
@@ -117,24 +115,19 @@ const ChordChart: FunctionComponent<Props> = (props) => {
       />
     }
   }
-  function lightBar(stringFrom: number, stringTo: number, theFretNum: number) {
-    let fretNum = theFretNum;
+  function lightBar(stringFrom: number, stringTo: number, fretNum: number) {
 
     const stringFromNum = numStrings - stringFrom;
     const stringToNum = numStrings - stringTo;
 
-    const x1 = chartXPos + stringSpacing * stringFromNum - barShiftX;
-    const xTo = chartXPos + stringSpacing * stringToNum + barShiftX;
-
     const y1 = chartYPos + fretSpacing * (fretNum - 1) + fretSpacing / 2;
-
     return <Line
       strokeWidth={circleRadius * 2}
       strokeLinecap={"round"}
       stroke={defaultColor}
-      x1={x1}
+      x1={chartXPos + stringSpacing * stringFromNum}
       y1={y1}
-      x2={xTo}
+      x2={chartXPos + stringSpacing * stringToNum}
       y2={y1}
     />
   }
@@ -147,7 +140,7 @@ const ChordChart: FunctionComponent<Props> = (props) => {
     >
       <Svg height={props.height} width={props.width}>
         {// Draw guitar bridge
-          position <= 1 ?
+          fretPosition <= 1 ?
             <Rect
               fill={defaultColor}
               width={chartWidth - stringSpacing}
@@ -159,7 +152,7 @@ const ChordChart: FunctionComponent<Props> = (props) => {
             drawText(
               chartXPos - fretLabelTextWidth,
               chartYPos + fontSize - fretWidth + (fretSpacing - fontSize) / 2,
-              `${position}º`)
+              `${fretPosition}º`)
         }
         {// Draw strings
           Array.from(Array(numStrings)).map((s, i) => {
