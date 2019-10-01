@@ -6,9 +6,9 @@ import SideMenu from 'react-native-side-menu'
 import SongRender from "../components/SongRender";
 import TouchableIcon from "../components/TouchableIcon";
 import { NavigationStackOptions, NavigationStackProp, } from "react-navigation-stack/lib/typescript/types";
-import ChordSheetJS, { Song as ChordSheetSong } from 'chordsheetjs'
 import Chord from 'chordjs'
 import ChordTab from "../components/ChordTab";
+import SongTransformer from "../components/SongTransformer";
 
 type Params = { id: string, title: string, openSideMenu: () => void }
 
@@ -23,15 +23,14 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   const [content, setContent] = useState<string>("")
   const [isSideMenuOpen, setIsSideMenuOpen] = useState<boolean>(false)
   const [tone, setTone] = useState<number>(0)
-  const [chords, setChords] = useState<Array<Chord>>([])
   const [selectedChord, selectChord] = useState<Chord | null>(null)
 
-  function transposeUp() { setTone(tone + 1 >= 12 ? 0 : tone + 1) }
-  function transposeDown() { setTone(tone - 1 <= -12 ? 0 : tone - 1) }
+  function transposeUp() { setTone(tone + 1 >= 12 ? 0 : tone + 1); selectChord(null) }
+  function transposeDown() { setTone(tone - 1 <= -12 ? 0 : tone - 1); selectChord(null) }
   function openSideMenu() { setIsSideMenuOpen(!isSideMenuOpen) }
 
-  function onClickChord(chord: string) {
-    selectChord(chords.find(c => c.toString() == chord)!)
+  function onClickChord(allChords: Array<Chord>, chordString: string) {
+    selectChord(allChords.find(c => c.toString() == chordString)!)
   }
 
   useEffect(() => {
@@ -39,22 +38,6 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
     let song = Song.getById(id)!
     setContent(song.content)
   }, [])
-
-  useEffect(() => {
-    const chordSheetSong = new ChordSheetJS.ChordProParser().parse(content);
-    let allChords = Array<Chord>()
-    chordSheetSong.lines.forEach(line => {
-      line.items.forEach(item => {
-        if (item instanceof ChordSheetJS.ChordLyricsPair && item.chords) {
-          const parsedChord = Chord.parse(item.chords);
-          if (allChords.find(c => c.toString() == parsedChord.toString()) == null) {
-            allChords.push(parsedChord)
-          }
-        }
-      });
-    })
-    setChords(allChords)
-  }, [content, tone])
 
   useEffect(() => {
     props.navigation.setParams({ 'openSideMenu': openSideMenu })
@@ -77,16 +60,24 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
       menuPosition="right"
       disableGestures={true}
     >
-      <SongRender
-        onPressChord={onClickChord}
-        chordProContent={content}
-        tone={tone}
-      />
-      <ChordTab
-        onPressClose={() => selectChord(null)}
-        selectedChord={selectedChord}
-        allChords={chords}
-      />
+      <SongTransformer
+        chordProSong={content}
+        transposeDelta={tone}
+      >
+        {songProps => (
+          <View style={{ flex: 1 }}>
+            <SongRender
+              onPressChord={(chordString) => onClickChord(songProps.chords, chordString)}
+              chordProContent={songProps.htmlSong}
+            />
+            <ChordTab
+              onPressClose={() => selectChord(null)}
+              selectedChord={selectedChord}
+              allChords={songProps.chords}
+            />
+          </View>
+        )}
+      </SongTransformer>
     </SideMenu>
   );
 }
