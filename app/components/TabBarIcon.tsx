@@ -9,8 +9,12 @@ interface Props {
 }
 
 const TabBarIcon = (props: Props) => {
+  let nameUnfocused = props.name
+  if (MaterialCommunityIcons.hasIcon(nameUnfocused + '-outline')) {
+    nameUnfocused = props.name + '-outline'
+  }
   return <MaterialCommunityIcons
-    name={`${props.name}${props.focused ? '' : '-outline'}`}
+    name={props.focused ? props.name : nameUnfocused}
     size={25}
     color={props.tintColor} />;
 }
