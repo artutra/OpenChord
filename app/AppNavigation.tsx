@@ -12,6 +12,9 @@ import PlaylistView from './containers/PlaylistView';
 import SongList from './containers/SongList';
 import { BottomTabBarOptions } from 'react-navigation-tabs/lib/typescript/src/types';
 import TabBarIcon from './components/TabBarIcon';
+import OnlineSearch from './containers/OnlineSearch';
+import SongPreview from './containers/SongPreview';
+import OnlineArtistView from './containers/OnlineArtistView';
 
 interface TabBarIconProps {
   focused: boolean
@@ -66,6 +69,27 @@ const AppNavigation = createBottomTabNavigator({
   //  SongView
   //}),
   //Search,
+  OnlineSearch: {
+    screen: createStackNavigator({
+      OnlineSearch: {
+        screen: OnlineSearch,
+        navigationOptions: {
+          header: null
+        }
+      },
+      SongPreview: {
+        screen: SongPreview,
+        navigationOptions: {
+          title: 'Preview'
+        }
+      },
+      OnlineArtistView: OnlineArtistView,
+    }),
+    navigationOptions: {
+      title: 'Online Search',
+      tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="magnify" />
+    }
+  },
   Config: {
     screen: Config,
     navigationOptions: {
