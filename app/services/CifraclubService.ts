@@ -1,6 +1,7 @@
 import axios from 'axios'
 import cheerio from 'react-native-cheerio'
 import { BaseService, Doc, SongDoc } from './BaseService'
+import CifraclubParser from '../utils/CifraclubParser'
 
 export default class CifraclubService extends BaseService {
   constructor() {
@@ -50,16 +51,18 @@ export default class CifraclubService extends BaseService {
 
     return result.data
   }
+  decode(str: string) {
+    return str.replace(/(&\S+;)/g, function (match, dec) {
+      return cheerio.load(`<div>${dec}</div>`)('div').text()
+    });
+  }
   parseToChordPro(html: string) {
-    // const $ = cheerio.load(html)
-    // let cifraHtml = $('pre').html()
-    // let convertNotes = require("./cifraclubConvertNotes")
-    // let convertTabs = require("./cifraclubConvertTabs")
-
-    // let res = convertNotes.convert(cifraHtml)
-    // let res2 = convertTabs.convert(res)
-    // let t = $('<textarea/>').html(res2).text()
-    return ''
+    const $ = cheerio.load(html)
+    let chordSheetHtml = $('pre').html()!
+    chordSheetHtml = this.decode(chordSheetHtml)
+    chordSheetHtml = CifraclubParser.replaceHtmlChords(chordSheetHtml)
+    chordSheetHtml = CifraclubParser.replaceHtmlTabs(chordSheetHtml)
+    return chordSheetHtml
   }
   parseToPlainText(html: string) {
     const $ = cheerio.load(html)

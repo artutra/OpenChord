@@ -22,8 +22,8 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
     const fetchData = async () => {
       let service = getService(serviceName)!
       let html = await service.getSongHtml(path)
-      let plainText = service.parseToPlainText(html)
-      setChordCheet(plainText)
+      let chordPro = service.parseToChordPro(html)
+      setChordCheet(chordPro)
     };
     fetchData();
   }, []);
@@ -34,7 +34,7 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
 
         <SongTransformer
           transposeDelta={0}
-          chordSheetSong={chordSheet}
+          chordProSong={chordSheet}
         >
           {({ chords, htmlSong }) => (
             <SongRender
