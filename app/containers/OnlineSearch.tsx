@@ -8,6 +8,7 @@ import { services, getService } from "../services";
 import { Doc } from "../services/BaseService";
 import { Header } from "react-navigation-stack";
 import SearchBar from "../components/SearchBar";
+import SafeAreaView from "react-native-safe-area-view";
 
 interface OnlineSearchProps {
   navigation: NavigationStackProp<{}, {}>
@@ -32,7 +33,7 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
     }
   }
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView>
       <View style={styles.customHeader}>
         <Picker
           selectedValue={serviceName}
@@ -68,7 +69,7 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
           }
         }}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 export default OnlineSearch
