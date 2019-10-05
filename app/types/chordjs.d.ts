@@ -1,6 +1,6 @@
 
 declare class Chord {
-  static parse: (chord: string) => Chord
+  static parse: (chord: string) => Chord | null
   toString: () => string
   clone: () => Chord
   normalize: () => Chord

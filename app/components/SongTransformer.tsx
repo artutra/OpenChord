@@ -7,7 +7,8 @@ interface SongProps {
   htmlSong: string
 }
 interface Props {
-  chordProSong: string
+  chordProSong?: string
+  chordSheetSong?: string
   transposeDelta: number
   children(props: SongProps): JSX.Element;
 }
@@ -38,19 +39,27 @@ const SongTransformer: FunctionComponent<Props> = (props) => {
   let [htmlSong, setHtmlSong] = useState("")
 
   useEffect(() => {
-    const song = new ChordSheetJS.ChordProParser().parse(props.chordProSong);
-    const transposedSong = transformSong(song, chord => chord.transpose(props.transposeDelta));
+    let song
+    if (props.chordProSong != null) {
+      song = new ChordSheetJS.ChordProParser().parse(props.chordProSong);
+    } else {
+      song = new ChordSheetJS.ChordSheetParser({ preserveWhitespace: true }).parse(props.chordSheetSong!);
+    }
+    let transposedSong = song
+    if (props.transposeDelta != 0) {
+      transposedSong = transformSong(song, chord => chord.transpose(props.transposeDelta));
+    }
     let allChords = Array<Chord>()
     transposedSong.lines.forEach(line => {
       line.items.forEach(item => {
         if (item instanceof ChordSheetJS.ChordLyricsPair && item.chords) {
           const parsedChord = Chord.parse(item.chords);
-          if (allChords.find(c => c.toString() == parsedChord.toString()) == null) {
+          if (parsedChord != null && allChords.find(c => c.toString() == parsedChord.toString()) == null) {
             allChords.push(parsedChord)
           }
         }
       });
-    }, [props.chordProSong, props.transposeDelta])
+    })
 
     const htmlSong = new ChordSheetJS.HtmlDivFormatter().format(transposedSong);
     setChords(allChords)

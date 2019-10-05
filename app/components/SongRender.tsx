@@ -3,17 +3,16 @@ import WebView from 'react-native-webview'
 
 interface Props {
   chordProContent: string
-  onPressChord: (chord: string) => void
+  onPressChord?: (chord: string) => void
 }
 const SongRender: FunctionComponent<Props> = (props) => {
   return (
     <WebView
       startInLoadingState={true}
       overScrollMode={'never'}
-      scrollEnabled={false}
       source={{ html: renderHtml(props.chordProContent, styles) }}
       injectedJavaScript={onClickChordPostMessage}
-      onMessage={(event) => { props.onPressChord(event.nativeEvent.data) }}
+      onMessage={(event) => { if (props.onPressChord) props.onPressChord(event.nativeEvent.data) }}
     />
   )
 }

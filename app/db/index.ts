@@ -10,12 +10,12 @@ export class Song {
   artist: Artist
   updated_at: Date
 
-  constructor(title: string, content: string, artist: Artist, updated_at: Date, id?: string, ) {
+  constructor(title: string, content: string, artist: Artist, updated_at?: Date, id?: string, ) {
     this.id = id
     this.title = title
     this.content = content
     this.artist = artist
-    this.updated_at = updated_at
+    this.updated_at = updated_at ? updated_at : new Date()
   }
 
   static schema: Realm.ObjectSchema = {
@@ -88,6 +88,7 @@ export class Song {
       songDb.content = song.content
       songDb.updated_at = song.updated_at
     }
+    return songDb
   }
 }
 export class Artist {
@@ -95,10 +96,10 @@ export class Artist {
   name: string
   updated_at: Date
 
-  constructor(name: string, updated_at: Date, id?: string) {
+  constructor(name: string, updated_at?: Date, id?: string) {
     this.name = name
     this.id = id
-    this.updated_at = updated_at
+    this.updated_at = updated_at ? updated_at : new Date()
   }
   static schema: Realm.ObjectSchema = {
     name: 'Artist',
