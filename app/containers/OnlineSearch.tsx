@@ -63,7 +63,7 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
             return (
               <ListItem
                 key={item.name}
-                onPress={() => { props.navigation.navigate('OnlineArtistView', { path: item.path, serviceName }) }}
+                onPress={() => { props.navigation.navigate('OnlineArtistView', { path: item.path, serviceName, title: item.name }) }}
                 title={item.name}
               />)
           } else {

@@ -8,7 +8,7 @@ import { getService } from "../services";
 import { SongDoc } from "../services/BaseService";
 
 interface Props {
-  navigation: NavigationStackProp<{}, { path: string, serviceName: string }>
+  navigation: NavigationStackProp<{}, { path: string, serviceName: string, title: string }>
 }
 const OnlineArtistView = (props: Props) => {
   const [songs, setSongs] = useState<SongDoc[]>([]);
@@ -26,7 +26,7 @@ const OnlineArtistView = (props: Props) => {
   }, []);
 
   function onSelectSong(path: string, serviceName: string) {
-    props.navigation.navigate('SongView', { path, serviceName })
+    props.navigation.navigate('SongPreview', { path, serviceName })
   }
 
   return (
@@ -41,5 +41,8 @@ const OnlineArtistView = (props: Props) => {
     </View>
   );
 }
+OnlineArtistView.navigationOptions = (props: Props) => ({
+  title: props.navigation.getParam('title')
+});
 
 export default OnlineArtistView
