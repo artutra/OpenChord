@@ -1,10 +1,13 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { NavigationScreenComponent } from "react-navigation";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
 import SongRender from "../components/SongRender";
 import SongTransformer from "../components/SongTransformer";
 import { getService } from "../services";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import ChordSheetJS from 'chordsheetjs';
+import realm, { Artist, Song } from "../db";
 
 interface SongPreviewProps {
   navigation: NavigationStackProp<{}, { path: string, serviceName: string }>
@@ -13,8 +16,8 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
   NavigationStackOptions,
   NavigationStackProp
 > = (props) => {
-  const [html, setHtml] = useState('')
   const [chordSheet, setChordCheet] = useState<string | null>(null)
+  const [isSaving, setIsSaving] = useState(false)
   let serviceName = props.navigation.getParam('serviceName')
   let path = props.navigation.getParam('path')
 
@@ -28,6 +31,24 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
     fetchData();
   }, []);
 
+  function saveSong() {
+    if (isSaving) return
+    setIsSaving(true)
+    const parser = new ChordSheetJS.ChordProParser();
+    const formatter = new ChordSheetJS.ChordProFormatter();
+    const parsedSong = parser.parse(chordSheet!);
+
+    let artist = new Artist(parsedSong.getMetaData('artist')!)
+    let song = new Song(parsedSong.getMetaData('title')!, formatter.format(parsedSong), artist)
+    let songId
+    realm.write(() => {
+      let created = Song.create(song)
+      songId = created.id
+    })
+    props.navigation.navigate('SongView', { id: songId, title: song.title })
+    Alert.alert('Song saved')
+  }
+
   return (
     <View style={{ flex: 1 }}>
       {chordSheet == null ? <Text>Loading...</Text> :
@@ -37,10 +58,20 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
           chordProSong={chordSheet}
         >
           {({ chords, htmlSong }) => (
-            <SongRender
-              chordProContent={htmlSong}
-            // height={700}
-            />
+            <View style={{ flex: 1 }}>
+              <SongRender
+                chordProContent={htmlSong}
+              />
+              <TouchableOpacity
+                style={styles.fabButton}
+                onPress={saveSong}>
+                <Icon
+                  color="white"
+                  size={30}
+                  name="content-save"
+                />
+              </TouchableOpacity>
+            </View>
           )}
         </SongTransformer>
       }
@@ -51,6 +82,14 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
 export default SongPreview
 
 const styles = StyleSheet.create({
+  fabButton: {
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+    borderRadius: 100,
+    backgroundColor: 'tomato',
+    padding: 15
+  },
   item: {
     paddingTop: 20,
     paddingBottom: 20,
