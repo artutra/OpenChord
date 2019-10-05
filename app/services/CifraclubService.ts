@@ -43,12 +43,25 @@ export default class CifraclubService extends BaseService {
   }
   async getArtistSongs(path: string): Promise<SongDoc[]> {
     const result = await axios.get(`${this.baseUrl}/${path}`);
-    return [{ title: 'Test', artist: 'Test', path: '/test', type: 'song' }]
+    const $ = cheerio.load(result.data)
+    let docs: SongDoc[] = []
+    $('.artist_songsAZ').children('ol.list').children().each((i: number, elem: CheerioElement) => {
+      let item = $('.list-item', elem)
+      let title = item.text()
+      let href = item.attr('href')
+      if (title) {
+        docs.push({
+          title,
+          artist: '',
+          path: href,
+          type: 'song'
+        })
+      }
+    })
+    return docs
   }
   async getSongHtml(path: string): Promise<string> {
-
     const result = await axios.get(`${this.baseUrl}/${path}`);
-
     return result.data
   }
   decode(str: string) {
