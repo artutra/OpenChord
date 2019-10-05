@@ -10,7 +10,6 @@ const SongRender: FunctionComponent<Props> = (props) => {
     <WebView
       startInLoadingState={true}
       overScrollMode={'never'}
-      scrollEnabled={false}
       source={{ html: renderHtml(props.chordProContent, styles) }}
       injectedJavaScript={onClickChordPostMessage}
       onMessage={(event) => { if (props.onPressChord) props.onPressChord(event.nativeEvent.data) }}
