@@ -33,6 +33,7 @@ const OnlineArtistView = (props: Props) => {
     <View>
       {isLoading && <Text>Is loading...</Text>}
       <FlatList
+        keyExtractor={(item) => item.path}
         data={songs}
         renderItem={({ item }) => {
           return <ListItem title={item.title} onPress={() => onSelectSong(item.path, serviceName)} />
