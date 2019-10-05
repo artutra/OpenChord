@@ -6,11 +6,10 @@ import { NavigationStackProp, NavigationStackOptions } from "react-navigation-st
 import { NavigationScreenComponent } from "react-navigation";
 import { services, getService } from "../services";
 import { Doc } from "../services/BaseService";
+import { Header } from "react-navigation-stack";
+import SearchBar from "../components/SearchBar";
 
 interface OnlineSearchProps {
-  title: string
-  subtitle?: string
-  onPress: () => void
   navigation: NavigationStackProp<{}, {}>
 }
 
@@ -34,42 +33,34 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
   }
   return (
     <View style={{ flex: 1 }}>
-      <Picker
-        selectedValue={serviceName}
-        style={{}}
-        onValueChange={(itemValue, itemIndex) =>
-          setServiceName(itemValue)
-        }>
-        {baseServices.map(service => {
-          return <Picker.Item key={service.name} label={service.name} value={service.name} />
-        })}
-      </Picker>
-      <TextInput
-        style={{}}
-        keyboardType="default"
-        placeholder="Search"
-        placeholderTextColor="#565e84"
-        autoFocus={false}
-        autoCorrect={false}
-        autoCapitalize='none'
+      <View style={styles.customHeader}>
+        <Picker
+          selectedValue={serviceName}
+          style={styles.picker}
+          onValueChange={(value) => setServiceName(value)}>
+          {baseServices.map(service => {
+            return <Picker.Item key={service.name} label={service.name} value={service.name} />
+          })}
+        </Picker>
+      </View>
+      <SearchBar
         onSubmitEditing={makeSearch}
         onChangeText={(value) => setQuery(value)}
-        value={query}
+        query={query}
       />
       <FlatList
+        keyExtractor={(item) => item.path}
         data={docs}
         renderItem={({ item, index }) => {
           if (item.type == 'artist') {
             return (
               <ListItem
-                key={item.name}
                 onPress={() => { props.navigation.navigate('OnlineArtistView', { path: item.path, serviceName, title: item.name }) }}
                 title={item.name}
               />)
           } else {
             return (
               <ListItem
-                key={item.title + item.artist}
                 onPress={() => { props.navigation.navigate('SongPreview', { path: item.path, serviceName }) }}
                 title={item.title}
                 subtitle={item.artist}
@@ -83,16 +74,13 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
 export default OnlineSearch
 
 const styles = StyleSheet.create({
-  item: {
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingLeft: 20,
-    borderBottomWidth: 1,
-    borderColor: '#eee',
+  customHeader: {
+    height: Header.HEIGHT,
     backgroundColor: 'white',
-    justifyContent: 'flex-start'
+    elevation: 4,
+    justifyContent: 'center'
   },
-  itemTitle: {
-    fontSize: 18
+  picker: {
+    marginHorizontal: 10
   }
 });

@@ -10,14 +10,14 @@ interface SearchBarProps {
 }
 const SearchBar: FunctionComponent<SearchBarProps> = (props) => {
   return (
-    <View style={{ padding: 10 }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#eee', borderRadius: 100, paddingHorizontal: 10 }}>
+    <View style={styles.container}>
+      <View style={styles.inputContainer}>
         <Icon name="magnify" size={20} color="#aaa" />
         <TextInput
-          style={{ flex: 1, padding: 5, fontSize: 14 }}
+          style={styles.searchText}
           keyboardType="default"
           placeholder="Search"
-          placeholderTextColor="#565e84"
+          placeholderTextColor="#aaa"
           autoFocus={false}
           autoCorrect={false}
           autoCapitalize='none'
@@ -32,19 +32,19 @@ const SearchBar: FunctionComponent<SearchBarProps> = (props) => {
 export default SearchBar
 
 const styles = StyleSheet.create({
-  item: {
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingLeft: 20,
-    borderBottomWidth: 1,
-    borderColor: '#eee',
-    backgroundColor: 'white',
-    justifyContent: 'flex-start'
+  container: {
+    padding: 10
   },
-  title: {
-    fontSize: 18
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#eee',
+    borderRadius: 100,
+    paddingHorizontal: 10
   },
-  subtitle: {
+  searchText: {
+    flex: 1,
+    padding: 5,
     fontSize: 14
   }
 });
