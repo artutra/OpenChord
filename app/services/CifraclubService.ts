@@ -7,7 +7,7 @@ export default class CifraclubService extends BaseService {
   constructor() {
     super()
     this.name = 'Cifraclub'
-    this.baseUrl = 'https://www.cifraclub.com'
+    this.baseUrl = 'https://m.cifraclub.com.br'
     this.searchUrl = 'https://studiosolsolr-a.akamaihd.net/cc/h2/'
   }
   async getSearch(query: string): Promise<Doc[]> {
@@ -59,9 +59,15 @@ export default class CifraclubService extends BaseService {
   parseToChordPro(html: string) {
     const $ = cheerio.load(html)
     let chordSheetHtml = $('pre').html()!
+    let musicTitle = $('.title').children('div').children('h1').text()
+    let artistName = $('.title').children('div').children('.title_h2').text()
+    let header = `{title: ${musicTitle}}\n{artist: ${artistName}}\n`
     chordSheetHtml = this.decode(chordSheetHtml)
+    chordSheetHtml = chordSheetHtml.replace(/\[/g, '')
+    chordSheetHtml = chordSheetHtml.replace(/\]/g, '')
     chordSheetHtml = CifraclubParser.replaceHtmlChords(chordSheetHtml)
     chordSheetHtml = CifraclubParser.replaceHtmlTabs(chordSheetHtml)
+    chordSheetHtml = header + chordSheetHtml
     return chordSheetHtml
   }
   parseToPlainText(html: string) {
