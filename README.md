@@ -1,6 +1,20 @@
 ![Open Chord Icon](android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png?raw=true "OpenChord")
+
 # OpenChord
 Cross-platform chordpro reader app for Android and iOS written with React Native.
+
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![David](https://img.shields.io/david/artutra/OpenChord.svg)](https://david-dm.org/artutra/OpenChord)
+
+<p style="display: flex;flex-wrap: wrap; align-items: center;justify-content: center">
+  <a href="#">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" width="230" height="65">
+  </a>
+  <a href="https://play.google.com/apps/testing/com.openchord">
+    <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" width="250">
+  </a>
+</p>
 
 # Features
 Open Chord is a React Native application for both Android and iOS that allows you to organize your chord charts, lyric sheets and songbooks with a simple app on your tablet or smartphone. Open Chord easily allows you to get rid of all that paper by displaying your music in a flexible, easy to read format.
@@ -10,8 +24,9 @@ A few features include:
 | Feature                          | Support            |
 |:-------------------------------- |:------------------:|
 | Render song with chordpro format | :heavy_check_mark: |
-| Create/edit song                 | :clock2:           |
+| Import songs from the web        | :heavy_check_mark: |
 | Transpose song                   | :heavy_check_mark: |
+| Create/edit song                 | :clock2:           |
 | Manage playlists                 | :clock2:           |
 | Search saved songs               | :clock2:           |
 | Slide with touch                 | :clock2:           |
@@ -19,7 +34,6 @@ A few features include:
 | Show/hide responsive tabs        | :clock2:           |
 | Multiple columns visualization   | :clock2:           |
 | Configure font size              | :clock2:           |
-| Import songs from the web        | :clock2:           |
 | Show guitar chord diagrams       | :clock2:           |
 | Multiple languages support       | :clock2:           |
 | Chord dictionary                 | :clock2:           |
@@ -74,6 +88,7 @@ Obs: The docker container can't attatch to the device via USB. You have to build
 * [Realm v3.0](https://github.com/realm/realm-js) - Realm is a mobile database that runs directly inside phones, tablets or wearables
 * [React Navigation v4.0](https://reactnavigation.org) - React Native module support navigation
 * [React Native Vector Icons v6.6](https://github.com/oblador/react-native-vector-icons) - Customizable Icons for React Native with support for NavBar/TabBar/ToolbarAndroid, image source and full styling
+* [React Native Webview](https://github.com/react-native-community/react-native-webview) - A modern, well-supported, and cross-platform WebView for React Native
 * [ChordSheetJS](https://github.com/martijnversluis/ChordSheetJS) - A JavaScript library for parsing and formatting chord sheets
 * [ChordPro](https://www.chordpro.org/chordpro/index.html) - A text file format to write lead sheets, songs with lyrics and chords
 
