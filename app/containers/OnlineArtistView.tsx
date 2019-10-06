@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FunctionComponent } from "react";
 import { Text, View } from "react-native";
-import { NavigationScreenProp } from "react-navigation"
+import { NavigationScreenProp, NavigationScreenComponent } from "react-navigation"
 import { FlatList } from "react-native-gesture-handler";
 import ListItem from "../components/ListItem";
-import { NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
+import { NavigationStackProp, NavigationStackOptions } from "react-navigation-stack/lib/typescript/types";
 import { getService } from "../services";
 import { SongDoc } from "../services/BaseService";
 
 interface Props {
   navigation: NavigationStackProp<{}, { path: string, serviceName: string, title: string }>
 }
-const OnlineArtistView = (props: Props) => {
+const OnlineArtistView: FunctionComponent<Props> & NavigationScreenComponent<
+  NavigationStackOptions,
+  NavigationStackProp
+> = (props: Props) => {
   const [songs, setSongs] = useState<SongDoc[]>([]);
   const [isLoading, setIsLoading] = useState(true)
   let serviceName = props.navigation.getParam('serviceName')
@@ -42,8 +45,8 @@ const OnlineArtistView = (props: Props) => {
     </View>
   );
 }
-OnlineArtistView.navigationOptions = (props: Props) => ({
-  title: props.navigation.getParam('title')
+OnlineArtistView.navigationOptions = ({ navigation }) => ({
+  title: navigation.getParam('title')
 });
 
 export default OnlineArtistView

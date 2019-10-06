@@ -10,7 +10,7 @@
     "build:ios": "node node_modules/react-native/local-cli/cli.js run-ios",
     "build:bundle": "npm run build:chordpro prod && cd android && ./gradlew bundleRelease",
     "build:release": "npm run build:chordpro prod && cd android && ./gradlew assembleRelease",
-    "test": "jest",
+    "test": "npm run build:chordpro && jest",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -56,6 +56,27 @@
     "typescript": "^3.6.3"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.(js)$": "<rootDir>/node_modules/babel-jest",
+      "\\.(ts|tsx)$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testPathIgnorePatterns": [
+      "\\.snap$",
+      "<rootDir>/node_modules/"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-navigation|@react-navigation|react-navigation-redux-helpers|react-native-reanimated)"
+    ],
+    "cacheDirectory": ".jest/cache",
+    "setupFiles": [
+      "./node_modules/react-native-gesture-handler/jestSetup.js"
+    ]
   }
 }
