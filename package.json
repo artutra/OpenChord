@@ -10,7 +10,7 @@
     "build:ios": "node node_modules/react-native/local-cli/cli.js run-ios",
     "build:bundle": "npm run build:chordpro prod && cd android && ./gradlew bundleRelease",
     "build:release": "npm run build:chordpro prod && cd android && ./gradlew assembleRelease",
-    "test": "jest",
+    "test": "npm run build:chordpro && jest",
     "lint": "eslint ."
   },
   "dependencies": {
