@@ -3,6 +3,7 @@
 # OpenChord
 Cross-platform chordpro reader app for Android and iOS written with React Native.
 
+[![Build Status](https://travis-ci.org/artutra/OpenChord.svg?branch=master)](https://travis-ci.org/artutra/OpenChord)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![David](https://img.shields.io/david/artutra/OpenChord.svg)](https://david-dm.org/artutra/OpenChord)
