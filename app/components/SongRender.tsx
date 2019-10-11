@@ -42,29 +42,44 @@ const onClickChordPostMessage = `
 true;
 `
 const styles = `
+body {
+  font-family: monospace;
+}
+.title {
+  font-size: 20px
+}
+.artist {
+  font-weight: bold;
+  color: red;
+}
+.chord:hover {
+  color: blue;
+}
+.line {
+  margin: 0;
+  position: relative;
+  margin-bottom: 0px;
+  font-size: 14px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  margin-right: 10px;
+}
 .chord {
   color: red;
-  font-size: 16px;
+  position: relative;
+  display: inline-block;
+  line-height: 20px;
+  padding-top: 20px;
+  padding-top: 15px;
+  width: 0px;
+  top: -17px;
+  cursor: pointer;
 }
 .chord:active {
   color: blue;
 }
-.lyrics {
-  font-size: 16px;
-}
-.column {
+.word {
   display: inline-block;
-}
-.row {
-  position: relative;
-  margin-bottom: 0px;
-  font-family: monospace;
-  white-space: pre-wrap;
-  margin-right: 10px;
-  font-size: 23px;
-}
-p {
-	margin: 0;
 }
 `
 export default SongRender

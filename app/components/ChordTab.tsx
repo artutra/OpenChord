@@ -11,10 +11,8 @@ interface Props {
 const ChordTab: FunctionComponent<Props> = ({ selectedChord, allChords, onPressClose }) => {
   const flatList = useRef<FlatList<Chord>>(null)
 
-  useEffect(() => {
-    if (selectedChord != null && flatList.current != null)
-      flatList.current.scrollToItem({ animated: true, item: selectedChord })
-  }, [selectedChord])
+  if (selectedChord != null && flatList.current != null)
+    flatList.current.scrollToItem({ animated: true, item: selectedChord })
 
   if (selectedChord == null)
     return null

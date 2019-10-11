@@ -1,6 +1,7 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
 import ChordSheetJS, { Song } from 'chordsheetjs'
 import Chord from 'chordjs'
+import CustomHtmlDivFormatter from "../utils/CustomHtmlDivFormatter";
 
 interface SongProps {
   chords: Array<Chord>
@@ -35,37 +36,30 @@ const transformSong = (song: Song, processor: (parsedChord: Chord) => Chord) => 
 };
 
 const SongTransformer: FunctionComponent<Props> = (props) => {
-  let [chords, setChords] = useState<Array<Chord>>([])
-  let [htmlSong, setHtmlSong] = useState("")
-
-  useEffect(() => {
-    let song
-    if (props.chordProSong != null) {
-      song = new ChordSheetJS.ChordProParser().parse(props.chordProSong);
-    } else {
-      song = new ChordSheetJS.ChordSheetParser({ preserveWhitespace: true }).parse(props.chordSheetSong!);
-    }
-    let transposedSong = song
-    if (props.transposeDelta != 0) {
-      transposedSong = transformSong(song, chord => chord.transpose(props.transposeDelta));
-    }
-    let allChords = Array<Chord>()
-    transposedSong.lines.forEach(line => {
-      line.items.forEach(item => {
-        if (item instanceof ChordSheetJS.ChordLyricsPair && item.chords) {
-          const parsedChord = Chord.parse(item.chords);
-          if (parsedChord != null && allChords.find(c => c.toString() == parsedChord.toString()) == null) {
-            allChords.push(parsedChord)
-          }
+  let htmlSong = ''
+  let song: Song
+  if (props.chordProSong != null) {
+    song = new ChordSheetJS.ChordProParser().parse(props.chordProSong);
+  } else {
+    song = new ChordSheetJS.ChordSheetParser({ preserveWhitespace: true }).parse(props.chordSheetSong!);
+  }
+  let transposedSong = song
+  if (props.transposeDelta != 0) {
+    transposedSong = transformSong(song, chord => chord.transpose(props.transposeDelta));
+  }
+  let allChords = Array<Chord>()
+  transposedSong.lines.forEach(line => {
+    line.items.forEach(item => {
+      if (item instanceof ChordSheetJS.ChordLyricsPair && item.chords) {
+        const parsedChord = Chord.parse(item.chords);
+        if (parsedChord != null && allChords.find(c => c.toString() == parsedChord.toString()) == null) {
+          allChords.push(parsedChord)
         }
-      });
-    })
+      }
+    });
+  })
+  htmlSong = new CustomHtmlDivFormatter().format(transposedSong)
 
-    const htmlSong = new ChordSheetJS.HtmlDivFormatter().format(transposedSong);
-    setChords(allChords)
-    setHtmlSong(htmlSong)
-  }, [props.chordProSong, props.transposeDelta])
-
-  return props.children({ chords, htmlSong })
+  return props.children({ chords: allChords, htmlSong })
 }
 export default SongTransformer
