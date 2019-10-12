@@ -17,7 +17,6 @@ it('render tags correctly', () => {
   res += "<p class=\"line\">"
   res += "<span class=\"artist\">Artist</span>"
   res += "</p>"
-  res += "\n"
   expect(formatter.format(song)).toBe(res)
 })
 
@@ -35,7 +34,6 @@ it('add a span tag to word with chord in the middle', () => {
   res += "</span>"
   res += " in the middle"
   res += "</p>"
-  res += "\n"
   expect(formatter.format(song)).toBe(res)
 })
 
@@ -57,6 +55,13 @@ it('add a span tag to word with many chords in the middle', () => {
   res += "</span>"
   res += " in the middle"
   res += "</p>"
-  res += "\n"
+  expect(formatter.format(song)).toBe(res)
+})
+
+it('add minimum space between chords', () => {
+  let chordPro = "Intro  [C#m7]  [A9]  [E]  [E9]"
+  let song = new ChordSheetJS.ChordProParser().parse(chordPro)
+  let formatter = new CustomHtmlDivFormatter()
+  let res = `<p class="line">Intro  <span class="chord">C#m7</span>     <span class="chord">A9</span>   <span class="chord">E</span>  <span class="chord">E9</span>   </p>`
   expect(formatter.format(song)).toBe(res)
 })
