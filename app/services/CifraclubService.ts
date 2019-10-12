@@ -1,4 +1,5 @@
 import axios from 'axios'
+//@ts-ignore
 import cheerio from 'react-native-cheerio'
 import { BaseService, Doc, SongDoc } from './BaseService'
 import CifraclubParser from '../utils/CifraclubParser'
@@ -78,8 +79,7 @@ export default class CifraclubService extends BaseService {
     chordSheetHtml = this.decode(chordSheetHtml)
     chordSheetHtml = chordSheetHtml.replace(/\[/g, '')
     chordSheetHtml = chordSheetHtml.replace(/\]/g, '')
-    chordSheetHtml = CifraclubParser.replaceHtmlChords(chordSheetHtml)
-    chordSheetHtml = CifraclubParser.replaceHtmlTabs(chordSheetHtml)
+    chordSheetHtml = new CifraclubParser().parse(chordSheetHtml)
     chordSheetHtml = header + chordSheetHtml
     return chordSheetHtml
   }
