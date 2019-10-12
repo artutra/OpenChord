@@ -1,5 +1,4 @@
 import axios from 'axios'
-//@ts-ignore
 import cheerio from 'react-native-cheerio'
 import { BaseService, Doc, SongDoc } from './BaseService'
 import CifraclubParser from '../utils/CifraclubParser'
