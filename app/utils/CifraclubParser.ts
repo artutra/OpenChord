@@ -1,179 +1,92 @@
-var regexLines = /[^\r\n]+/g;
-var regexChords = /<b>(\S+)<\/b>/g;
-var commentMarkdown = "";
-var tabMarkdown = ["{sot}", "{eot}"];
-var breakLine = '\r\n';
-var chordOutTextMarkdown = ["[", "]"];
-var chordInTextMarkdown = ["[", "]"];
+const REGEX_LINES = /[^\r\n]+/g
+const REGEX_CHORDS = /<b>(\S+?)<\/b>/g
+const REGEX_TAB = /<span class="tablatura">([\s\S]*?)<span class="cnt">([\s\S]*?)<\/span>[\s\S]*?<\/span>/g
+const START_OF_TABS = "{sot}"
+const END_OF_TABS = "{eot}"
+const NEW_LINE = '\n'
+const SQUARE_START = '['
+const SQUARE_END = ']'
 
 interface MusicChord {
-  chord: string,
+  text: string,
   index: number,
-  chordFromNextLine: boolean
 }
-interface Line {
-  text: string
-  index: number
-  musicChords: MusicChord[]
-}
-const replaceHtmlChords = (content: string) => {
-  var lines: Line[] = [];
-  //separate the text in an array of lines
-  let m
-  while ((m = regexLines.exec(content)) !== null) {
-    if (m.index === regexLines.lastIndex) {
-      regexLines.lastIndex++;
-    }
-    lines.push({
-      text: m[0],
-      index: m.index,
-      musicChords: []
-    });
+
+export default class CifraclubParser {
+  parse = (html: string) => {
+    html = this.parseChords(html)
+    html = this.parseTabs(html)
+    return html
   }
-  //put in each line object of the array, a vector of chords
-  for (var i = 0; i < lines.length; i++) {
-    var chordFromNextLine;//this var tell where is the chord from
-    if (checkIfThereIsTextInThisLine(lines[i].text))
-      chordFromNextLine = false;
-    else {
-      if (lines[i + 1] && checkIfThereIsOnlyTextInNextLine(lines[i + 1].text))
-        chordFromNextLine = true;
-      else
-        chordFromNextLine = false;
-    }
-    var chordPlace = 1;//1 is the first one of the line, 2 is the second ...
-    while ((m = regexChords.exec(lines[i].text)) !== null) {
-      if (m.index === regexChords.lastIndex) {
-        regexChords.lastIndex++;
+
+  private parseChords = (content: string) => {
+    let lines = content.match(REGEX_LINES)
+    let rendered = ""
+    if (lines != null) {
+      let chordsNextLine: MusicChord[] = []
+      lines.forEach((line) => {
+        if (chordsNextLine.length > 0) {
+          rendered += this.insertChordsInLine(line, chordsNextLine) + NEW_LINE
+          chordsNextLine = []
+        } else {
+          let lineChords = this.getChords(line)
+          // clean chords from line
+          line = line.replace(REGEX_CHORDS, '')
+          if (this.hasNonWhitespaceCharacter(line)) {
+            // TODO: Add comment tag for inline chord notation
+            rendered += this.insertChordsInLine(line, lineChords, true) + NEW_LINE
+          } else {
+            chordsNextLine = lineChords
+          }
+        }
+      })
+      if (chordsNextLine.length > 0) {
+        rendered += this.insertChordsInLine('', chordsNextLine, true) + NEW_LINE
       }
-      if (chordFromNextLine) {
-        lines[i + 1].musicChords.push({
-          chord: m[1],
-          index: indexInLine(m.index, chordPlace),
-          chordFromNextLine: chordFromNextLine
-        });
-        lines.splice(i, 1);
+    }
+    return rendered
+  }
+
+  private hasNonWhitespaceCharacter = (line: string) => {
+    return line.match(/\S+/g) != null
+  }
+
+  private getChords = (line: string): MusicChord[] => {
+    let m: RegExpExecArray | null
+    let chords: MusicChord[] = []
+    let spacing = 7 // '<b></b>'.length
+    while ((m = REGEX_CHORDS.exec(line)) !== null) {
+      chords.push({
+        text: m[1],
+        index: m.index - spacing * chords.length
+      })
+    }
+    return chords
+  }
+
+  private insertChordsInLine = (line: string, chords: MusicChord[], ignoreChordLength = false) => {
+    let insertedCharacters = 0
+    let maxIndex = 0
+    chords.forEach(c => { maxIndex = Math.max(maxIndex, c.index) })
+    line += " ".repeat(Math.max(maxIndex - line.length, 0))
+    chords.forEach((chord) => {
+      line =
+        line.substr(0, chord.index + insertedCharacters) +
+        SQUARE_START + chord.text + SQUARE_END +
+        line.substr(chord.index + insertedCharacters)
+      insertedCharacters += SQUARE_START.length + SQUARE_END.length
+      if (!ignoreChordLength) {
+        insertedCharacters += chord.text.length
       }
-      else
-        lines[i].musicChords.push({
-          chord: m[1],
-          index: indexInLine(m.index, chordPlace),
-          chordFromNextLine: chordFromNextLine
-        });
-      chordPlace++;
-    }
-    lines[i].text = lines[i].text.replace(regexChords, '');
-  }
-  var charactersAlreadyAdded = 0;
-  for (i = 0; i < lines.length; i++) {
-    charactersAlreadyAdded = 0;
-    for (var j = 0; j < lines[i].musicChords.length; j++) {
-      lines[i].text = addChordSubstring(lines[i].text, lines[i].musicChords[j], charactersAlreadyAdded);
-      if (lines[i].musicChords[j].chordFromNextLine === true)
-        charactersAlreadyAdded += chordInTextMarkdown[0].length +
-          chordInTextMarkdown[1].length +
-          lines[i].musicChords[j].chord.length;
-      else
-        charactersAlreadyAdded += chordOutTextMarkdown[0].length +
-          chordOutTextMarkdown[1].length;
-    }
+    })
+    return line
   }
 
-  var res = '';
-  for (i = 0; i < lines.length; i++) {
-    res += lines[i].text + breakLine;
+  private parseTabs = (content: string) => {
+    return content.replace(REGEX_TAB, (v1, comment, tabs) => {
+      comment = this.parseChords(comment)
+      tabs = tabs.replace(/<u>|<\/u>/g, '')
+      return `${comment}${START_OF_TABS}${NEW_LINE}${tabs}${END_OF_TABS}${NEW_LINE}`
+    })
   }
-  return res;
-};
-function checkIfThereIsTextInThisLine(line: string) {
-  var lineWithoutChords = line.replace(regexChords, '');
-  //any non-whitespace character
-  var regex = /\S+/g;
-  let m
-  if ((m = regex.exec(lineWithoutChords)) !== null)
-    return true;
-  return false;
-}
-function checkIfThereIsOnlyTextInNextLine(nextLine: string) {
-  //if there is chords in nextLine
-  let m
-  if ((m = regexChords.exec(nextLine)) !== null)
-    return false;
-  //if there is tabs or tabs comment in the nextLine
-  //if ((m = tabMarkdown.exec(nextLine) !== null || (m = commentMarkdown.exec(nextLine)) !== null))
-  //  return false;
-  else {
-    //any non-whitespace character
-    var regex = /\S+/g;
-    if ((m = regex.exec(nextLine)) !== null)
-      return true;
-    return false;
-  }
-}
-//calculate the index of the chord disregarding the '<B>'and '</B>' tags
-function indexInLine(chordIndex: number, chordPlace: number) {
-  if (chordPlace == 1)
-    return chordIndex;//equivalent to the first '<B>' tag
-  else
-    return chordIndex - 7 * (chordPlace - 1);//equivalent to the '</B> <B>' tags behind the chord
-}
-function addChordSubstring(line: string, chord: MusicChord, charactersAlreadyAdded: number) {
-  var chordStr;
-  if (chord.chordFromNextLine === true)
-    chordStr = chordInTextMarkdown[0] + chord.chord + chordInTextMarkdown[1];
-  else
-    chordStr = chordOutTextMarkdown[0] + chord.chord + chordOutTextMarkdown[1];
-  return line.substr(0, chord.index + charactersAlreadyAdded) + chordStr + line.substr(chord.index + charactersAlreadyAdded);
-}
-var regexTab = /<span class="tablatura">(([\s\S])*?<\/span><\/span>)/g;
-var commentMarkdown = "";
-var tabMarkdown = ["{sot}", "{eot}"];
-var breakLine = '\r\n';
-
-const replaceHtmlTabs = (content: string) => {
-  var m;
-  var tab;
-  var k = 1;
-  var tempContent = content;
-  while ((m = regexTab.exec(tempContent)) !== null) {
-    if (m.index === regexTab.lastIndex) {
-      regexTab.lastIndex++;
-    }
-
-    tab = getTab(m[1]);
-    content = content.replace(m[0], tab.comment + tab.tabs);
-  }
-  return content;
-};
-
-function getTab(tabString: string) {
-  var regexSubTab = /t">([^]*?)<\/span><\/span>/g;
-  var regexComment = /([^]*?)<span class="cnt">/g;
-  var tab = {
-    "comment": "",
-    "tabs": ""
-  };
-  tabString = tabString.replace(/<u>|<\/u>/g, '');
-  var m;
-  if ((m = regexComment.exec(tabString)) !== null) {
-    if (m.index === regexComment.lastIndex) {
-      regexComment.lastIndex++;
-    }
-    if (m[1] !== null)
-      tab.comment = commentMarkdown + m[1];
-  }
-
-  if ((m = regexSubTab.exec(tabString)) !== null) {
-    if (m.index === regexTab.lastIndex) {
-      regexTab.lastIndex++;
-    }
-    if (m[1] !== null)
-      tab.tabs = tabMarkdown[0] + breakLine + m[1] + tabMarkdown[1];
-  }
-  return tab;
-}
-
-export default {
-  replaceHtmlChords,
-  replaceHtmlTabs
 }
