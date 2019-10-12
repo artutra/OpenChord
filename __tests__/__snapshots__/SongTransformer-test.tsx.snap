@@ -11,12 +11,11 @@ exports[`renders correctly 1`] = `
 &lt;p class="line"&gt;&lt;/p&gt;
 &lt;p class="line"&gt;&lt;span class="comment"&gt;Intro [C] [D]&lt;/span&gt;&lt;/p&gt;
 &lt;p class="line"&gt;Let it &lt;span class="chord"&gt;Am&lt;/span&gt;be, let it &lt;span class="chord"&gt;C/G&lt;/span&gt;be, let it &lt;span class="chord"&gt;F&lt;/span&gt;be, let it &lt;span class="chord"&gt;C&lt;/span&gt;be&lt;/p&gt;
-&lt;p class="line"&gt;&lt;span class="chord"&gt;C&lt;/span&gt;Whisper words of &lt;span class="word"&gt;w&lt;span class="chord"&gt;G&lt;/span&gt;isdom&lt;/span&gt;, let it &lt;span class="chord"&gt;F&lt;/span&gt;be &lt;span class="chord"&gt;C/E&lt;/span&gt;      &lt;span class="chord"&gt;Dm&lt;/span&gt;     &lt;span class="chord"&gt;C&lt;/span&gt; &lt;/p&gt;
+&lt;p class="line"&gt;&lt;span class="chord"&gt;C&lt;/span&gt;Whisper words of &lt;span class="word"&gt;w&lt;span class="chord"&gt;G&lt;/span&gt;isdom&lt;/span&gt;, let it &lt;span class="chord"&gt;F&lt;/span&gt;be &lt;span class="chord"&gt;C/E&lt;/span&gt;      &lt;span class="chord"&gt;Dm&lt;/span&gt;     &lt;span class="chord"&gt;C&lt;/span&gt;  &lt;/p&gt;
 &lt;p class="line"&gt;&lt;/p&gt;
 &lt;p class="line"&gt;C|---&lt;/p&gt;
 &lt;p class="line"&gt;E|---&lt;/p&gt;
 &lt;p class="line"&gt;&lt;/p&gt;
 &lt;p class="line"&gt;&lt;/p&gt;
-
 </Text>
 `;
