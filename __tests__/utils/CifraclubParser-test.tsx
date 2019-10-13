@@ -31,6 +31,21 @@ it('add spaces when lyrics are to short', () => {
   expect(chordPro).toBe(res)
 })
 
+it('dont skip empty lines', () => {
+  let htmlSong =
+    "Intro <b>Ab</b> <b>Bb</b>  <b>Eb</b> <b>Eb/D</b>  <b>Cm</b>  <b>Bb</b>\n" +
+    "<b>Ab</b>  <b>Bb</b>  <b>Ab</b>  <b>Bb</b>\n" +
+    "\n" +
+    "<b>Eb</b>\n" +
+    "Super fantástico Amigo\n"
+  let chordPro = new CifraclubParser().parse(htmlSong)
+  let res =
+    "Intro [Ab] [Bb]  [Eb] [Eb/D]  [Cm]  [Bb]\n" +
+    "[Ab]    [Bb]    [Ab]    [Bb]\n" +
+    "[Eb]Super fantástico Amigo\n"
+  expect(chordPro).toBe(res)
+})
+
 it('parse tabs correctly', () => {
   let html = `
 <span class="tablatura">   <b>C</b>                        
