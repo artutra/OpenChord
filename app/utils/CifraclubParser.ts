@@ -1,4 +1,3 @@
-const REGEX_LINES = /[^\r\n]+/g
 const REGEX_CHORDS = /<b>(\S+?)<\/b>/g
 const REGEX_TAB = /<span class="tablatura">([\s\S]*?)<span class="cnt">([\s\S]*?)<\/span>[\s\S]*?<\/span>/g
 const START_OF_TABS = "{sot}"
@@ -20,7 +19,7 @@ export default class CifraclubParser {
   }
 
   private parseChords = (content: string) => {
-    let lines = content.match(REGEX_LINES)
+    let lines = content.split(NEW_LINE)
     let rendered = ""
     if (lines != null) {
       let chordsNextLine: MusicChord[] = []
@@ -66,9 +65,11 @@ export default class CifraclubParser {
 
   private insertChordsInLine = (line: string, chords: MusicChord[], ignoreChordLength = false) => {
     let insertedCharacters = 0
-    let maxIndex = 0
-    chords.forEach(c => { maxIndex = Math.max(maxIndex, c.index) })
-    line += " ".repeat(Math.max(maxIndex - line.length, 0))
+    if (!ignoreChordLength) {
+      let maxIndex = 0
+      chords.forEach(c => { maxIndex = Math.max(maxIndex, c.index) })
+      line += " ".repeat(Math.max(maxIndex - line.length, 0))
+    }
     chords.forEach((chord) => {
       line =
         line.substr(0, chord.index + insertedCharacters) +
