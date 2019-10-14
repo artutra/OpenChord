@@ -15,6 +15,7 @@ import TabBarIcon from './components/TabBarIcon';
 import OnlineSearch from './containers/OnlineSearch';
 import SongPreview from './containers/SongPreview';
 import OnlineArtistView from './containers/OnlineArtistView';
+import SongEdit from './containers/SongEdit';
 
 interface TabBarIconProps {
   focused: boolean
@@ -55,7 +56,8 @@ const AppNavigation = createBottomTabNavigator({
         screen: SongList,
         navigationOptions: { title: 'Songs' }
       },
-      SongView
+      SongView,
+      SongEdit: SongEdit
     }),
     navigationOptions: ({ navigation }) => ({
       title: 'Songs',

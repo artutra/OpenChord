@@ -1,8 +1,8 @@
 import React, { FunctionComponent } from 'react'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { TouchableOpacity, StyleProp, ViewStyle, StyleSheet } from 'react-native';
+import { TouchableOpacity, StyleProp, ViewStyle, StyleSheet, TouchableOpacityProps } from 'react-native';
 
-interface Props {
+interface Props extends TouchableOpacityProps {
   onPress: () => void
   iconStyle?: StyleProp<ViewStyle>
   size?: number
@@ -10,9 +10,10 @@ interface Props {
   color?: string
 }
 
-const TouchableIcon: FunctionComponent<Props> = ({ onPress, size = 30, name, color, iconStyle }) => {
+const TouchableIcon: FunctionComponent<Props> = (props) => {
+  let { size = 30, name, color, iconStyle } = props
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity {...props}>
       <MaterialCommunityIcons
         style={[styles.iconPadding, iconStyle]}
         name={name}

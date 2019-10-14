@@ -10,7 +10,7 @@ export class Song {
   artist: Artist
   updated_at: Date
 
-  constructor(title: string, content: string, artist: Artist, updated_at?: Date, id?: string, ) {
+  constructor(title: string, content: string, artist: Artist, updated_at?: Date, id?: string | null, ) {
     this.id = id
     this.title = title
     this.content = content

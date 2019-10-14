@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Alert } from "react-native";
 import { Song } from '../db'
 import { NavigationScreenComponent } from "react-navigation";
 import SideMenu from 'react-native-side-menu'
@@ -32,7 +32,9 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   function onClickChord(allChords: Array<Chord>, chordString: string) {
     selectChord(allChords.find(c => c.toString() == chordString)!)
   }
-
+  function editSong() {
+    props.navigation.navigate('SongEdit', { id: props.navigation.getParam('id') })
+  }
   useEffect(() => {
     let id = props.navigation.getParam('id')
     let song = Song.getById(id)!
@@ -51,6 +53,9 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
             <TouchableIcon onPress={transposeUp} name="plus" />
             <Text>{tone}</Text>
             <TouchableIcon onPress={transposeDown} name="minus" />
+          </View>
+          <View style={styles.secondaryToolbarContainer}>
+            <TouchableIcon onPress={editSong} name="pencil" />
           </View>
         </View>
       }
@@ -91,12 +96,17 @@ SongView.navigationOptions = ({ navigation }) => {
 const styles = StyleSheet.create({
   sideMenuContainer: {
     backgroundColor: '#eee',
-    flex: 1
+    flex: 1,
+    justifyContent: 'space-between',
   },
   toolbarContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#ccc'
+  },
+  secondaryToolbarContainer: {
+    flex: 1,
+    justifyContent: 'flex-end'
   }
 })
 export default SongView
