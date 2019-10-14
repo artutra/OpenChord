@@ -32,6 +32,9 @@ export class Song {
   static getById(id: string) {
     return realm.objectForPrimaryKey<Song>('Song', id)
   }
+  static getByArtist(artistId: string) {
+    return realm.objects<Song>('Song').filtered('artist.id = $0', artistId);
+  }
   static shouldUpdateDb() {
     let s = this.getAll().find(() => true)
     let newSongsDate = new Date(allSongs.updated_at)
@@ -90,6 +93,16 @@ export class Song {
     }
     return songDb
   }
+  static delete(id: string) {
+    realm.write(() => {
+      let song = Song.getById(id)
+      let artistId = song!.artist.id!
+      realm.delete(song)
+      if (Song.getByArtist(artistId).length <= 0) {
+        Artist.delete(artistId)
+      }
+    })
+  }
 }
 export class Artist {
   id?: string | null
@@ -111,6 +124,13 @@ export class Artist {
     }
   }
   static getAll() { return realm.objects<Artist>('Artist') }
+
+  static getById(id: string) {
+    return realm.objectForPrimaryKey<Artist>('Artist', id)
+  }
+  static delete(id: string) {
+    realm.delete(this.getById(id))
+  }
 }
 var realm = new Realm({
   schema: [
