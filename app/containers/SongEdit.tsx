@@ -24,13 +24,20 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
   const [error, setError] = useState<string | null>(null)
   const [mode, setMode] = useState<'CHORD_PRO' | 'CHORD_SHEET'>('CHORD_PRO')
 
+  function removeMetaTags(text: string) {
+    text = text.replace(/{title:[^}]+}\n?/g, '')
+    text = text.replace(/{t:[^}]+}\n?/g, '')
+    text = text.replace(/{artist:[^}]+}\n?/g, '')
+    text = text.replace(/{a:[^}]+}\n?/g, '')
+    return text
+  }
   useEffect(() => {
     let id = props.navigation.getParam('id')
     if (id != null) {
       let song = Song.getById(id)!
       setTitle(song.title)
       setArtist(song.artist.name)
-      setContent(song.content)
+      setContent(removeMetaTags(song.content))
     }
   }, [])
 
@@ -109,7 +116,7 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
           onChangeText={setArtist}
           value={artist}
         />
-        <View style={{ flexDirection: 'row' }}>
+        <View style={styles.tabsContainer}>
           <TouchableOpacity
             style={mode == 'CHORD_PRO' ? styles.tabActive : styles.tabInactive}
             onPress={switchToChordPro} disabled={mode == 'CHORD_PRO'}>
@@ -141,13 +148,16 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
 
 SongEdit.navigationOptions = ({ navigation }) => {
   return {
-    title: 'Edit Song',//navigation.getParam('title'),
+    title: 'Edit Song',
     headerRight: <TouchableIcon onPress={navigation.getParam('saveSong')} name="content-save" />,
   }
 }
 const styles = StyleSheet.create({
   container: {
     padding: 10
+  },
+  tabsContainer: {
+    flexDirection: 'row'
   },
   tabActive: {
     borderTopRightRadius: 3,
