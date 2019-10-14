@@ -35,6 +35,23 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   function editSong() {
     props.navigation.navigate('SongEdit', { id: props.navigation.getParam('id') })
   }
+  function removeSong() {
+    Alert.alert(
+      'Delete Song',
+      'Are you sure you want to permanently delete this song?',
+      [
+        { text: 'Cancel', style: 'cancel', onPress: () => { } },
+        {
+          text: 'Yes', onPress: () => {
+            Song.delete(props.navigation.getParam('id'))
+            props.navigation.goBack()
+          }
+        },
+      ],
+      { cancelable: true }
+    )
+  }
+
   useEffect(() => {
     let id = props.navigation.getParam('id')
     let song = Song.getById(id)!
@@ -56,6 +73,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
           </View>
           <View style={styles.secondaryToolbarContainer}>
             <TouchableIcon onPress={editSong} name="pencil" />
+            <TouchableIcon style={styles.deleteButton} onPress={removeSong} name="trash-can" color="white" size={20} />
           </View>
         </View>
       }
@@ -107,6 +125,11 @@ const styles = StyleSheet.create({
   secondaryToolbarContainer: {
     flex: 1,
     justifyContent: 'flex-end'
+  },
+  deleteButton: {
+    backgroundColor: '#e74c3c',
+    borderRadius: 3,
+    margin: 5
   }
 })
 export default SongView
