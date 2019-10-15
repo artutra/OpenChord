@@ -42,7 +42,7 @@ const SongTransformer: FunctionComponent<Props> = (props) => {
   let song: Song
   if (chordProSong != null) {
     if (!showTabs) {
-      chordProSong = chordProSong.replace(/{sot}(.*\r\n)*?{eot}/g, '')
+      chordProSong = chordProSong.replace(/{sot}(.*\r?\n)*?{eot}\r?\n?/g, '')
     }
     song = new ChordSheetJS.ChordProParser().parse(chordProSong);
   } else {
