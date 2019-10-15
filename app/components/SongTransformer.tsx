@@ -10,7 +10,8 @@ interface SongProps {
 interface Props {
   chordProSong?: string
   chordSheetSong?: string
-  transposeDelta: number
+  transposeDelta?: number
+  showTabs?: boolean
   children(props: SongProps): JSX.Element;
 }
 
@@ -36,16 +37,20 @@ const transformSong = (song: Song, processor: (parsedChord: Chord) => Chord) => 
 };
 
 const SongTransformer: FunctionComponent<Props> = (props) => {
+  let { showTabs = true, transposeDelta = 0, chordProSong } = props
   let htmlSong = ''
   let song: Song
-  if (props.chordProSong != null) {
-    song = new ChordSheetJS.ChordProParser().parse(props.chordProSong);
+  if (chordProSong != null) {
+    if (!showTabs) {
+      chordProSong = chordProSong.replace(/{sot}(.*\r?\n)*?{eot}\r?\n?/g, '')
+    }
+    song = new ChordSheetJS.ChordProParser().parse(chordProSong);
   } else {
     song = new ChordSheetJS.ChordSheetParser({ preserveWhitespace: true }).parse(props.chordSheetSong!);
   }
   let transposedSong = song
-  if (props.transposeDelta != 0) {
-    transposedSong = transformSong(song, chord => chord.transpose(props.transposeDelta));
+  if (transposeDelta != 0) {
+    transposedSong = transformSong(song, chord => chord.transpose(transposeDelta));
   }
   let allChords = Array<Chord>()
   transposedSong.lines.forEach(line => {

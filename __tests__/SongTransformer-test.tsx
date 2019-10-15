@@ -30,3 +30,33 @@ E|---
   ).toJSON()
   expect(tree).toMatchSnapshot()
 })
+
+it('hide tabs', () => {
+  let chordProSong = `
+{title: Let it be}
+{artist: The Beatles}
+{soc}
+Let it [Am]be, let it [C/G]be, let it [F]be, let it [C]be big[Cm]word
+Let it [Am]be, let it [C/G]be, let it [F]be, let it [C]be
+{eoc}
+
+{comment: Intro [C] [D]}
+Let it [Am]be, let it [C/G]be, let it [F]be, let it [C]be
+{sot}
+C|---
+E|---
+{eot}
+[C]Whisper words of w[G]isdom, let it [F]be [C/E]      [Dm]     [C] 
+{sot}
+C|---
+E|---
+{eot}`
+  const tree = renderer.create(
+    <SongTransformer
+      chordProSong={chordProSong}
+      transposeDelta={0}
+      showTabs={false}
+      children={(songProps) => <Text>{songProps.htmlSong}</Text>} />
+  ).toJSON()
+  expect(tree).toMatchSnapshot()
+})

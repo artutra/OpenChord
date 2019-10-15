@@ -24,6 +24,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   const [isSideMenuOpen, setIsSideMenuOpen] = useState<boolean>(false)
   const [tone, setTone] = useState<number>(0)
   const [selectedChord, selectChord] = useState<Chord | null>(null)
+  const [showTabs, setShowTabs] = useState(true)
 
   function transposeUp() { setTone(tone + 1 >= 12 ? 0 : tone + 1); selectChord(null) }
   function transposeDown() { setTone(tone - 1 <= -12 ? 0 : tone - 1); selectChord(null) }
@@ -51,6 +52,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
       { cancelable: true }
     )
   }
+  function toggleShowTabs() { setShowTabs(!showTabs) }
 
   useEffect(() => {
     let id = props.navigation.getParam('id')
@@ -70,6 +72,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
             <TouchableIcon onPress={transposeUp} name="plus" />
             <Text>{tone}</Text>
             <TouchableIcon onPress={transposeDown} name="minus" />
+            <TouchableIcon onPress={toggleShowTabs} name="guitar-electric" />
           </View>
           <View style={styles.secondaryToolbarContainer}>
             <TouchableIcon onPress={editSong} name="pencil" />
@@ -86,6 +89,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
       <SongTransformer
         chordProSong={content}
         transposeDelta={tone}
+        showTabs={showTabs}
       >
         {songProps => (
           <View style={{ flex: 1 }}>
