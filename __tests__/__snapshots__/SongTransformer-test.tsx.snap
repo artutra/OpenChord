@@ -1,5 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`hide tabs 1`] = `
+<Text>
+  &lt;p class="line"&gt;&lt;span class="title"&gt;Let it be&lt;/span&gt;&lt;/p&gt;
+&lt;p class="line"&gt;&lt;span class="artist"&gt;The Beatles&lt;/span&gt;&lt;/p&gt;
+&lt;p class="line"&gt;&lt;/p&gt;
+&lt;p class="line"&gt;Let it &lt;span class="chord"&gt;Am&lt;/span&gt;be, let it &lt;span class="chord"&gt;C/G&lt;/span&gt;be, let it &lt;span class="chord"&gt;F&lt;/span&gt;be, let it &lt;span class="chord"&gt;C&lt;/span&gt;be &lt;span class="word"&gt;big&lt;span class="chord"&gt;Cm&lt;/span&gt;word&lt;/span&gt;&lt;/p&gt;
+&lt;p class="line"&gt;Let it &lt;span class="chord"&gt;Am&lt;/span&gt;be, let it &lt;span class="chord"&gt;C/G&lt;/span&gt;be, let it &lt;span class="chord"&gt;F&lt;/span&gt;be, let it &lt;span class="chord"&gt;C&lt;/span&gt;be&lt;/p&gt;
+&lt;p class="line"&gt;&lt;/p&gt;
+&lt;p class="line"&gt;&lt;/p&gt;
+&lt;p class="line"&gt;&lt;span class="comment"&gt;Intro [C] [D]&lt;/span&gt;&lt;/p&gt;
+&lt;p class="line"&gt;Let it &lt;span class="chord"&gt;Am&lt;/span&gt;be, let it &lt;span class="chord"&gt;C/G&lt;/span&gt;be, let it &lt;span class="chord"&gt;F&lt;/span&gt;be, let it &lt;span class="chord"&gt;C&lt;/span&gt;be&lt;/p&gt;
+&lt;p class="line"&gt;&lt;span class="chord"&gt;C&lt;/span&gt;Whisper words of &lt;span class="word"&gt;w&lt;span class="chord"&gt;G&lt;/span&gt;isdom&lt;/span&gt;, let it &lt;span class="chord"&gt;F&lt;/span&gt;be &lt;span class="chord"&gt;C/E&lt;/span&gt;      &lt;span class="chord"&gt;Dm&lt;/span&gt;     &lt;span class="chord"&gt;C&lt;/span&gt;  &lt;/p&gt;
+&lt;p class="line"&gt;&lt;/p&gt;
+</Text>
+`;
+
 exports[`renders correctly 1`] = `
 <Text>
   &lt;p class="line"&gt;&lt;span class="title"&gt;Let it be&lt;/span&gt;&lt;/p&gt;
