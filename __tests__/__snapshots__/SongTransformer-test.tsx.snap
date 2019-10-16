@@ -16,6 +16,12 @@ exports[`hide tabs 1`] = `
 </Text>
 `;
 
+exports[`hide tabs with different line breaking formats 1`] = `
+<Text>
+  &lt;p class="line"&gt;&lt;/p&gt;
+</Text>
+`;
+
 exports[`renders correctly 1`] = `
 <Text>
   &lt;p class="line"&gt;&lt;span class="title"&gt;Let it be&lt;/span&gt;&lt;/p&gt;
