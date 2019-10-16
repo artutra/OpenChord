@@ -12,6 +12,7 @@ interface Props {
   chordSheetSong?: string
   transposeDelta?: number
   showTabs?: boolean
+  fontSize?: number
   children(props: SongProps): JSX.Element;
 }
 
@@ -37,7 +38,7 @@ const transformSong = (song: Song, processor: (parsedChord: Chord) => Chord) => 
 };
 
 const SongTransformer: FunctionComponent<Props> = (props) => {
-  let { showTabs = true, transposeDelta = 0, chordProSong } = props
+  let { showTabs = true, transposeDelta = 0, chordProSong, fontSize = 14 } = props
   let htmlSong = ''
   let song: Song
   if (chordProSong != null) {
@@ -63,7 +64,7 @@ const SongTransformer: FunctionComponent<Props> = (props) => {
       }
     });
   })
-  htmlSong = new CustomHtmlDivFormatter().format(transposedSong)
+  htmlSong = new CustomHtmlDivFormatter().format(transposedSong, fontSize)
 
   return props.children({ chords: allChords, htmlSong })
 }
