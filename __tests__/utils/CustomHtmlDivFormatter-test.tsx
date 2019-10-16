@@ -65,3 +65,20 @@ it('add minimum space between chords', () => {
   let res = `<p class="line">Intro  <span class="chord">C#m7</span>     <span class="chord">A9</span>   <span class="chord">E</span>  <span class="chord">E9</span>   </p>`
   expect(formatter.format(song)).toBe(res)
 })
+
+it('will add a class with size 16 to lines and chords', () => {
+  let chordProSong = `This is a bigword[Cm]withachord in the middle`
+  let song = new ChordSheetJS.ChordProParser().parse(chordProSong)
+  let formatter = new CustomHtmlDivFormatter()
+  let res = ""
+  res += "<p class=\"line line-size-16\">"
+  res += "This is a "
+  res += "<span class=\"word\">"
+  res += "bigword"
+  res += "<span class=\"chord chord-size-16\">Cm</span>"
+  res += "withachord"
+  res += "</span>"
+  res += " in the middle"
+  res += "</p>"
+  expect(formatter.format(song, 16)).toBe(res)
+})
