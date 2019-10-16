@@ -27,15 +27,15 @@ A few features include:
 | Render song with chordpro format | :heavy_check_mark: |
 | Import songs from the web        | :heavy_check_mark: |
 | Transpose song                   | :heavy_check_mark: |
-| Create/edit song                 | :clock2:           |
+| Create/edit song                 | :heavy_check_mark: |
+| Show/hide tabs                   | :heavy_check_mark: |
+| Configure font size              | :heavy_check_mark: |
+| Show guitar chord diagrams       | :heavy_check_mark: |
 | Manage playlists                 | :clock2:           |
 | Search saved songs               | :clock2:           |
 | Slide with touch                 | :clock2:           |
 | Slide with volume button         | :clock2:           |
-| Show/hide responsive tabs        | :clock2:           |
 | Multiple columns visualization   | :clock2:           |
-| Configure font size              | :clock2:           |
-| Show guitar chord diagrams       | :clock2:           |
 | Multiple languages support       | :clock2:           |
 | Chord dictionary                 | :clock2:           |
 | Playlist presentation mode       | :clock2:           |
