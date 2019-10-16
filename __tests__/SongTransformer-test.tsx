@@ -60,3 +60,26 @@ E|---
   ).toJSON()
   expect(tree).toMatchSnapshot()
 })
+
+it('hide tabs with different line breaking formats', () => {
+  let chordProSong = `
+{sot}E|---{eot}
+{sot}
+C|---
+E|---{eot}
+{sot}
+C|---
+E|---
+{eot}{sot}
+C|---
+E|---
+{eot}`
+  const tree = renderer.create(
+    <SongTransformer
+      chordProSong={chordProSong}
+      transposeDelta={0}
+      showTabs={false}
+      children={(songProps) => <Text>{songProps.htmlSong}</Text>} />
+  ).toJSON()
+  expect(tree).toMatchSnapshot()
+})
