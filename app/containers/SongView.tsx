@@ -23,11 +23,14 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   const [content, setContent] = useState<string>("")
   const [isSideMenuOpen, setIsSideMenuOpen] = useState<boolean>(false)
   const [tone, setTone] = useState<number>(0)
+  const [fontSize, setFontSize] = useState<number>(14)
   const [selectedChord, selectChord] = useState<Chord | null>(null)
   const [showTabs, setShowTabs] = useState(true)
 
   function transposeUp() { setTone(tone + 1 >= 12 ? 0 : tone + 1); selectChord(null) }
   function transposeDown() { setTone(tone - 1 <= -12 ? 0 : tone - 1); selectChord(null) }
+  function increaseFontSize() { setFontSize(fontSize + 2 >= 24 ? 24 : fontSize + 2) }
+  function decreaseFontSize() { setFontSize(fontSize - 2 <= 14 ? 14 : fontSize - 2) }
   function openSideMenu() { setIsSideMenuOpen(!isSideMenuOpen) }
 
   function onClickChord(allChords: Array<Chord>, chordString: string) {
@@ -72,6 +75,9 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
             <TouchableIcon onPress={transposeUp} name="plus" />
             <Text>{tone}</Text>
             <TouchableIcon onPress={transposeDown} name="minus" />
+            <TouchableIcon onPress={increaseFontSize} name="plus" />
+            <Text>{fontSize}</Text>
+            <TouchableIcon onPress={decreaseFontSize} name="minus" />
             <TouchableIcon onPress={toggleShowTabs} name="guitar-electric" />
           </View>
           <View style={styles.secondaryToolbarContainer}>
@@ -90,6 +96,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
         chordProSong={content}
         transposeDelta={tone}
         showTabs={showTabs}
+        fontSize={fontSize}
       >
         {songProps => (
           <View style={{ flex: 1 }}>

@@ -2,17 +2,19 @@ import ChordSheetJS, { Song } from "chordsheetjs"
 const NEW_LINE = '\n'
 
 export default class CustomHtmlDivFormatter {
-  format(song: Song) {
+  format(song: Song, fontSize = 14) {
+    let CHORD_SIZE_CLASS = fontSize != 14 ? ` chord-size-${fontSize}` : ''
+    let LYRICS_SIZE_CLASS = fontSize != 14 ? ` line-size-${fontSize}` : ''
     let html = ''
     song.lines.forEach((l, index) => {
-      html += `<p class="line">`
+      html += `<p class="line${LYRICS_SIZE_CLASS}">`
       l.items.forEach(item => {
         if (item instanceof ChordSheetJS.ChordLyricsPair) {
           if (item.chords) {
             let { lyrics } = item
             if (lyrics.length <= item.chords.length)
               lyrics = lyrics + " ".repeat(item.chords.length - lyrics.length + 1)
-            html += `<span class="chord">${item.chords}</span>${lyrics}`
+            html += `<span class="chord${CHORD_SIZE_CLASS}">${item.chords}</span>${lyrics}`
           } else {
             html += `${item.lyrics}`
           }
@@ -27,7 +29,7 @@ export default class CustomHtmlDivFormatter {
         html += NEW_LINE
       }
     })
-    html = html.replace(/\w+(<span class="chord">(.*?)<\/span>\w+)+/g, (v) => {
+    html = html.replace(/\w+(<span class="chord(.*?)<\/span>\w+)+/g, (v) => {
       return `<span class="word">${v}</span>`
     })
     return html
