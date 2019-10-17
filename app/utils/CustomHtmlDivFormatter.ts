@@ -19,7 +19,9 @@ export default class CustomHtmlDivFormatter {
             html += `${item.lyrics}`
           }
         } else {
-          if (item.value != null) {
+          if (item.name == 'x_source_website') {
+            html += `<span class="${item.name}">Source website: ${item.value}</span>`
+          } else if (item.value != null) {
             html += `<span class="${item.name}">${item.value}</span>`
           }
         }
