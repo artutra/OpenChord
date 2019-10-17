@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
-import { Text, View, StyleSheet, TextInput, KeyboardAvoidingView, Button } from "react-native";
+import { Text, View, StyleSheet, TextInput, KeyboardAvoidingView, Button, Platform } from "react-native";
 import { Song, Artist } from '../db'
 import { NavigationScreenComponent } from "react-navigation";
 import TouchableIcon from "../components/TouchableIcon";
@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
     marginBottom: 5
   },
   content: {
-    fontFamily: 'monospace',
+    fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
     flex: 1,
     minHeight: 200,
     padding: 10,
