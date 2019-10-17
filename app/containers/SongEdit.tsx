@@ -72,7 +72,7 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
   }, [artist, title, content])
 
   function switchToChordPro() {
-    let song = new ChordSheetJS.ChordSheetParser({ preserveWhitespace: true }).parse(content)
+    let song = new ChordSheetJS.ChordSheetParser({ preserveWhitespace: false }).parse(content)
     let chordPro = new ChordSheetJS.ChordProFormatter().format(song)
     setContent(chordPro)
     setMode('CHORD_PRO')
