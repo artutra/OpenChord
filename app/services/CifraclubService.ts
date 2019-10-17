@@ -60,6 +60,11 @@ export default class CifraclubService extends BaseService {
     })
     return docs
   }
+  async getChordProSong(path: string) {
+    let url = `${this.baseUrl}/${path}`
+    const result = await axios.get(url);
+    return this.parseToChordPro(result.data, url)
+  }
   async getSongHtml(path: string): Promise<string> {
     const result = await axios.get(`${this.baseUrl}/${path}`);
     return result.data
@@ -69,22 +74,20 @@ export default class CifraclubService extends BaseService {
       return cheerio.load(`<div>${dec}</div>`)('div').text()
     });
   }
-  parseToChordPro(html: string) {
+  parseToChordPro(html: string, url: string) {
     const $ = cheerio.load(html)
     let chordSheetHtml = $('pre').html()!
     let musicTitle = $('.title').children('div').children('h1').text()
     let artistName = $('.title').children('div').children('.title_h2').text()
-    let header = `{title: ${musicTitle}}\n{artist: ${artistName}}\n`
+    let header =
+      `{title: ${musicTitle}}\n` +
+      `{artist: ${artistName}}\n` +
+      `{x_source_website: ${url}}\n`
     chordSheetHtml = this.decode(chordSheetHtml)
     chordSheetHtml = chordSheetHtml.replace(/\[/g, '')
     chordSheetHtml = chordSheetHtml.replace(/\]/g, '')
     chordSheetHtml = new CifraclubParser().parse(chordSheetHtml)
     chordSheetHtml = header + chordSheetHtml
     return chordSheetHtml
-  }
-  parseToPlainText(html: string) {
-    const $ = cheerio.load(html)
-    let cs = $('div.cifra_cnt').text()
-    return cs
   }
 }

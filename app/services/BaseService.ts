@@ -18,7 +18,6 @@ export abstract class BaseService {
   constructor() { }
   abstract async getSearch(query: string): Promise<Doc[]>
   abstract async getArtistSongs(path: string): Promise<SongDoc[]>
-  abstract async getSongHtml(path: string): Promise<string>
-  abstract parseToChordPro(html: string): string
-  abstract parseToPlainText(html: string): string
+  abstract async getChordProSong(path: string): Promise<string>
+  abstract parseToChordPro(html: string, url: string): string
 }

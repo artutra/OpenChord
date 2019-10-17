@@ -82,3 +82,14 @@ it('will add a class with size 16 to lines and chords', () => {
   res += "</p>"
   expect(formatter.format(song, 16)).toBe(res)
 })
+
+it('add label to x_source_website tag', () => {
+  let chordProSong = `{x_source_website: www.test.com}`
+  let song = new ChordSheetJS.ChordProParser().parse(chordProSong)
+  let formatter = new CustomHtmlDivFormatter()
+  let res =
+    "<p class=\"line\">" +
+    "<span class=\"x_source_website\">Source website: www.test.com</span>" +
+    "</p>"
+  expect(formatter.format(song)).toBe(res)
+})
