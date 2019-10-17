@@ -3,12 +3,8 @@ import { Component } from 'react';
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { createStackNavigator } from 'react-navigation-stack'
 import ArtistList from "./containers/ArtistList";
-import Config from "./containers/Config";
-import PlaylistList from "./containers/PlaylistList";
-import Search from "./containers/Search";
 import ArtistView from './containers/ArtistView';
 import SongView from './containers/SongView';
-import PlaylistView from './containers/PlaylistView';
 import SongList from './containers/SongList';
 import { BottomTabBarOptions } from 'react-navigation-tabs/lib/typescript/src/types';
 import TabBarIcon from './components/TabBarIcon';
@@ -65,12 +61,6 @@ const AppNavigation = createBottomTabNavigator({
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="playlist-music" />
     })
   },
-  //PlaylistList: createStackNavigator({
-  //  PlaylistList,
-  //  PlaylistView,
-  //  SongView
-  //}),
-  //Search,
   OnlineSearch: {
     screen: createStackNavigator({
       OnlineSearch: {
@@ -90,13 +80,6 @@ const AppNavigation = createBottomTabNavigator({
     navigationOptions: {
       title: 'Online Search',
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="magnify" />
-    }
-  },
-  Config: {
-    screen: Config,
-    navigationOptions: {
-      title: 'Settings',
-      tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="settings" />
     }
   },
 }, tabNavigatorConfig)
