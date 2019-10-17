@@ -24,8 +24,7 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
   useEffect(() => {
     const fetchData = async () => {
       let service = getService(serviceName)!
-      let html = await service.getSongHtml(path)
-      let chordPro = service.parseToChordPro(html)
+      let chordPro = await service.getChordProSong(path)
       setChordCheet(chordPro)
     };
     fetchData();
