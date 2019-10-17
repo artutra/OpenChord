@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
-import { Text, View, StyleSheet, Alert } from "react-native";
+import { Text, View, StyleSheet, Alert, Switch } from "react-native";
 import { Song } from '../db'
 import { NavigationScreenComponent } from "react-navigation";
 import SideMenu from 'react-native-side-menu'
@@ -55,7 +55,6 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
       { cancelable: true }
     )
   }
-  function toggleShowTabs() { setShowTabs(!showTabs) }
 
   useEffect(() => {
     let id = props.navigation.getParam('id')
@@ -72,13 +71,19 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
       menu={
         <View style={styles.sideMenuContainer}>
           <View style={styles.toolbarContainer}>
-            <TouchableIcon onPress={transposeUp} name="plus" />
-            <Text>{tone}</Text>
-            <TouchableIcon onPress={transposeDown} name="minus" />
-            <TouchableIcon onPress={increaseFontSize} name="plus" />
-            <Text>{fontSize}</Text>
-            <TouchableIcon onPress={decreaseFontSize} name="minus" />
-            <TouchableIcon onPress={toggleShowTabs} name="guitar-electric" />
+            <View style={styles.tool}>
+              <TouchableIcon size={25} onPress={transposeUp} name="plus" />
+              <Text>{tone}</Text>
+              <TouchableIcon size={25} onPress={transposeDown} name="minus" />
+            </View>
+            <View style={styles.tool}>
+              <TouchableIcon size={25} onPress={increaseFontSize} name="format-font-size-increase" />
+              <TouchableIcon size={25} onPress={decreaseFontSize} name="format-font-size-decrease" />
+            </View>
+            <View style={styles.tool}>
+              <Switch onValueChange={setShowTabs} value={showTabs} />
+              <Text style={styles.toolLabel}>Show Tabs</Text>
+            </View>
           </View>
           <View style={styles.secondaryToolbarContainer}>
             <TouchableIcon onPress={editSong} name="pencil" />
@@ -130,8 +135,17 @@ const styles = StyleSheet.create({
   },
   toolbarContainer: {
     justifyContent: 'center',
+    alignItems: 'stretch',
+  },
+  tool: {
+    backgroundColor: '#ccc',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ccc'
+    marginBottom: 5,
+    paddingVertical: 5,
+  },
+  toolLabel: {
+    textAlign: 'center'
   },
   secondaryToolbarContainer: {
     flex: 1,
