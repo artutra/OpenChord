@@ -23,7 +23,7 @@ export default class CifraclubParser {
     let rendered = ""
     if (lines != null) {
       let chordsNextLine: MusicChord[] = []
-      lines.forEach((line) => {
+      lines.forEach((line, index) => {
         if (chordsNextLine.length > 0) {
           rendered += this.insertChordsInLine(line, chordsNextLine) + NEW_LINE
           chordsNextLine = []
@@ -31,7 +31,11 @@ export default class CifraclubParser {
           let lineChords = this.getChords(line)
           // clean chords from line
           line = line.replace(REGEX_CHORDS, '')
-          if (this.hasNonWhitespaceCharacter(line)) {
+          let nextLineHasChords = false
+          if (index < lines.length - 1) {
+            nextLineHasChords = this.hasChords(lines[index + 1])
+          }
+          if (this.hasNonWhitespaceCharacter(line) || nextLineHasChords) {
             // TODO: Add comment tag for inline chord notation
             rendered += this.insertChordsInLine(line, lineChords, true) + NEW_LINE
           } else {
@@ -40,7 +44,10 @@ export default class CifraclubParser {
         }
       })
       if (chordsNextLine.length > 0) {
-        rendered += this.insertChordsInLine('', chordsNextLine, true) + NEW_LINE
+        // clean chords from line
+        let lastLine = lines[lines.length - 1]
+        lastLine = lastLine.replace(REGEX_CHORDS, '')
+        rendered += this.insertChordsInLine(lastLine, chordsNextLine, true) + NEW_LINE
       }
     }
     return rendered
@@ -48,6 +55,9 @@ export default class CifraclubParser {
 
   private hasNonWhitespaceCharacter = (line: string) => {
     return line.match(/\S+/g) != null
+  }
+  private hasChords = (line: string) => {
+    return line.match(REGEX_CHORDS) != null
   }
 
   private getChords = (line: string): MusicChord[] => {

@@ -57,6 +57,7 @@ A|3<u>----------</u>3<u>-</u>3<u>---</u>3<u>-</u>3<u>-</u>3<u>--</u>2<u>--</u>
 E|<u>---------------------------</u>
 </span></span>`
   let res =
+    "\n" +
     "   [C]                        \n" +
     "{sot}\n" +
     "e|---------------------------\n" +
@@ -66,6 +67,23 @@ E|<u>---------------------------</u>
     "A|3----------3-3---3-3-3--2--\n" +
     "E|---------------------------\n" +
     "{eot}\n\n"
+  let chordPro = new CifraclubParser().parse(html)
+  expect(chordPro).toBe(res)
+})
+
+it('will render correctly when it has multiple lines of chords in a row', () => {
+  let html = ` Base do solo
+<b>G</b>  <b>D/F#</b>  <b>Em</b>  <b>G</b>  <b>A7</b>  <b>D</b>
+<b>G</b>  <b>D/F#</b>  <b>Em</b>  <b>A7</b>  <b>D</b>
+<b>G</b>  <b>A7</b>  <b>D</b>
+<b>D</b>  <b>A7</b>  <b>D7</b>  <b>C9</b>`
+  let res =
+    " Base do solo\n" +
+    "[G]  [D/F#]  [Em]  [G]  [A7]  [D]\n" +
+    "[G]  [D/F#]  [Em]  [A7]  [D]\n" +
+    "[G]  [A7]  [D]\n" +
+    "[D]  [A7]  [D7]  [C9]\n"
+
   let chordPro = new CifraclubParser().parse(html)
   expect(chordPro).toBe(res)
 })
