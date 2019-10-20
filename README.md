@@ -17,6 +17,16 @@ Cross-platform chordpro reader app for Android and iOS written with React Native
   </a>
 </p>
 
+# :camera: Screenshots
+
+<p float="left">
+  <img src="./screenshots/ArtistList.png" alt="screenshot-1" width="150">
+  <img src="./screenshots/SongView.png" alt="screenshot-2" width="150">
+  <img src="./screenshots/ChordDiagram.png" alt="screenshot-3" width="150">
+  <img src="./screenshots/Toolbar.png" alt="screenshot-4" width="150">
+  <img src="./screenshots/EditSong.png" alt="screenshot-5" width="150">
+</p>
+
 # Features
 Open Chord is a React Native application for both Android and iOS that allows you to organize your chord charts, lyric sheets and songbooks with a simple app on your tablet or smartphone. Open Chord easily allows you to get rid of all that paper by displaying your music in a flexible, easy to read format.
 
@@ -31,6 +41,7 @@ A few features include:
 | Show/hide tabs                   | :heavy_check_mark: |
 | Configure font size              | :heavy_check_mark: |
 | Show guitar chord diagrams       | :heavy_check_mark: |
+| Autoscroll                       | :heavy_check_mark: |
 | Manage playlists                 | :clock2:           |
 | Search saved songs               | :clock2:           |
 | Slide with touch                 | :clock2:           |
