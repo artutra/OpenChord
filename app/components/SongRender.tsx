@@ -1,13 +1,43 @@
-import React, { FunctionComponent } from 'react'
+import React, { FunctionComponent, useRef, useEffect } from 'react'
 import WebView from 'react-native-webview'
 
 interface Props {
   chordProContent: string
   onPressChord?: (chord: string) => void
+  scrollSpeed?: number
 }
 const SongRender: FunctionComponent<Props> = (props) => {
+  const webRef = useRef<WebView>(null)
+  let { scrollSpeed = 0 } = props
+  useEffect(() => {
+    let run: string
+    if (scrollSpeed <= 0) {
+      run = `
+      if(window.intervalId) {
+        clearInterval(window.intervalId);
+      }
+      true;
+      `
+    } else {
+      run = `
+      function pageScroll(){
+        window.scrollBy(0,1);
+      }
+      if(window.intervalId) {
+        clearInterval(window.intervalId);
+      }
+      window.intervalId = setInterval(pageScroll, ${(1 - scrollSpeed) * 200 + 10});
+      true;
+      `
+    }
+    if (webRef.current) {
+      webRef.current.injectJavaScript(run)
+    }
+  }, [props.scrollSpeed])
+
   return (
     <WebView
+      ref={webRef}
       startInLoadingState={true}
       overScrollMode={'never'}
       source={{ html: renderHtml(props.chordProContent, styles) }}
@@ -31,12 +61,12 @@ const onClickChordPostMessage = `
         window.ReactNativeWebView.postMessage(chord)
       }
     }
-  var anchors = document.getElementsByClassName('chord');
-  for(var i = 0; i < anchors.length; i++) {
-      var anchor = anchors[i];
-      var chord = anchor.innerText || anchor.textContent;
-      anchor.onclick = onClickChord(chord)
-  }
+    var anchors = document.getElementsByClassName('chord');
+    for(var i = 0; i < anchors.length; i++) {
+        var anchor = anchors[i];
+        var chord = anchor.innerText || anchor.textContent;
+        anchor.onclick = onClickChord(chord)
+    }
 })();
 
 true;

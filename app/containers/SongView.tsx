@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
-import { Text, View, StyleSheet, Alert, Switch } from "react-native";
+import { Text, View, StyleSheet, Alert, Switch, Slider, TouchableOpacity } from "react-native";
 import { Song } from '../db'
 import { NavigationScreenComponent } from "react-navigation";
 import SideMenu from 'react-native-side-menu'
@@ -9,6 +9,7 @@ import { NavigationStackOptions, NavigationStackProp, } from "react-navigation-s
 import Chord from 'chordjs'
 import ChordTab from "../components/ChordTab";
 import SongTransformer from "../components/SongTransformer";
+import AutoScrollSlider from "../components/AutoScrollSlider";
 
 type Params = { id: string, title: string, openSideMenu: () => void }
 
@@ -23,6 +24,8 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   const [content, setContent] = useState<string>("")
   const [isSideMenuOpen, setIsSideMenuOpen] = useState<boolean>(false)
   const [tone, setTone] = useState<number>(0)
+  const [showAutoScrollSlider, setShowAutoScrollSlider] = useState(false)
+  const [scrollSpeed, setScrollSpeed] = useState<number>(0)
   const [fontSize, setFontSize] = useState<number>(14)
   const [selectedChord, selectChord] = useState<Chord | null>(null)
   const [showTabs, setShowTabs] = useState(true)
@@ -81,6 +84,14 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
               <TouchableIcon size={25} onPress={decreaseFontSize} name="format-font-size-decrease" />
             </View>
             <View style={styles.tool}>
+              <TouchableOpacity onPress={() => {
+                setIsSideMenuOpen(false)
+                setShowAutoScrollSlider(true)
+              }}>
+                <Text style={styles.toolLabel}>Auto Scroll</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.tool}>
               <Switch onValueChange={setShowTabs} value={showTabs} />
               <Text style={styles.toolLabel}>Show Tabs</Text>
             </View>
@@ -108,11 +119,17 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
             <SongRender
               onPressChord={(chordString) => onClickChord(songProps.chords, chordString)}
               chordProContent={songProps.htmlSong}
+              scrollSpeed={scrollSpeed}
             />
             <ChordTab
               onPressClose={() => selectChord(null)}
               selectedChord={selectedChord}
               allChords={songProps.chords}
+            />
+            <AutoScrollSlider
+              show={showAutoScrollSlider}
+              onValueChange={setScrollSpeed}
+              onClose={() => setShowAutoScrollSlider(false)}
             />
           </View>
         )}
