@@ -10,17 +10,27 @@ const SongRender: FunctionComponent<Props> = (props) => {
   const webRef = useRef<WebView>(null)
   let { scrollSpeed = 0 } = props
   useEffect(() => {
-    const run = `
-    function pageScroll(){
-      window.scrollBy(0,1);
+    let run: string
+    if (scrollSpeed <= 0) {
+      run = `
+      if(window.intervalId) {
+        clearInterval(window.intervalId);
+      }
+      true;
+      `
+    } else {
+      run = `
+      function pageScroll(){
+        window.scrollBy(0,1);
+      }
+      if(window.intervalId) {
+        clearInterval(window.intervalId);
+      }
+      window.intervalId = setInterval(pageScroll, ${(1 - scrollSpeed) * 200 + 10});
+      true;
+      `
     }
-    if(window.intervalId) {
-      clearInterval(window.intervalId);
-    }
-    window.intervalId = setInterval(pageScroll, ${(1 - scrollSpeed) * 200 + 10});
-    true;
-    `
-    if (webRef.current && scrollSpeed > 0) {
+    if (webRef.current) {
       webRef.current.injectJavaScript(run)
     }
   }, [props.scrollSpeed])
