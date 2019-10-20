@@ -41,6 +41,7 @@ A few features include:
 | Show/hide tabs                   | :heavy_check_mark: |
 | Configure font size              | :heavy_check_mark: |
 | Show guitar chord diagrams       | :heavy_check_mark: |
+| Autoscroll                       | :heavy_check_mark: |
 | Manage playlists                 | :clock2:           |
 | Search saved songs               | :clock2:           |
 | Slide with touch                 | :clock2:           |
