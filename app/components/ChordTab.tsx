@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, FunctionComponent } from "react";
-import { Text, View, TouchableOpacity, StyleSheet, FlatList } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, FlatList, StyleProp, ViewStyle } from "react-native";
 import ChordChart from "../components/ChordChart";
 import chords from '../assets/chords/guitar.json'
 
@@ -39,8 +39,8 @@ const ChordTab: FunctionComponent<Props> = ({ selectedChord, allChords, onPressC
               position = chordObj.positions
             }
           }
-          let selectedStyle = null
-          if (item == selectedChord)
+          let selectedStyle: StyleProp<ViewStyle> = null
+          if (item.toString() == selectedChord.toString())
             selectedStyle = styles.itemSelected
           return (
             <View key={item.toString()} style={[styles.item, selectedStyle]}>
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   itemSelected: {
-    borderBottomColor: 'blue',
+    borderBottomColor: 'tomato',
     borderBottomWidth: 5
   }
 });
