@@ -120,6 +120,13 @@ body {
   top: -17px;
   cursor: pointer;
 }
+.chord-inline {
+  position: inherit;
+  display: inline-block;
+  padding-top: 0px;
+  width: auto;
+  top: auto;
+}
 .chord-size-14 { top: -14px; }
 .chord-size-15 { top: -15px; }
 .chord-size-16 { top: -16px; }
