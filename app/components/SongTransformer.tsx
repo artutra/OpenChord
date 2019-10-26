@@ -17,13 +17,21 @@ interface Props {
 }
 
 const processChord = (item: (ChordSheetJS.ChordLyricsPair | ChordSheetJS.Tag), processor: (parsedChord: Chord) => Chord) => {
-  if (item instanceof ChordSheetJS.ChordLyricsPair && item.chords) {
-    const parsedChord = Chord.parse(item.chords);
+  if (item instanceof ChordSheetJS.ChordLyricsPair) {
+    if (item.chords) {
+      const parsedChord = Chord.parse(item.chords);
 
-    if (parsedChord) {
-      const processedChordLyricsPair = item.clone();
-      processedChordLyricsPair.chords = processor(parsedChord).toString();
-      return processedChordLyricsPair;
+      if (parsedChord) {
+        const processedChordLyricsPair = item.clone();
+        processedChordLyricsPair.chords = processor(parsedChord).toString();
+        return processedChordLyricsPair;
+      }
+    }
+  } else {
+    if (item.name == 'comment' && item.value) {
+      let commentSong = new ChordSheetJS.ChordProParser().parse(item.value)
+      commentSong = transformSong(commentSong, processor);
+      item.value = new ChordSheetJS.ChordProFormatter().format(commentSong)
     }
   }
   return item;
@@ -36,7 +44,32 @@ const transformSong = (song: Song, processor: (parsedChord: Chord) => Chord) => 
   });
   return song;
 };
-
+export const transposeSong = (song: Song, transposeDelta: number) => transformSong(song, chord => chord.transpose(transposeDelta))
+export const getChords = (song: Song): Chord[] => {
+  let allChords: Chord[] = []
+  song.lines.forEach(line => {
+    line.items.forEach(item => {
+      if (item instanceof ChordSheetJS.ChordLyricsPair) {
+        if (item.chords) {
+          const parsedChord = Chord.parse(item.chords);
+          if (parsedChord != null && allChords.find(c => c.toString() == parsedChord.toString()) == null) {
+            allChords.push(parsedChord)
+          }
+        }
+      } else {
+        if (item.name == 'comment' && item.value) {
+          let commentSong = new ChordSheetJS.ChordProParser().parse(item.value)
+          getChords(commentSong).forEach(c => {
+            if (!allChords.some(ac => ac.toString() == c.toString())) {
+              allChords.push(c)
+            }
+          })
+        }
+      }
+    })
+  })
+  return allChords
+}
 const SongTransformer: FunctionComponent<Props> = (props) => {
   let { showTabs = true, transposeDelta = 0, chordProSong, fontSize = 14 } = props
   let htmlSong = ''
@@ -51,19 +84,9 @@ const SongTransformer: FunctionComponent<Props> = (props) => {
   }
   let transposedSong = song
   if (transposeDelta != 0) {
-    transposedSong = transformSong(song, chord => chord.transpose(transposeDelta));
+    transposedSong = transposeSong(song, transposeDelta);
   }
-  let allChords = Array<Chord>()
-  transposedSong.lines.forEach(line => {
-    line.items.forEach(item => {
-      if (item instanceof ChordSheetJS.ChordLyricsPair && item.chords) {
-        const parsedChord = Chord.parse(item.chords);
-        if (parsedChord != null && allChords.find(c => c.toString() == parsedChord.toString()) == null) {
-          allChords.push(parsedChord)
-        }
-      }
-    });
-  })
+  let allChords = getChords(transposedSong)
   htmlSong = new CustomHtmlDivFormatter().format(transposedSong, fontSize)
 
   return props.children({ chords: allChords, htmlSong })
