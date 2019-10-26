@@ -19,7 +19,13 @@ export default class CustomHtmlDivFormatter {
             html += `${item.lyrics}`
           }
         } else {
-          if (item.name == 'x_source_website') {
+          if (item.name == 'comment' && item.value) {
+            let comment = item.value
+            comment = comment.replace(/\[([^\]]+)\]/g, (v, c) => {
+              return `<span class="chord${CHORD_SIZE_CLASS} chord-inline">${c}</span>`
+            })
+            html += `<span class="${item.name}">${comment}</span>`
+          } else if (item.name == 'x_source_website') {
             html += `<span class="${item.name}">Source website: ${item.value}</span>`
           } else if (item.value != null) {
             html += `<span class="${item.name}">${item.value}</span>`
