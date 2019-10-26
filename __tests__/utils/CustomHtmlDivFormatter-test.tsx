@@ -93,3 +93,21 @@ it('add label to x_source_website tag', () => {
     "</p>"
   expect(formatter.format(song)).toBe(res)
 })
+
+it('render comment tag correctly', () => {
+  let chordProSong =
+    "{comment: Intro [C] [D7]  [F#]}\n" +
+    "{c: Intro [C] [D7]  [F#]}"
+  let song = new ChordSheetJS.ChordProParser().parse(chordProSong)
+  let formatter = new CustomHtmlDivFormatter()
+  let res =
+    "<p class=\"line\">" +
+    "<span class=\"comment\">Intro " +
+    "<span class=\"chord chord-inline\">C</span> " +
+    "<span class=\"chord chord-inline\">D7</span>  " +
+    "<span class=\"chord chord-inline\">F#</span>" +
+    "</span>" +
+    "</p>"
+  res = res + '\n' + res
+  expect(formatter.format(song)).toBe(res)
+})
