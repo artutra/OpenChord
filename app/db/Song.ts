@@ -34,7 +34,7 @@ export class Song {
     return realm.objectForPrimaryKey<Song>('Song', id)
   }
   static getByArtist(artistId: string) {
-    return realm.objects<Song>('Song').filtered('artist.id = $0', artistId);
+    return realm.objects<Song>('Song').filtered('artist.id = $0', artistId).sorted('title');
   }
   static shouldUpdateDb() {
     let s = this.getAll().find(() => true)
@@ -62,7 +62,7 @@ export class Song {
     }
   }
 
-  static getAll() { return realm.objects<Song>('Song') }
+  static getAll() { return realm.objects<Song>('Song').sorted('title') }
 
   static create(song: Song) {
     let artistName = song.artist.name

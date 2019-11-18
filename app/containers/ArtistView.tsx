@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Text, FlatList } from "react-native";
 import { NavigationScreenProp } from "react-navigation"
-import realm, { Song, Artist } from "../db";
+import { Song, Artist } from "../db";
 import ListItem from "../components/ListItem";
 
 interface Props {
@@ -9,9 +9,9 @@ interface Props {
 }
 const ArtistView = (props: Props) => {
   let id = props.navigation.getParam('id')
-  let artist = realm.objectForPrimaryKey<Artist>('Artist', id)!
+  let artist = Artist.getById(id)!
   const [name] = useState(artist.name)
-  const [musics] = useState(realm.objects<Song>('Song').filtered('artist.id = $0', id));
+  const [musics] = useState(Song.getByArtist(artist.id!))
 
   function onSelectSong(id: string, title: string) {
     props.navigation.navigate('SongView', { id, title })
