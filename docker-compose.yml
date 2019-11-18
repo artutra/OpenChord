@@ -6,6 +6,8 @@ services:
     ports:
       - 8081:8081
     volumes:
-      - ./__tests__:/usr/src/app/__tests__
-      - ./android:/usr/src/app/android
-      - ./app:/usr/src/app/app
+      - '.:/usr/src/app'
+      - node_modules:/usr/src/app/node_modules
+
+volumes:
+  node_modules:
