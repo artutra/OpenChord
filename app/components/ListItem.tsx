@@ -13,7 +13,7 @@ const ListItem: FunctionComponent<ListItemProps> = (props) => {
   const [isMenuEnabled, setMenuEnabled] = useState(false)
   return (
     <TouchableOpacity onPress={props.onPress} style={styles.item}>
-      <View>
+      <View style={styles.textContainer}>
         <Text style={styles.title}>{props.title}</Text>
         {props.subtitle && <Text style={styles.subtitle}>{props.subtitle}</Text>}
       </View>
@@ -41,9 +41,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'space-between'
   },
-  title: {
+  textContainer: {
     paddingTop: 20,
     paddingBottom: 20,
+  },
+  title: {
     fontSize: 18
   },
   subtitle: {
