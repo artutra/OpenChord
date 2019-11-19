@@ -1,4 +1,5 @@
 import realm from "."
+import { Song } from "./Song"
 
 export class Artist {
   id?: string | null
@@ -19,7 +20,11 @@ export class Artist {
       updated_at: 'date'
     }
   }
-  static getAll() { return realm.objects<Artist>('Artist') }
+  songs() {
+    console.warn(this.id)
+    return Song.getByArtist(this.id!)
+  }
+  static getAll() { return realm.objects<Artist>('Artist').sorted('name') }
 
   static getById(id: string) {
     return realm.objectForPrimaryKey<Artist>('Artist', id)

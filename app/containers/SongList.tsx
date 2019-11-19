@@ -1,7 +1,7 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
 import { NavigationScreenProp, NavigationScreenComponent } from "react-navigation"
 import { FlatList } from "react-native-gesture-handler";
-import realm, { Song } from '../db'
+import { Song } from '../db'
 import ListItem from "../components/ListItem";
 import TouchableIcon from "../components/TouchableIcon";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
@@ -13,7 +13,7 @@ const SongList: FunctionComponent<Props> & NavigationScreenComponent<
   NavigationStackOptions,
   NavigationStackProp
 > = (props: Props) => {
-  const [songs] = useState(realm.objects<Song>('Song').sorted('title'));
+  const [songs] = useState(Song.getAll());
   function onSelectSong(id: string, title: string) {
     props.navigation.navigate('SongView', { id, title })
   }
