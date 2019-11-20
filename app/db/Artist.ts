@@ -30,6 +30,9 @@ export class Artist {
     return realm.objectForPrimaryKey<Artist>('Artist', id)
   }
   static delete(id: string) {
-    realm.delete(this.getById(id))
+    realm.write(() => {
+      realm.delete(Song.getByArtist(id))
+      realm.delete(this.getById(id))
+    })
   }
 }

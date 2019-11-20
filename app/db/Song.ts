@@ -100,7 +100,7 @@ export class Song {
       let artistId = song!.artist.id!
       realm.delete(song)
       if (Song.getByArtist(artistId).length <= 0) {
-        Artist.delete(artistId)
+        realm.delete(Artist.getById(artistId))
       }
     })
   }
