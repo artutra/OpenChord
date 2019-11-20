@@ -8,6 +8,8 @@ import { getService } from "../services";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import ChordSheetJS from 'chordsheetjs';
 import realm, { Artist, Song } from "../db";
+import { ROUTES } from "../AppNavigation";
+import { SongViewParams } from "./SongView";
 
 interface SongPreviewProps {
   navigation: NavigationStackProp<{}, { path: string, serviceName: string }>
@@ -39,13 +41,14 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
 
     let artist = new Artist(parsedSong.getMetaData('artist')!)
     let song = new Song(parsedSong.getMetaData('title')!, formatter.format(parsedSong), artist)
-    let songId
+    let songId: string
     realm.write(() => {
       let created = Song.create(song)
-      songId = created.id
+      songId = created.id!
     })
-    props.navigation.navigate('SongView', { id: songId, title: song.title })
-    Alert.alert('Song saved')
+    let params: SongViewParams = { id: songId!, title: song.title }
+    props.navigation.replace(ROUTES.SongView, params)
+    Alert.alert('Info', 'Song downloaded')
   }
 
   return (
@@ -67,7 +70,7 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
                 <Icon
                   color="white"
                   size={30}
-                  name="content-save"
+                  name="download"
                 />
               </TouchableOpacity>
             </View>

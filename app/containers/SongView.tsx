@@ -11,10 +11,10 @@ import ChordTab from "../components/ChordTab";
 import SongTransformer from "../components/SongTransformer";
 import AutoScrollSlider from "../components/AutoScrollSlider";
 
-type Params = { id: string, title: string, openSideMenu: () => void }
+export type SongViewParams = { id: string, title: string, openSideMenu?: () => void }
 
 type Props = {
-  navigation: NavigationStackProp<{}, Params>
+  navigation: NavigationStackProp<{}, SongViewParams>
 }
 
 const SongView: FunctionComponent<Props> & NavigationScreenComponent<
