@@ -1,9 +1,9 @@
-import React, { useState, useEffect, FunctionComponent } from "react";
+import React, { useState, useEffect, FunctionComponent, useRef } from "react";
 import { View, StyleSheet, Picker, TextInput } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import ListItem from "../components/ListItem";
 import { NavigationStackProp, NavigationStackOptions } from "react-navigation-stack/lib/typescript/types";
-import { NavigationScreenComponent } from "react-navigation";
+import { NavigationScreenComponent, withNavigationFocus } from "react-navigation";
 import { services, getService } from "../services";
 import { Doc } from "../services/BaseService";
 import { Header } from "react-navigation-stack";
@@ -12,19 +12,21 @@ import SafeAreaView from "react-native-safe-area-view";
 
 interface OnlineSearchProps {
   navigation: NavigationStackProp<{}, {}>
+  isFocused: boolean // Provided by the withNavigationFocus HOC
 }
 
 const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenComponent<
   NavigationStackOptions,
   NavigationStackProp
 > = (props) => {
+  const searchInput = useRef<TextInput>(null)
   const [baseServices] = useState(services)
   const [serviceName, setServiceName] = useState(services[0].name)
   const [docs, setDocs] = useState<Doc[]>([])
   const [query, setQuery] = useState('')
 
   async function makeSearch() {
-    if (query.length > 2) {
+    if (query.length > 0) {
       const fetchData = async () => {
         const docs = await getService(serviceName)!.getSearch(query)
         setDocs(docs)
@@ -32,6 +34,13 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
       fetchData();
     }
   }
+
+  useEffect(() => {
+    if (searchInput.current && props.isFocused) {
+      searchInput.current.focus()
+    }
+  }, [props.isFocused])
+
   return (
     <SafeAreaView>
       <View style={styles.customHeader}>
@@ -45,6 +54,7 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
         </Picker>
       </View>
       <SearchBar
+        inputRef={searchInput}
         onSubmitEditing={makeSearch}
         onChangeText={(value) => setQuery(value)}
         query={query}
@@ -72,7 +82,7 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
     </SafeAreaView>
   );
 }
-export default OnlineSearch
+export default withNavigationFocus(OnlineSearch)
 
 const styles = StyleSheet.create({
   customHeader: {
