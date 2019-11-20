@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 interface SearchBarProps {
   query: string
+  inputRef?: React.RefObject<TextInput> | null | undefined
   onChangeText: (text: string) => void
   onSubmitEditing: () => void
 }
@@ -14,6 +15,7 @@ const SearchBar: FunctionComponent<SearchBarProps> = (props) => {
       <View style={styles.inputContainer}>
         <Icon name="magnify" size={20} color="#aaa" />
         <TextInput
+          ref={props.inputRef}
           style={styles.searchText}
           keyboardType="default"
           placeholder="Search"
