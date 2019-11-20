@@ -52,6 +52,7 @@ const AppNavigation = createBottomTabNavigator({
         screen: SongList,
         navigationOptions: { title: 'Songs' }
       },
+      ArtistView,
       SongView,
       SongEdit: SongEdit
     }),
@@ -75,7 +76,8 @@ const AppNavigation = createBottomTabNavigator({
           title: 'Preview'
         }
       },
-      OnlineArtistView: OnlineArtistView,
+      OnlineArtistView,
+      SongView
     }),
     navigationOptions: {
       title: 'Online Search',
@@ -85,3 +87,14 @@ const AppNavigation = createBottomTabNavigator({
 }, tabNavigatorConfig)
 
 export default AppNavigation;
+
+export enum ROUTES {
+  ArtistList = 'ArtistList',
+  ArtistView = 'ArtistView',
+  OnlineArtistView = 'OnlineArtistView',
+  OnlineSearch = 'OnlineSearch',
+  SongEdit = 'SongEdit',
+  SongList = 'SongList',
+  SongPreview = 'SongPreview',
+  SongView = 'SongView',
+}
