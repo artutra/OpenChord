@@ -4,6 +4,7 @@ import { NavigationScreenProp } from "react-navigation"
 import { FlatList } from "react-native-gesture-handler";
 import { Artist, Song } from '../db'
 import ListItem from "../components/ListItem";
+import { removeArtist } from "../utils/removeArtist";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>
@@ -23,6 +24,11 @@ const ArtistList = (props: Props) => {
   function onSelectArtist(id: string, name: string) {
     props.navigation.navigate('ArtistView', { id, title: name })
   }
+  function onPressDeleteArtist(id: string) {
+    removeArtist(id, () => {
+      setArtists(Artist.getAll())
+    })
+  }
 
   useEffect(() => {
     const didBlurSubscription = props.navigation.addListener(
@@ -40,7 +46,15 @@ const ArtistList = (props: Props) => {
       <FlatList
         data={artists}
         renderItem={({ item }) => {
-          return <ListItem key={item.id!} title={item.name} onPress={() => onSelectArtist(item.id!, item.name)} />
+          return (
+            <ListItem
+              key={item.id!}
+              title={item.name}
+              onPress={() => onSelectArtist(item.id!, item.name)}
+              options={[
+                { title: 'Delete', onPress: () => onPressDeleteArtist(item.id!) }
+              ]} />
+          )
         }}
       />
     </View>
