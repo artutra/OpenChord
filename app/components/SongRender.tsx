@@ -1,11 +1,15 @@
 import React, { FunctionComponent, useRef, useEffect } from 'react'
 import WebView from 'react-native-webview'
+import { NativeSyntheticEvent } from 'react-native'
+import { WebViewMessage } from 'react-native-webview/lib/WebViewTypes'
 
 interface Props {
   chordProContent: string
   onPressChord?: (chord: string) => void
+  onPressArtist?: () => void
   scrollSpeed?: number
 }
+const ARTIST_TAG = "<artist>"
 const SongRender: FunctionComponent<Props> = (props) => {
   const webRef = useRef<WebView>(null)
   let { scrollSpeed = 0 } = props
@@ -35,6 +39,16 @@ const SongRender: FunctionComponent<Props> = (props) => {
     }
   }, [props.scrollSpeed])
 
+
+  function onReceiveMessage(event: NativeSyntheticEvent<WebViewMessage>) {
+    let { data } = event.nativeEvent
+    if (props.onPressArtist && data.includes(ARTIST_TAG)) {
+      props.onPressArtist()
+    } else if (props.onPressChord) {
+      props.onPressChord(event.nativeEvent.data)
+    }
+  }
+
   return (
     <WebView
       ref={webRef}
@@ -42,7 +56,7 @@ const SongRender: FunctionComponent<Props> = (props) => {
       overScrollMode={'never'}
       source={{ html: renderHtml(props.chordProContent, styles) }}
       injectedJavaScript={onClickChordPostMessage}
-      onMessage={(event) => { if (props.onPressChord) props.onPressChord(event.nativeEvent.data) }}
+      onMessage={onReceiveMessage}
     />
   )
 }
@@ -67,6 +81,12 @@ const onClickChordPostMessage = `
         var chord = anchor.innerText || anchor.textContent;
         anchor.onclick = onClickChord(chord)
     }
+    var artistNodes = document.getElementsByClassName('artist');
+    for(var i = 0; i < artistNodes.length; i++) {
+        var anchor = artistNodes[i];
+        var artist = anchor.innerText || anchor.textContent;
+        anchor.onclick = onClickChord("${ARTIST_TAG}" + artist)
+    }
 })();
 
 true;
@@ -87,6 +107,7 @@ body {
 .artist {
   font-weight: bold;
   color: red;
+  cursor: pointer;
 }
 .chord:hover {
   color: blue;
