@@ -12,6 +12,8 @@ import OnlineSearch from './containers/OnlineSearch';
 import SongPreview from './containers/SongPreview';
 import OnlineArtistView from './containers/OnlineArtistView';
 import SongEdit from './containers/SongEdit';
+import PlaylistList from './containers/PlaylistList';
+import PlaylistView from './containers/PlaylistView';
 
 interface TabBarIconProps {
   focused: boolean
@@ -31,6 +33,21 @@ let tabNavigatorConfig: TabNavigatorConfig = {
 }
 
 const AppNavigation = createBottomTabNavigator({
+  PlaylistList: {
+    screen: createStackNavigator({
+      PlaylistList: {
+        screen: PlaylistList,
+        navigationOptions: { title: 'Playlists' }
+      },
+      PlaylistView,
+      SongView
+    }),
+    navigationOptions: ({ navigation }) => ({
+      title: 'Playlists',
+      tabBarVisible: navigation.state.index <= 0,
+      tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="playlist-music" />
+    })
+  },
   ArtistList: {
     screen: createStackNavigator({
       ArtistList: {
@@ -59,7 +76,7 @@ const AppNavigation = createBottomTabNavigator({
     navigationOptions: ({ navigation }) => ({
       title: 'Songs',
       tabBarVisible: navigation.state.index <= 0,
-      tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="playlist-music" />
+      tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="format-list-bulleted-square" />
     })
   },
   OnlineSearch: {
@@ -98,4 +115,6 @@ export enum ROUTES {
   SongList = 'SongList',
   SongPreview = 'SongPreview',
   SongView = 'SongView',
+  PlaylistView = 'PlaylistView',
+  PlaylistList = 'PlaylistList',
 }

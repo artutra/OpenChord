@@ -14,7 +14,7 @@ const PlaylistList = (props: Props) => {
   const [showAddPlaylistModal, setShowAddPlaylistModal] = useState(false)
 
   function onSelectPlaylist(id: string, name: string) {
-    // props.navigation.navigate(ROUTES.PlaylistView, { id, title: name })
+    props.navigation.navigate(ROUTES.PlaylistView, { id, title: name })
   }
   function onPressDeletePlaylist(id: string) {
     // TODO: Add removePlaylist helper
