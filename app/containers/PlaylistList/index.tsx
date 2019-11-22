@@ -1,17 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FunctionComponent } from "react";
 import { Text, View, Button, FlatList } from "react-native";
-import { NavigationScreenProp } from "react-navigation"
+import { NavigationScreenProp, NavigationScreenComponent } from "react-navigation"
 import ListItem from "../../components/ListItem";
 import { Playlist } from "../../db/Playlist";
 import { ROUTES } from "../../AppNavigation";
 import CreatePlaylistModal from "./components/CreatePlaylistModal";
+import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
+import TouchableIcon from "../../components/TouchableIcon";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>
 }
-const PlaylistList = (props: Props) => {
+const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
+  NavigationStackOptions,
+  NavigationStackProp
+> = (props: Props) => {
   const [playlists, setPlaylists] = useState(Playlist.getAll())
   const [showAddPlaylistModal, setShowAddPlaylistModal] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   function onSelectPlaylist(id: string, name: string) {
     props.navigation.navigate(ROUTES.PlaylistView, { id, title: name })
@@ -29,18 +35,31 @@ const PlaylistList = (props: Props) => {
     )
     return () => didBlurSubscription.remove()
   }, [playlists])
-  function onPressCreate(playlistName: string) {
-    Playlist.create(playlistName)
-    setShowAddPlaylistModal(false)
-    setPlaylists(Playlist.getAll())
 
+  function onCreate(playlistName: string) {
+    try {
+      Playlist.create(playlistName)
+      setShowAddPlaylistModal(false)
+      setPlaylists(Playlist.getAll())
+    } catch (e) {
+      if (e instanceof Error) {
+        setError(e.message)
+      } else {
+        throw e
+      }
+    }
   }
+
+  useEffect(() => {
+    props.navigation.setParams({ 'onPressCreatePlaylist': () => setShowAddPlaylistModal(true) })
+  }, [playlists])
   return (
     <View style={{ flex: 1 }}>
       <CreatePlaylistModal
+        error={error}
         enabled={showAddPlaylistModal}
         onDismiss={() => setShowAddPlaylistModal(false)}
-        onPressCreate={onPressCreate}
+        onPressCreate={onCreate}
       />
       <FlatList
         contentContainerStyle={{ flex: 1 }}
@@ -68,6 +87,12 @@ const PlaylistList = (props: Props) => {
     </View>
 
   );
+}
+PlaylistList.navigationOptions = ({ navigation }) => {
+  return {
+    headerRight: <TouchableIcon onPress={navigation.getParam('onPressCreatePlaylist')} name="plus" />,
+    title: navigation.getParam('title')
+  }
 }
 
 export default PlaylistList

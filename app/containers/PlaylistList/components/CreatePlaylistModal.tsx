@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState, useRef, useEffect } from "react";
 import { Text, View, TouchableOpacity, StyleSheet, Modal, Button, TextInput } from "react-native";
+import ErrorText from "../../../components/ErrorText";
 
 export interface Option {
   title: string
@@ -7,13 +8,14 @@ export interface Option {
 }
 interface CreatePlaylistModalProps {
   enabled: boolean
+  error?: string | null
   onDismiss: () => void
   onPressCreate: (playlistName: string) => void
 }
 const CreatePlaylistModal: FunctionComponent<CreatePlaylistModalProps> = (props) => {
   const [name, setName] = useState("")
   const textInput = useRef<TextInput>(null)
-  const { enabled, onDismiss } = props
+  const { enabled, onDismiss, error } = props
   useEffect(() => {
     if (enabled && textInput.current) {
       textInput.current.focus()
@@ -27,6 +29,7 @@ const CreatePlaylistModal: FunctionComponent<CreatePlaylistModalProps> = (props)
         <TouchableOpacity style={styles.outsideContainer} onPress={onDismiss} />
         <View style={styles.container}>
           <TextInput ref={textInput} placeholder="Playlist name" onChangeText={setName} value={name} />
+          <ErrorText>{error}</ErrorText>
           <Button onPress={() => props.onPressCreate(name)} title="CREATE" />
         </View>
       </View>
