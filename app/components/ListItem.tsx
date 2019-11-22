@@ -7,6 +7,7 @@ interface ListItemProps {
   title: string
   subtitle?: string
   onPress: () => void
+  showIcon?: undefined | null | 'plus' | 'check'
   options?: Option[]
 }
 const ListItem: FunctionComponent<ListItemProps> = (props) => {
@@ -17,6 +18,8 @@ const ListItem: FunctionComponent<ListItemProps> = (props) => {
         <Text style={styles.title}>{props.title}</Text>
         {props.subtitle && <Text style={styles.subtitle}>{props.subtitle}</Text>}
       </View>
+      {props.showIcon == 'check' && <TouchableIcon onPress={props.onPress} name="check" size={25} />}
+      {props.showIcon == 'plus' && <TouchableIcon onPress={props.onPress} name="plus" size={25} />}
       {props.options &&
         <TouchableIcon onPress={() => setMenuEnabled(true)} name="dots-vertical" size={25} />
       }
