@@ -39,7 +39,10 @@ export class Playlist {
     })
   }
   static create(name: string) {
-    // TODO: check if exists
+    let sameNamePlaylist = Playlist.getByName(name)
+    if (sameNamePlaylist) {
+      throw new Error(`Playlist with name "${name}" already exists`)
+    }
     let playlist: Playlist
     realm.write(() => {
       playlist = realm.create<Playlist>('Playlist', {
