@@ -5,6 +5,7 @@ import { Song, Artist } from "../db";
 import ListItem from "../components/ListItem";
 import { removeSong } from "../utils/removeSong";
 import { Playlist } from "../db/Playlist";
+import { ROUTES } from "../AppNavigation";
 
 interface Props {
   navigation: NavigationScreenProp<any, { id: string, title: string }>
@@ -28,7 +29,7 @@ const PlaylistView = (props: Props) => {
     })
   }
   function onPressAddSongs() {
-
+    props.navigation.navigate(ROUTES.PlaylistAddSongs)
   }
   return (
     <FlatList
