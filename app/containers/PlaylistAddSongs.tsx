@@ -11,12 +11,20 @@ interface Props {
   navigation: NavigationScreenProp<any, { id: string, title: string }>
 }
 const PlaylistAddSongs = (props: Props) => {
+  const id = props.navigation.getParam('id')
+  const [playlist] = useState(Playlist.getById(id)!)
   const [songs, setSongs] = useState(Song.getAll())
   const [query, setQuery] = useState('')
   const searchInput = useRef<TextInput>(null)
 
   function onSelectSong(id: string, title: string) {
-    //props.navigation.navigate(ROUTES.SongView, { id, title })
+    let song = Song.getById(id)!
+    if (Playlist.hasSong(playlist, song)) {
+      Playlist.removeSong(playlist, song)
+    } else {
+      Playlist.addSong(playlist, song)
+    }
+    setSongs(Song.search(query))
   }
 
   function onSubmitEditing() { }
@@ -40,6 +48,7 @@ const PlaylistAddSongs = (props: Props) => {
             title={item.title}
             subtitle={item.artist.name}
             onPress={() => onSelectSong(item.id!, item.title)}
+            showIcon={Playlist.hasSong(playlist, item) ? 'check' : 'plus'}
           />
         }}
       />
