@@ -15,6 +15,7 @@ import SongEdit from './containers/SongEdit';
 import PlaylistList from './containers/PlaylistList';
 import PlaylistView from './containers/PlaylistView';
 import PlaylistAddSongs from './containers/PlaylistAddSongs';
+import PlaylistEdit from './containers/PlaylistEdit';
 
 interface TabBarIconProps {
   focused: boolean
@@ -42,7 +43,8 @@ const AppNavigation = createBottomTabNavigator({
       },
       PlaylistView,
       SongView,
-      PlaylistAddSongs
+      PlaylistAddSongs,
+      PlaylistEdit
     }),
     navigationOptions: ({ navigation }) => ({
       title: 'Playlists',
@@ -119,5 +121,6 @@ export enum ROUTES {
   SongView = 'SongView',
   PlaylistView = 'PlaylistView',
   PlaylistList = 'PlaylistList',
-  PlaylistAddSongs = 'PlaylistAddSongs'
+  PlaylistAddSongs = 'PlaylistAddSongs',
+  PlaylistEdit = 'PlaylistEdit'
 }
