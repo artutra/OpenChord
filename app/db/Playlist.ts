@@ -21,6 +21,9 @@ export class Playlist {
   }
   static getAll() { return realm.objects<Playlist>('Playlist').sorted('name') }
   static getById(id: string) { return realm.objectForPrimaryKey<Playlist>('Playlist', id) }
+  static getByName(name: string) {
+    return realm.objects<Playlist>('Playlist').filtered('name = $0', name).find(() => true)
+  }
   static hasSong(playlist: Playlist, song: Song) {
     if (!playlist || !song) return false
     return playlist.songs.some(s => s.id == song.id)
@@ -46,5 +49,20 @@ export class Playlist {
       })
     })
     return playlist!
+  }
+  static update(id: string, name: string, songs: Song[]) {
+    let sameNamePlaylist = Playlist.getByName(name)
+    if (sameNamePlaylist && sameNamePlaylist.id != id) {
+      throw new Error(`Playlist with name "${name}" already exists`)
+    }
+    let playlist = Playlist.getById(id)
+    if (playlist != null) {
+      realm.write(() => {
+        playlist!.name = name
+        playlist!.songs = songs
+        playlist!.updated_at = new Date()
+      })
+    }
+    return playlist
   }
 }
