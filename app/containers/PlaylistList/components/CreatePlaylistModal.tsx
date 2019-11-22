@@ -11,7 +11,7 @@ interface CreatePlaylistModalProps {
   onPressCreate: (playlistName: string) => void
 }
 const CreatePlaylistModal: FunctionComponent<CreatePlaylistModalProps> = (props) => {
-  const [name, setName] = useState("test")
+  const [name, setName] = useState("")
   const textInput = useRef<TextInput>(null)
   const { enabled, onDismiss } = props
   useEffect(() => {
@@ -26,7 +26,7 @@ const CreatePlaylistModal: FunctionComponent<CreatePlaylistModalProps> = (props)
       <View style={styles.backgroundOverlayer}>
         <TouchableOpacity style={styles.outsideContainer} onPress={onDismiss} />
         <View style={styles.container}>
-          <TextInput ref={textInput} onChangeText={setName} value={name} />
+          <TextInput ref={textInput} placeholder="Playlist name" onChangeText={setName} value={name} />
           <Button onPress={() => props.onPressCreate(name)} title="CREATE" />
         </View>
       </View>
