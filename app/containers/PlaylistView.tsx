@@ -23,7 +23,7 @@ const PlaylistView: FunctionComponent<Props> & NavigationScreenComponent<
 > = (props: Props) => {
   let id = props.navigation.getParam('id')
   let playlist = Playlist.getById(id)!
-  const [name] = useState(playlist.name)
+  const [name, setName] = useState(playlist.name)
   const [songs, setSongs] = useState(playlist.songs)
 
   function onSelectSong(id: string, title: string) {
@@ -47,11 +47,13 @@ const PlaylistView: FunctionComponent<Props> & NavigationScreenComponent<
 
   useEffect(() => {
     setSongs(playlist.songs)
+    setName(playlist.name)
   }, [props.isFocused])
 
   useEffect(() => {
     props.navigation.setParams({ 'onPressEditPlaylist': onPressEditPlaylist })
-  }, [songs])
+    props.navigation.setParams({ 'title': name })
+  }, [songs, name])
 
   return (
     <FlatList
