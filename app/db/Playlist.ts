@@ -68,4 +68,12 @@ export class Playlist {
     }
     return playlist
   }
+  static delete(id: string) {
+    let playlist = Playlist.getById(id)
+    if (playlist) {
+      realm.write(() => {
+        realm.delete(playlist)
+      })
+    }
+  }
 }

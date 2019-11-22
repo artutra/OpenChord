@@ -7,6 +7,7 @@ import { ROUTES } from "../../AppNavigation";
 import CreatePlaylistModal from "./components/CreatePlaylistModal";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
 import TouchableIcon from "../../components/TouchableIcon";
+import { removePlaylist } from "../../utils/removePlaylist";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>
@@ -23,7 +24,9 @@ const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
     props.navigation.navigate(ROUTES.PlaylistView, { id, title: name })
   }
   function onPressDeletePlaylist(id: string) {
-    // TODO: Add removePlaylist helper
+    removePlaylist(id, () => {
+      setPlaylists(Playlist.getAll())
+    })
   }
 
   useEffect(() => {
