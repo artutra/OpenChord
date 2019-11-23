@@ -1,13 +1,13 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
 import { Text, View, TextInput, StyleSheet, Alert } from "react-native";
 import { NavigationScreenProp, NavigationScreenComponent } from "react-navigation"
-import { Playlist } from "../db/Playlist";
+import { Playlist } from "../../db/Playlist";
 import DraggableFlatList, { RenderItemInfo } from 'react-native-draggable-flatlist'
-import TouchableIcon from "../components/TouchableIcon";
-import { Song } from "../db";
+import TouchableIcon from "../../components/TouchableIcon";
+import { Song } from "../../db";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
 import { Header } from "react-navigation-stack";
-import ErrorText from "../components/ErrorText";
+import ErrorText from "../../components/ErrorText";
 
 interface Props {
   navigation: NavigationScreenProp<any, { id: string, title: string }>
