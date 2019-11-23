@@ -62,8 +62,13 @@ const PlaylistEdit: FunctionComponent<Props> & NavigationScreenComponent<
         <Text style={styles.headerTitle}>Playlist Edit</Text>
         <TouchableIcon name="check" onPress={onPressSavePlaylist} />
       </View>
-      <View>
-        <TextInput value={name} onChangeText={value => setName(value)} />
+      <View style={styles.playlistNameInputContiner}>
+        <TextInput
+          style={styles.playlistNameInput}
+          value={name}
+          onChangeText={value => setName(value)}
+          placeholder="Playlist name"
+        />
         <ErrorText>{error}</ErrorText>
       </View>
       <DraggableFlatList
@@ -87,6 +92,18 @@ export default PlaylistEdit
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  playlistNameInputContiner: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  playlistNameInput: {
+    fontSize: 22,
+    textAlign: 'center',
+    borderBottomWidth: 2,
+    maxWidth: 250
   },
   headerTitle: {
     fontSize: 18,

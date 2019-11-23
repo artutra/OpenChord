@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '#eee',
     backgroundColor: 'white',
-    justifyContent: 'flex-start'
+    justifyContent: 'flex-start',
+    paddingVertical: 5
   },
   deleteIcon: {
     flex: 0
