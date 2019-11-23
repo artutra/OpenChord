@@ -7,6 +7,7 @@ import { Playlist } from "../db/Playlist";
 import { ROUTES } from "../AppNavigation";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
 import TouchableIcon from "../components/TouchableIcon";
+import EmptyListMessage from "../components/EmptyListMessage";
 
 interface Params {
   id: string
@@ -57,12 +58,21 @@ const PlaylistView: FunctionComponent<Props> & NavigationScreenComponent<
 
   return (
     <FlatList
+      contentContainerStyle={{ flex: 1 }}
       data={songs}
       ListHeaderComponent={() => {
-        return (
-          <Button onPress={onPressAddSongs} title="Add songs" />
-        )
+        if (songs.length > 0)
+          return <Button onPress={onPressAddSongs} title="Add songs" />
+        else
+          return null
       }}
+      ListEmptyComponent={
+        <EmptyListMessage
+          message="You haven't added any songs yet"
+          onPress={onPressAddSongs}
+          buttonTitle="ADD SONGS"
+        />
+      }
       renderItem={({ item }) => {
         return <ListItem
           key={item.id!}

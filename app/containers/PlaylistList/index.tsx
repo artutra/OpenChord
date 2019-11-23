@@ -8,6 +8,7 @@ import CreatePlaylistModal from "./components/CreatePlaylistModal";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
 import TouchableIcon from "../../components/TouchableIcon";
 import { removePlaylist } from "../../utils/removePlaylist";
+import EmptyListMessage from "../../components/EmptyListMessage";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>
@@ -67,14 +68,13 @@ const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
       <FlatList
         contentContainerStyle={{ flex: 1 }}
         data={playlists}
-        ListEmptyComponent={() => {
-          return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <Text>You haven't created any playlist yet</Text>
-              <Button onPress={() => setShowAddPlaylistModal(true)} title="CREATE NEW PLAYLIST" />
-            </View>
-          )
-        }}
+        ListEmptyComponent={
+          <EmptyListMessage
+            message="You haven't created any playlist yet"
+            onPress={() => setShowAddPlaylistModal(true)}
+            buttonTitle="CREATE NEW PLAYLIST"
+          />
+        }
         renderItem={({ item }) => {
           return (
             <ListItem
