@@ -59,7 +59,7 @@ const PlaylistView: FunctionComponent<Props> & NavigationScreenComponent<
 
   return (
     <FlatList
-      contentContainerStyle={{ flex: 1 }}
+      contentContainerStyle={songs.length <= 0 ? { flex: 1 } : {}}
       data={songs}
       ListHeaderComponent={() => {
         if (songs.length > 0)

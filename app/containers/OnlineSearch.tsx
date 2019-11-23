@@ -42,7 +42,7 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
   }, [props.isFocused])
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <View style={styles.customHeader}>
         <Picker
           selectedValue={serviceName}
@@ -85,6 +85,9 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
 export default withNavigationFocus(OnlineSearch)
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   customHeader: {
     height: Header.HEIGHT,
     backgroundColor: 'white',
