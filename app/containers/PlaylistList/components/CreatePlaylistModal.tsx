@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState, useRef, useEffect } from "react";
 import { Text, View, TouchableOpacity, StyleSheet, Modal, Button, TextInput } from "react-native";
 import ErrorText from "../../../components/ErrorText";
+import PrimaryButton from "../../../components/PrimaryButton";
 
 export interface Option {
   title: string
@@ -30,7 +31,7 @@ const CreatePlaylistModal: FunctionComponent<CreatePlaylistModalProps> = (props)
         <View style={styles.container}>
           <TextInput ref={textInput} placeholder="Playlist name" onChangeText={setName} value={name} />
           <ErrorText>{error}</ErrorText>
-          <Button onPress={() => props.onPressCreate(name)} title="CREATE" />
+          <PrimaryButton onPress={() => props.onPressCreate(name)} title="CREATE" />
         </View>
       </View>
     </Modal>
