@@ -15,7 +15,7 @@ const DraggableItem: FunctionComponent<DraggableItemProps> = (props) => {
     <View style={styles.item}>
       <TouchableIcon style={styles.deleteIcon} size={20} onPress={onPressDelete} name="minus-circle-outline" />
       <View style={styles.labelAndDragContainer}>
-        <View>
+        <View style={styles.textContainer}>
           <Text style={styles.title}>{title}</Text>
           {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
         </View>
@@ -35,6 +35,9 @@ const styles = StyleSheet.create({
   },
   deleteIcon: {
     flex: 0
+  },
+  textContainer: {
+    flex: 1
   },
   labelAndDragContainer: {
     flex: 1,
