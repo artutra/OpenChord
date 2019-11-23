@@ -9,7 +9,7 @@ var realm = new Realm({
     Artist.schema,
     Playlist.schema,
   ],
-  schemaVersion: 3,
+  schemaVersion: 4,
   migration: () => { }
 })
 export default realm;

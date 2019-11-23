@@ -9,6 +9,9 @@ export class Song {
   title!: string
   content!: string
   artist!: Artist
+  transposeAmount?: number
+  fontSize?: number
+  showTablature!: boolean
   updated_at!: Date
 
   static schema: Realm.ObjectSchema = {
@@ -18,6 +21,9 @@ export class Song {
       id: 'string',
       title: 'string',
       content: 'string',
+      transposeAmount: 'int?',
+      fontSize: 'int?',
+      showTablature: { type: 'bool', default: true },
       artist: { type: 'Artist' },
       updated_at: 'date'
     }
@@ -80,7 +86,7 @@ export class Song {
       .find(() => true)
     if (song == null) {
       realm.write(() => {
-        song = realm.create('Song', {
+        song = realm.create<Song>('Song', {
           id: uuid(),
           title,
           content,
@@ -121,6 +127,18 @@ export class Song {
       if (Song.getByArtist(artistId).length <= 0) {
         realm.delete(Artist.getById(artistId))
       }
+    })
+  }
+  static setPreferences(song: Song, preferences: {
+    showTablature?: boolean,
+    fontSize?: number,
+    transposeAmount?: number
+  }) {
+    let { showTablature = true, fontSize, transposeAmount } = preferences
+    realm.write(() => {
+      song.showTablature = showTablature
+      song.fontSize = fontSize
+      song.transposeAmount = transposeAmount
     })
   }
 }
