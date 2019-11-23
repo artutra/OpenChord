@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
-import { NavigationScreenProp, NavigationScreenComponent } from "react-navigation"
+import { NavigationScreenProp, NavigationScreenComponent, withNavigationFocus } from "react-navigation"
 import { Song } from '../db'
 import ListItem from "../components/ListItem";
 import TouchableIcon from "../components/TouchableIcon";
@@ -7,9 +7,12 @@ import { NavigationStackOptions, NavigationStackProp } from "react-navigation-st
 import { removeSong } from "../utils/removeSong";
 import { FlatList, StyleSheet, View } from "react-native";
 import SearchBar from "../components/SearchBar";
+import EmptyListMessage from "../components/EmptyListMessage";
+import { ROUTES } from "../AppNavigation";
 
 interface Props {
   navigation: NavigationScreenProp<any, { addSong: () => void }>
+  isFocused: boolean
 }
 const SongList: FunctionComponent<Props> & NavigationScreenComponent<
   NavigationStackOptions,
@@ -49,6 +52,14 @@ const SongList: FunctionComponent<Props> & NavigationScreenComponent<
     props.navigation.setParams({ 'addSong': addNewSong })
   }, [songs])
 
+  useEffect(() => {
+    if (query != '') {
+      setSongs(Song.search(query))
+    } else {
+      setSongs(Song.getAll())
+    }
+  }, [props.isFocused])
+
   return (
     <View style={styles.container}>
       <SearchBar
@@ -57,6 +68,14 @@ const SongList: FunctionComponent<Props> & NavigationScreenComponent<
       />
       <FlatList
         data={songs}
+        contentContainerStyle={songs.length <= 0 ? { flex: 1 } : {}}
+        ListEmptyComponent={
+          <EmptyListMessage
+            message="You haven't downloaded any song yet"
+            onPress={() => { props.navigation.navigate(ROUTES.OnlineSearch) }}
+            buttonTitle="GO TO ONLINE SEARCH"
+          />
+        }
         renderItem={({ item }) => {
           return (
             <ListItem
@@ -88,4 +107,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default SongList
+export default withNavigationFocus(SongList)
