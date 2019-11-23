@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
-import { Text, View, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { NavigationScreenComponent } from "react-navigation";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
 import SongRender from "../components/SongRender";
@@ -10,6 +10,7 @@ import ChordSheetJS from 'chordsheetjs';
 import { Artist, Song } from "../db";
 import { ROUTES } from "../AppNavigation";
 import { SongViewParams } from "./SongView";
+import LoadingIndicator from "../components/LoadingIndicator";
 
 interface SongPreviewProps {
   navigation: NavigationStackProp<{}, { path: string, serviceName: string }>
@@ -20,16 +21,28 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
 > = (props) => {
   const [chordSheet, setChordCheet] = useState<string | null>(null)
   const [isSaving, setIsSaving] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   let serviceName = props.navigation.getParam('serviceName')
   let path = props.navigation.getParam('path')
 
   useEffect(() => {
     const fetchData = async () => {
-      let service = getService(serviceName)!
-      let chordPro = await service.getChordProSong(path)
-      setChordCheet(chordPro)
-    };
-    fetchData();
+      try {
+        let service = getService(serviceName)!
+        let chordPro = await service.getChordProSong(path)
+        setChordCheet(chordPro)
+        setIsLoading(false)
+      } catch (e) {
+        if (e instanceof Error) {
+          setError(e.message)
+          setIsLoading(false)
+        } else {
+          throw e
+        }
+      }
+    }
+    fetchData()
   }, []);
 
   function saveSong() {
@@ -57,8 +70,8 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
 
   return (
     <View style={{ flex: 1 }}>
-      {chordSheet == null ? <Text>Loading...</Text> :
-
+      <LoadingIndicator error={error} loading={isLoading} />
+      {chordSheet != null &&
         <SongTransformer
           transposeDelta={0}
           chordProSong={chordSheet}
@@ -81,7 +94,6 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
           )}
         </SongTransformer>
       }
-
     </View>
   );
 }
