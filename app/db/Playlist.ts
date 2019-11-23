@@ -39,6 +39,9 @@ export class Playlist {
     })
   }
   static create(name: string) {
+    if (name == null || name == "") {
+      throw new Error(`Empty name not allowed`)
+    }
     let sameNamePlaylist = Playlist.getByName(name)
     if (sameNamePlaylist) {
       throw new Error(`Playlist with name "${name}" already exists`)
@@ -54,6 +57,9 @@ export class Playlist {
     return playlist!
   }
   static update(id: string, name: string, songs: Song[]) {
+    if (name == null || name == "") {
+      throw new Error(`Empty name not allowed`)
+    }
     let sameNamePlaylist = Playlist.getByName(name)
     if (sameNamePlaylist && sameNamePlaylist.id != id) {
       throw new Error(`Playlist with name "${name}" already exists`)
