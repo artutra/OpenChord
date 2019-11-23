@@ -43,7 +43,10 @@ const AppNavigation = createBottomTabNavigator({
       },
       PlaylistView,
       SongView,
-      PlaylistAddSongs,
+      PlaylistAddSongs: {
+        screen: PlaylistAddSongs,
+        navigationOptions: { title: 'Add songs' }
+      },
       PlaylistEdit
     }),
     navigationOptions: ({ navigation }) => ({
