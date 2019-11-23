@@ -5,8 +5,9 @@ import { Song, Artist } from "../db";
 import ListItem from "../components/ListItem";
 import { removeSong } from "../utils/removeSong";
 
+export type ArtistViewParams = { id: string, title: string }
 interface Props {
-  navigation: NavigationScreenProp<any, { id: string, title: string }>
+  navigation: NavigationScreenProp<any, ArtistViewParams>
 }
 const ArtistView = (props: Props) => {
   let id = props.navigation.getParam('id')
