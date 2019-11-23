@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
-import { Text, FlatList, View, Button } from "react-native";
+import { FlatList } from "react-native";
 import { NavigationScreenProp, withNavigationFocus, NavigationScreenComponent } from "react-navigation"
 import ListItem from "../components/ListItem";
 import { removeSong } from "../utils/removeSong";
@@ -34,8 +34,8 @@ const PlaylistView: FunctionComponent<Props> & NavigationScreenComponent<
   function onPressEditSong(id: string) {
     props.navigation.navigate('SongEdit', { id })
   }
-  function onPressDeleteSong(id: string) {
-    removeSong(id, () => {
+  function onPressDeleteSong(songId: string) {
+    removeSong(songId, () => {
       let playlist = Playlist.getById(id)!
       setSongs(playlist.songs)
     })
