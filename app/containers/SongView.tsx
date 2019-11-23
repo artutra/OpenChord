@@ -24,12 +24,14 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   NavigationStackOptions,
   NavigationStackProp
 > = (props) => {
+  const DEFAULT_FONT_SIZE = 14
+  const songId = props.navigation.getParam('id')
   const [content, setContent] = useState<string>("")
   const [isSideMenuOpen, setIsSideMenuOpen] = useState<boolean>(false)
   const [tone, setTone] = useState<number>(0)
   const [showAutoScrollSlider, setShowAutoScrollSlider] = useState(false)
   const [scrollSpeed, setScrollSpeed] = useState<number>(0)
-  const [fontSize, setFontSize] = useState<number>(14)
+  const [fontSize, setFontSize] = useState<number>(DEFAULT_FONT_SIZE)
   const [selectedChord, selectChord] = useState<Chord | null>(null)
   const [showTabs, setShowTabs] = useState(true)
 
@@ -62,7 +64,15 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
     let id = props.navigation.getParam('id')
     let song = Song.getById(id)!
     setContent(Song.getChordPro(song))
+    setTone(song.transposeAmount ? song.transposeAmount : 0)
+    setFontSize(song.fontSize ? song.fontSize : DEFAULT_FONT_SIZE)
+    setShowTabs(song.showTablature)
   }, [])
+
+  useEffect(() => {
+    let song = Song.getById(songId)!
+    Song.setPreferences(song, { fontSize, showTablature: showTabs, transposeAmount: tone })
+  }, [fontSize, showTabs, tone])
 
   useEffect(() => {
     props.navigation.setParams({ 'openSideMenu': openSideMenu })
