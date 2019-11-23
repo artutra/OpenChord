@@ -8,6 +8,7 @@ import { Song } from "../../db";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
 import { Header } from "react-navigation-stack";
 import ErrorText from "../../components/ErrorText";
+import DraggableItem from "./compoents/DraggableItem";
 
 interface Props {
   navigation: NavigationScreenProp<any, { id: string, title: string }>
@@ -45,13 +46,13 @@ const PlaylistEdit: FunctionComponent<Props> & NavigationScreenComponent<
   function renderItem(info: RenderItemInfo<Song>) {
     let { item, move, moveEnd } = info
     return (
-      <View style={styles.item}>
-        <TouchableIcon style={{ flex: 0 }} size={20} onPress={() => onPressRemoveSong(item)} name="minus-circle-outline" />
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Text>{item.title}</Text>
-          <TouchableIcon activeOpacity={1} onPressIn={move} onPressOut={moveEnd} name="drag" />
-        </View>
-      </View>
+      <DraggableItem
+        title={item.title}
+        subtitle={item.artist.name}
+        onPressDelete={() => onPressRemoveSong(item)}
+        onDragStart={move}
+        onDragEnd={moveEnd}
+      />
     )
   }
   return (
