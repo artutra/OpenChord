@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { NavigationScreenProp } from "react-navigation"
 import { FlatList } from "react-native-gesture-handler";
 import { Artist } from '../db'
 import ListItem from "../components/ListItem";
 import { removeArtist } from "../utils/removeArtist";
 import TextInputModal from "../components/TextInputModal";
+import EmptyListMessage from "../components/EmptyListMessage";
+import { ROUTES } from "../AppNavigation";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>
@@ -60,7 +62,7 @@ const ArtistList = (props: Props) => {
   }, [artists])
 
   return (
-    <View>
+    <View style={styles.container}>
       <TextInputModal
         error={error}
         value={artistEditName}
@@ -74,6 +76,14 @@ const ArtistList = (props: Props) => {
       />
       <FlatList
         data={artists}
+        contentContainerStyle={artists.length <= 0 ? { flex: 1 } : {}}
+        ListEmptyComponent={
+          <EmptyListMessage
+            message="You haven't downloaded any song yet"
+            onPress={() => { props.navigation.navigate(ROUTES.OnlineSearch) }}
+            buttonTitle="GO TO ONLINE SEARCH"
+          />
+        }
         renderItem={({ item }) => {
           return (
             <ListItem
@@ -91,4 +101,9 @@ const ArtistList = (props: Props) => {
   );
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+})
 export default ArtistList
