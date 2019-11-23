@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent, useRef } from "react";
-import { View, StyleSheet, Picker, TextInput } from "react-native";
+import { View, StyleSheet, Picker, TextInput, ActivityIndicator } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import ListItem from "../components/ListItem";
 import { NavigationStackProp, NavigationStackOptions } from "react-navigation-stack/lib/typescript/types";
@@ -9,6 +9,7 @@ import { Doc } from "../services/BaseService";
 import { Header } from "react-navigation-stack";
 import SearchBar from "../components/SearchBar";
 import SafeAreaView from "react-native-safe-area-view";
+import LoadingIndicator from "../components/LoadingIndicator";
 
 interface OnlineSearchProps {
   navigation: NavigationStackProp<{}, {}>
@@ -24,14 +25,28 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
   const [serviceName, setServiceName] = useState(services[0].name)
   const [docs, setDocs] = useState<Doc[]>([])
   const [query, setQuery] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   async function makeSearch() {
     if (query.length > 0) {
       const fetchData = async () => {
         const docs = await getService(serviceName)!.getSearch(query)
         setDocs(docs)
-      };
-      fetchData();
+      }
+      try {
+        setIsLoading(true)
+        setError(null)
+        await fetchData()
+        setIsLoading(false)
+      } catch (e) {
+        if (e instanceof Error) {
+          setIsLoading(false)
+          setError(e.message)
+        } else {
+          throw e
+        }
+      }
     }
   }
 
@@ -62,6 +77,7 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
       <FlatList
         keyExtractor={(item) => item.path}
         data={docs}
+        ListHeaderComponent={<LoadingIndicator error={error} loading={isLoading} />}
         renderItem={({ item, index }) => {
           if (item.type == 'artist') {
             return (
