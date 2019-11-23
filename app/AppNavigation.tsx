@@ -43,6 +43,7 @@ const AppNavigation = createBottomTabNavigator({
       },
       PlaylistView,
       SongView,
+      SongEdit,
       PlaylistAddSongs: {
         screen: PlaylistAddSongs,
         navigationOptions: { title: 'Add songs' }
@@ -62,7 +63,8 @@ const AppNavigation = createBottomTabNavigator({
         navigationOptions: { title: 'Artists' }
       },
       ArtistView,
-      SongView
+      SongView,
+      SongEdit,
     }),
     navigationOptions: ({ navigation }) => ({
       title: 'Artists',
@@ -78,7 +80,7 @@ const AppNavigation = createBottomTabNavigator({
       },
       ArtistView,
       SongView,
-      SongEdit: SongEdit
+      SongEdit,
     }),
     navigationOptions: ({ navigation }) => ({
       title: 'Songs',
