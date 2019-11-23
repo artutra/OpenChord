@@ -30,6 +30,9 @@ export class Song {
       updated_at: 'date'
     }
   }
+  static search(query: string) {
+    return realm.objects<Song>('Song').filtered('title CONTAINS[c] $0 OR artist.name CONTAINS[c] $0', query)
+  }
   static getById(id: string) {
     return realm.objectForPrimaryKey<Song>('Song', id)
   }

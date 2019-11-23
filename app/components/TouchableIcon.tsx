@@ -3,7 +3,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { TouchableOpacity, StyleProp, ViewStyle, StyleSheet, TouchableOpacityProps } from 'react-native';
 
 interface Props extends TouchableOpacityProps {
-  onPress: () => void
   iconStyle?: StyleProp<ViewStyle>
   size?: number
   name: string
