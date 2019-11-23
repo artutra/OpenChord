@@ -79,10 +79,11 @@ const AppNavigation = createBottomTabNavigator({
       OnlineArtistView,
       SongView
     }),
-    navigationOptions: {
+    navigationOptions: ({ navigation }) => ({
       title: 'Online Search',
+      tabBarVisible: navigation.state.index <= 0,
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="magnify" />
-    }
+    })
   },
 }, tabNavigatorConfig)
 
