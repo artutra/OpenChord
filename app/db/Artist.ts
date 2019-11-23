@@ -51,4 +51,19 @@ export class Artist {
     })
     return artist!
   }
+  static update(id: string, name: string) {
+    let artist = Artist.getById(id)
+    if (artist) {
+      if (name == artist.name) return artist
+      let artistWithSameName = Artist.getByName(name)
+      if (artistWithSameName) {
+        // TODO: Merge songs to this artist
+      } else {
+        realm.write(() => {
+          artist!.name = name
+        })
+      }
+    }
+    return artist
+  }
 }
