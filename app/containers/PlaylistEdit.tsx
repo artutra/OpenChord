@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FunctionComponent } from "react";
 import { Text, View, TextInput, StyleSheet, Alert } from "react-native";
-import { NavigationScreenProp } from "react-navigation"
+import { NavigationScreenProp, NavigationScreenComponent } from "react-navigation"
 import { Playlist } from "../db/Playlist";
 import DraggableFlatList, { RenderItemInfo } from 'react-native-draggable-flatlist'
 import TouchableIcon from "../components/TouchableIcon";
 import { Song } from "../db";
-import { NavigationStackOptions } from "react-navigation-stack/lib/typescript/types";
+import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
 import { Header } from "react-navigation-stack";
 import ErrorText from "../components/ErrorText";
 
@@ -13,7 +13,10 @@ interface Props {
   navigation: NavigationScreenProp<any, { id: string, title: string }>
   isFocused: boolean
 }
-const PlaylistView = (props: Props) => {
+const PlaylistEdit: FunctionComponent<Props> & NavigationScreenComponent<
+  NavigationStackOptions,
+  NavigationStackProp
+> = (props: Props) => {
   let id = props.navigation.getParam('id')
   let playlist = Playlist.getById(id)!
   const [name, setName] = useState(playlist.name)
@@ -72,13 +75,13 @@ const PlaylistView = (props: Props) => {
     </View>
   )
 }
-PlaylistView.navigationOptions = (props: Props): NavigationStackOptions => ({
-  title: props.navigation.getParam('title'),
+PlaylistEdit.navigationOptions = ({ navigation }) => ({
+  title: navigation.getParam('title'),
   headerTransparent: true,
   headerLeft: null
 });
 
-export default PlaylistView
+export default PlaylistEdit
 
 const styles = StyleSheet.create({
   container: {
