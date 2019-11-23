@@ -66,7 +66,7 @@ const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
         onPressCreate={onCreate}
       />
       <FlatList
-        contentContainerStyle={{ flex: 1 }}
+        contentContainerStyle={playlists.length <= 0 ? { flex: 1 } : {}}
         data={playlists}
         ListEmptyComponent={
           <EmptyListMessage

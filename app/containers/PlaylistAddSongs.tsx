@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Text, FlatList, View, Button, TextInput } from "react-native";
+import { Text, FlatList, View, Button, TextInput, StyleSheet } from "react-native";
 import { NavigationScreenProp } from "react-navigation"
 import { Song, Artist } from "../db";
 import ListItem from "../components/ListItem";
@@ -33,7 +33,7 @@ const PlaylistAddSongs = (props: Props) => {
   }, [query])
 
   return (
-    <View>
+    <View style={styles.container}>
       <SearchBar
         inputRef={searchInput}
         onSubmitEditing={onSubmitEditing}
@@ -56,5 +56,9 @@ const PlaylistAddSongs = (props: Props) => {
 
   );
 }
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+})
 export default PlaylistAddSongs
