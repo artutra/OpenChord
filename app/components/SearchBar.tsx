@@ -7,7 +7,7 @@ interface SearchBarProps {
   query: string
   inputRef?: React.RefObject<TextInput> | null | undefined
   onChangeText: (text: string) => void
-  onSubmitEditing: () => void
+  onSubmitEditing?: () => void
 }
 const SearchBar: FunctionComponent<SearchBarProps> = (props) => {
   return (
