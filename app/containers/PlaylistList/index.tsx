@@ -4,11 +4,11 @@ import { NavigationScreenProp, NavigationScreenComponent } from "react-navigatio
 import ListItem from "../../components/ListItem";
 import { Playlist } from "../../db/Playlist";
 import { ROUTES } from "../../AppNavigation";
-import CreatePlaylistModal from "./components/CreatePlaylistModal";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
 import TouchableIcon from "../../components/TouchableIcon";
 import { removePlaylist } from "../../utils/removePlaylist";
 import EmptyListMessage from "../../components/EmptyListMessage";
+import TextInputModal from "../../components/TextInputModal";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>
@@ -40,7 +40,7 @@ const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
     return () => didBlurSubscription.remove()
   }, [playlists])
 
-  function onCreate(playlistName: string) {
+  function onSubmit(playlistName: string) {
     try {
       Playlist.create(playlistName)
       setShowAddPlaylistModal(false)
@@ -59,11 +59,16 @@ const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
   }, [playlists])
   return (
     <View style={{ flex: 1 }}>
-      <CreatePlaylistModal
+      <TextInputModal
         error={error}
         enabled={showAddPlaylistModal}
-        onDismiss={() => setShowAddPlaylistModal(false)}
-        onPressCreate={onCreate}
+        onDismiss={() => {
+          setError(null)
+          setShowAddPlaylistModal(false)
+        }}
+        onSubmit={onSubmit}
+        submitButtonTitle="CREATE"
+        placeholder="Playlist Name"
       />
       <FlatList
         contentContainerStyle={playlists.length <= 0 ? { flex: 1 } : {}}

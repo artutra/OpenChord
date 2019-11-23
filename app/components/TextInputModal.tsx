@@ -1,27 +1,42 @@
 import React, { FunctionComponent, useState, useRef, useEffect } from "react";
 import { Text, View, TouchableOpacity, StyleSheet, Modal, Button, TextInput } from "react-native";
-import ErrorText from "../../../components/ErrorText";
-import PrimaryButton from "../../../components/PrimaryButton";
+import ErrorText from "./ErrorText";
+import PrimaryButton from "./PrimaryButton";
 
-export interface Option {
-  title: string
-  onPress: () => void
-}
-interface CreatePlaylistModalProps {
+interface TextInputModalProps {
   enabled: boolean
+  initialValue?: string
+  placeholder?: string
   error?: string | null
+  submitButtonTitle?: string
+  value?: string
+  onChange?: (name: string) => void
   onDismiss: () => void
-  onPressCreate: (playlistName: string) => void
+  onSubmit: (name: string) => void
 }
-const CreatePlaylistModal: FunctionComponent<CreatePlaylistModalProps> = (props) => {
-  const [name, setName] = useState("")
+const TextInputModal: FunctionComponent<TextInputModalProps> = (props) => {
+  const {
+    enabled,
+    initialValue = "",
+    placeholder,
+    onDismiss,
+    error,
+    onSubmit,
+    submitButtonTitle = 'OK',
+    onChange
+  } = props
+  const [value, setValue] = useState(initialValue)
   const textInput = useRef<TextInput>(null)
-  const { enabled, onDismiss, error } = props
   useEffect(() => {
     if (enabled && textInput.current) {
       textInput.current.focus()
     }
   }, [enabled])
+  function onChangeText(value: string) {
+    setValue(value)
+    if (onChange)
+      onChange(value)
+  }
   if (!enabled) return null
 
   return (
@@ -29,15 +44,15 @@ const CreatePlaylistModal: FunctionComponent<CreatePlaylistModalProps> = (props)
       <View style={styles.backgroundOverlayer}>
         <TouchableOpacity style={styles.outsideContainer} onPress={onDismiss} />
         <View style={styles.container}>
-          <TextInput ref={textInput} placeholder="Playlist name" onChangeText={setName} value={name} />
+          <TextInput ref={textInput} placeholder={placeholder} onChangeText={onChangeText} value={props.value} />
           <ErrorText>{error}</ErrorText>
-          <PrimaryButton onPress={() => props.onPressCreate(name)} title="CREATE" />
+          <PrimaryButton onPress={() => onSubmit(value)} title={submitButtonTitle} />
         </View>
       </View>
     </Modal>
   );
 }
-export default CreatePlaylistModal
+export default TextInputModal
 
 const styles = StyleSheet.create({
   backgroundOverlayer: {
