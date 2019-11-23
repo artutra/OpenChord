@@ -5,19 +5,11 @@ import { Artist } from './Artist';
 import realm from '.';
 
 export class Song {
-  id?: string | null
-  title: string
-  content: string
-  artist: Artist
-  updated_at: Date
-
-  constructor(title: string, content: string, artist: Artist, updated_at?: Date, id?: string | null, ) {
-    this.id = id
-    this.title = title
-    this.content = content
-    this.artist = artist
-    this.updated_at = updated_at ? updated_at : new Date()
-  }
+  id!: string
+  title!: string
+  content!: string
+  artist!: Artist
+  updated_at!: Date
 
   static schema: Realm.ObjectSchema = {
     name: 'Song',
@@ -51,51 +43,67 @@ export class Song {
     if (this.shouldUpdateDb()) {
       for (var i = 0; i < allSongs.data.length; i++) {
         let s: string = allSongs.data[i]
-        let updated_at = new Date(allSongs.updated_at)
         const parser = new ChordSheetJS.ChordProParser();
         const formatter = new ChordSheetJS.ChordProFormatter();
         const parsedSong = parser.parse(s);
+        let artistName = parsedSong.getMetaData('artist')!
+        let songTitle = parsedSong.getMetaData('title')!
+        let songContent = formatter.format(parsedSong)
 
-        let artist = new Artist(parsedSong.getMetaData('artist')!, updated_at)
-        let song = new Song(parsedSong.getMetaData('title')!, formatter.format(parsedSong), artist, updated_at)
-        realm.write(() => {
-          Song.create(song)
-        })
+        let artist = Artist.create(artistName)
+        Song.create(artist, songTitle, songContent)
       }
     }
   }
 
   static getAll() { return realm.objects<Song>('Song').sorted('title') }
 
-  static create(song: Song) {
-    let artistName = song.artist.name
-    let artist: Artist | undefined
-    artist = realm.objects<Artist>('Artist').filtered('name = $0', artistName).find(() => true)
-    if (artist == null) {
-      artist = realm.create<Artist>('Artist', {
-        id: uuid(),
-        name: artistName,
-        updated_at: song.artist.updated_at
-      })
+  static create(artist: Artist, title: string, content: string) {
+    if (title == null || title == "") {
+      throw new Error(`Empty title not allowed`)
     }
-    let songDb: Song | undefined
-    songDb = realm
+    if (content == null || content == "") {
+      throw new Error(`Empty content not allowed`)
+    }
+    let song: Song | undefined
+    song = realm
       .objects<Song>('Song')
-      .filtered('title = $0 && artist.name = $1', song.title, artistName)
+      .filtered('title = $0 && artist.name = $1', title, artist.name)
       .find(() => true)
-    if (songDb == null) {
-      songDb = realm.create('Song', {
-        id: uuid(),
-        title: song.title,
-        content: song.content,
-        artist,
-        updated_at: song.updated_at
+    if (song == null) {
+      realm.write(() => {
+        song = realm.create('Song', {
+          id: uuid(),
+          title,
+          content,
+          artist,
+          updated_at: new Date()
+        })
       })
     } else {
-      songDb.content = song.content
-      songDb.updated_at = song.updated_at
+      // TODO: Enable multiple versions of same song
     }
-    return songDb
+    return song!
+  }
+  static update(id: string, artist: Artist, title: string, content: string) {
+    if (title == null || title == "") {
+      throw new Error(`Empty title not allowed`)
+    }
+    if (content == null || content == "") {
+      throw new Error(`Empty content not allowed`)
+    }
+    let song = Song.getById(id)
+    if (song != null) {
+      realm.write(() => {
+        song!.title = title
+        song!.artist = artist
+        song!.content = content
+        song!.updated_at = new Date()
+      })
+    } else {
+      throw new Error(`Song not found`)
+    }
+    return song!
   }
   static delete(id: string) {
     realm.write(() => {

@@ -6,7 +6,7 @@ import TouchableIcon from "../components/TouchableIcon";
 import { NavigationStackOptions, NavigationStackProp, } from "react-navigation-stack/lib/typescript/types";
 import ChordSheetJS from 'chordsheetjs'
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import realm from '../db'
+import { ROUTES } from "../AppNavigation";
 
 type Params = { id: string | null | undefined, title: string, saveSong: () => void }
 
@@ -45,9 +45,11 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
     if (title.trim() == '') return setError('Invalid Title')
     if (artist.trim() == '') return setError('Invalid Artist')
     if (content.trim() == '') return setError('Invalid content')
+    let artistName = artist.trim()
+    let songTitle = title.trim()
     let header =
-      `{title: ${title.trim()}}\n` +
-      `{artist: ${artist.trim()}}\n`
+      `{title: ${songTitle}}\n` +
+      `{artist: ${artistName}}\n`
     let chordPro: string
     if (mode == 'CHORD_PRO') {
       chordPro = header + content
@@ -57,14 +59,17 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
       chordPro = header + formatter.format(chordSheetSong)
     }
     let songId = props.navigation.getParam('id')
-    let artistDb = new Artist(artist.trim())
-    let song = new Song(title.trim(), chordPro, artistDb, new Date(), songId)
-    realm.write(() => {
-      let created = Song.create(song)
-      songId = created.id
-    })
-    // TODO: Remove old song if title was changed 
-    props.navigation.navigate('SongView', { id: songId, title: title.trim() })
+    let artistDb: Artist | undefined = Artist.getByName(artistName)
+    if (artistDb == null) {
+      artistDb = Artist.create(artistName)
+    }
+    if (songId) {
+      Song.update(songId, artistDb, songTitle, chordPro)
+    } else {
+      let song = Song.create(artistDb, songTitle, chordPro)
+      songId = song.id
+    }
+    props.navigation.replace(ROUTES.SongView, { id: songId, title: songTitle })
   }
 
   useEffect(() => {
