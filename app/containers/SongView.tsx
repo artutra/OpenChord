@@ -13,6 +13,7 @@ import AutoScrollSlider from "../components/AutoScrollSlider";
 import { removeSong } from "../utils/removeSong";
 import { ROUTES } from "../AppNavigation";
 import { ArtistViewParams } from "./ArtistView";
+import { SongEditParams } from "./SongEdit";
 
 export type SongViewParams = { id: string, title: string, openSideMenu?: () => void }
 
@@ -43,7 +44,8 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
     selectChord(allChords.find(c => c.toString() == chordString)!)
   }
   function editSong() {
-    props.navigation.navigate('SongEdit', { id: props.navigation.getParam('id') })
+    let params: SongEditParams = { id: props.navigation.getParam('id') }
+    props.navigation.replace(ROUTES.SongEdit, params)
   }
   function onPressRemoveSong() {
     let id = props.navigation.getParam('id')

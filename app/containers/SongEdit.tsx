@@ -7,11 +7,12 @@ import { NavigationStackOptions, NavigationStackProp, } from "react-navigation-s
 import ChordSheetJS from 'chordsheetjs'
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { ROUTES } from "../AppNavigation";
+import { HeaderBackButton } from "react-navigation-stack";
 
-type Params = { id: string | null | undefined, title: string, saveSong: () => void }
+export type SongEditParams = { id: string | null | undefined, saveSong?: () => void }
 
 type Props = {
-  navigation: NavigationStackProp<{}, Params>
+  navigation: NavigationStackProp<{}, SongEditParams>
 }
 
 const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
