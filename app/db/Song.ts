@@ -57,7 +57,15 @@ export class Song {
   }
 
   static getAll() { return realm.objects<Song>('Song').sorted('title') }
-
+  static getChordPro(song: Song) {
+    let headerlessContent = song.content
+    headerlessContent = headerlessContent.replace(/{artist:[^}]*}\n/g, '')
+    headerlessContent = headerlessContent.replace(/{title:[^}]*}\n/g, '')
+    let header =
+      `{title: ${song.title}}\n` +
+      `{artist: ${song.artist.name}}\n`
+    return header + headerlessContent
+  }
   static create(artist: Artist, title: string, content: string) {
     if (title == null || title == "") {
       throw new Error(`Empty title not allowed`)

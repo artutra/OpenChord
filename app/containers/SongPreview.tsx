@@ -36,18 +36,19 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
     if (isSaving) return
     setIsSaving(true)
     const parser = new ChordSheetJS.ChordProParser();
-    const formatter = new ChordSheetJS.ChordProFormatter();
     const parsedSong = parser.parse(chordSheet!);
-
     let artistName = parsedSong.getMetaData('artist')!
     let songTitle = parsedSong.getMetaData('title')!
-    let songContent = formatter.format(parsedSong)
+
+    let headerlessContent = chordSheet!
+    headerlessContent = headerlessContent.replace(/{artist:[^}]*}\n/g, '')
+    headerlessContent = headerlessContent.replace(/{title:[^}]*}\n/g, '')
 
     let artist: Artist | undefined = Artist.getByName(artistName)
     if (artist == null) {
       artist = Artist.create(artistName)
     }
-    let song = Song.create(artist, songTitle, songContent)
+    let song = Song.create(artist, songTitle, headerlessContent)
 
     let params: SongViewParams = { id: song.id, title: song.title }
     props.navigation.replace(ROUTES.SongView, params)

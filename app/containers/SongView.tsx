@@ -61,7 +61,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   useEffect(() => {
     let id = props.navigation.getParam('id')
     let song = Song.getById(id)!
-    setContent(song.content)
+    setContent(Song.getChordPro(song))
   }, [])
 
   useEffect(() => {

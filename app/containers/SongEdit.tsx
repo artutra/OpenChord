@@ -47,16 +47,11 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
     if (content.trim() == '') return setError('Invalid content')
     let artistName = artist.trim()
     let songTitle = title.trim()
-    let header =
-      `{title: ${songTitle}}\n` +
-      `{artist: ${artistName}}\n`
-    let chordPro: string
-    if (mode == 'CHORD_PRO') {
-      chordPro = header + content
-    } else {
+    let chordPro = content
+    if (mode == 'CHORD_SHEET') {
       const formatter = new ChordSheetJS.ChordProFormatter();
-      let chordSheetSong = new ChordSheetJS.ChordSheetParser({ preserveWhitespace: true }).parse(content)
-      chordPro = header + formatter.format(chordSheetSong)
+      let chordSheetSong = new ChordSheetJS.ChordSheetParser({ preserveWhitespace: false }).parse(content)
+      chordPro = formatter.format(chordSheetSong)
     }
     let songId = props.navigation.getParam('id')
     let artistDb: Artist | undefined = Artist.getByName(artistName)
