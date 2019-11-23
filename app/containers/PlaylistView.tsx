@@ -8,6 +8,7 @@ import { ROUTES } from "../AppNavigation";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
 import TouchableIcon from "../components/TouchableIcon";
 import EmptyListMessage from "../components/EmptyListMessage";
+import PrimaryButton from "../components/PrimaryButton";
 
 interface Params {
   id: string
@@ -62,7 +63,7 @@ const PlaylistView: FunctionComponent<Props> & NavigationScreenComponent<
       data={songs}
       ListHeaderComponent={() => {
         if (songs.length > 0)
-          return <Button onPress={onPressAddSongs} title="Add songs" />
+          return <PrimaryButton style={{ margin: 10 }} onPress={onPressAddSongs} title="ADD SONGS" outline />
         else
           return null
       }}
