@@ -34,12 +34,13 @@ const ChordChart: FunctionComponent<Props> = (props) => {
         lower = parseInt(c)
     }
   })
+  let normalizedChord = chord.slice()
   if (lower == 100) {
     fretPosition = 0
   } else if (lower >= 3) {
     fretPosition = lower
     for (var i = 0; i < chord.length; i++) {
-      chord[i] = chord[i] == 'x' ? 'x' : (parseInt(chord[i]) - (lower - 1)).toString()
+      normalizedChord[i] = chord[i] == 'x' ? 'x' : (parseInt(chord[i]) - (lower - 1)).toString()
     }
   }
   let barres: any[] = [
@@ -183,7 +184,7 @@ const ChordChart: FunctionComponent<Props> = (props) => {
             )
           })}
         {// Draw mute and loose strings icons
-          chord.map((c, i) => {
+          normalizedChord.map((c, i) => {
             if (c == 'x') {
               return drawText(
                 chartXPos + stringSpacing * i,
@@ -202,7 +203,7 @@ const ChordChart: FunctionComponent<Props> = (props) => {
           })
         }
         {// Draw finger circles
-          chord.map((c, i) => {
+          normalizedChord.map((c, i) => {
             return lightUp(i, c)
           })
         }
