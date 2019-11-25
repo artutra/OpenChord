@@ -6,7 +6,6 @@ import ArtistList from "./containers/ArtistList";
 import ArtistView from './containers/ArtistView';
 import SongView from './containers/SongView';
 import SongList from './containers/SongList';
-import { BottomTabBarOptions } from 'react-navigation-tabs/lib/typescript/src/types';
 import TabBarIcon from './components/TabBarIcon';
 import OnlineSearch from './containers/OnlineSearch';
 import SongPreview from './containers/SongPreview';
@@ -23,15 +22,19 @@ interface TabBarIconProps {
   tintColor: string
 }
 
-interface TabNavigatorConfig {
-  tabBarOptions: BottomTabBarOptions
-}
-
-let tabNavigatorConfig: TabNavigatorConfig = {
-  tabBarOptions: {
-    activeTintColor: 'tomato',
-    inactiveTintColor: 'gray',
-  }
+export enum ROUTES {
+  ArtistList = 'ArtistList',
+  ArtistView = 'ArtistView',
+  OnlineArtistView = 'OnlineArtistView',
+  OnlineSearch = 'OnlineSearch',
+  SongEdit = 'SongEdit',
+  SongList = 'SongList',
+  SongPreview = 'SongPreview',
+  SongView = 'SongView',
+  PlaylistView = 'PlaylistView',
+  PlaylistList = 'PlaylistList',
+  PlaylistAddSongs = 'PlaylistAddSongs',
+  PlaylistEdit = 'PlaylistEdit'
 }
 
 const AppNavigation = createBottomTabNavigator({
@@ -111,21 +114,12 @@ const AppNavigation = createBottomTabNavigator({
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="magnify" />
     })
   },
-}, tabNavigatorConfig)
+}, {
+  tabBarOptions: {
+    activeTintColor: 'tomato',
+    inactiveTintColor: 'gray',
+  },
+  initialRouteName: ROUTES.SongList
+})
 
 export default AppNavigation;
-
-export enum ROUTES {
-  ArtistList = 'ArtistList',
-  ArtistView = 'ArtistView',
-  OnlineArtistView = 'OnlineArtistView',
-  OnlineSearch = 'OnlineSearch',
-  SongEdit = 'SongEdit',
-  SongList = 'SongList',
-  SongPreview = 'SongPreview',
-  SongView = 'SongView',
-  PlaylistView = 'PlaylistView',
-  PlaylistList = 'PlaylistList',
-  PlaylistAddSongs = 'PlaylistAddSongs',
-  PlaylistEdit = 'PlaylistEdit'
-}
