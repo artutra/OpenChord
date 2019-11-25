@@ -18,7 +18,7 @@ Cross-platform chordpro reader app for Android and iOS written with React Native
 
 <p float="left">
   <img src="./screenshots/ArtistList.png" alt="screenshot-1" width="150">
-  <img src="./screenshots/SongView.png" alt="screenshot-2" width="150">
+  <img src="./screenshots/SongList.png" alt="screenshot-2" width="150">
   <img src="./screenshots/ChordDiagram.png" alt="screenshot-3" width="150">
   <img src="./screenshots/Toolbar.png" alt="screenshot-4" width="150">
   <img src="./screenshots/EditSong.png" alt="screenshot-5" width="150">
