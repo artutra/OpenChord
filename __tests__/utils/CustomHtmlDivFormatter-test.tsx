@@ -145,7 +145,7 @@ it('render tabs correctly', () => {
 })
 
 
-it('render tabs correctly', () => {
+it('dont throw error if close tag {eot} was not typed', () => {
   let chordProSong =
     "{sot}\n" +
     "E|-\n" +
