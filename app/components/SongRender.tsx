@@ -165,5 +165,13 @@ body {
 .word {
   display: inline-block;
 }
+.tab {
+}
+.tab-line {
+  max-width: 4px;
+  display: inline-block;
+  word-wrap: break-word;
+  padding-bottom: 20px;
+}
 `
 export default SongRender
