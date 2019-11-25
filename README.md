@@ -9,10 +9,7 @@ Cross-platform chordpro reader app for Android and iOS written with React Native
 [![David](https://img.shields.io/david/artutra/OpenChord.svg)](https://david-dm.org/artutra/OpenChord)
 
 <p style="display: flex;flex-wrap: wrap; align-items: center;justify-content: center">
-  <a href="#">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" width="230" height="65">
-  </a>
-  <a href="https://play.google.com/apps/testing/com.openchord">
+  <a href="https://play.google.com/store/apps/details?id=com.openchord">
     <img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" width="250">
   </a>
 </p>
@@ -21,14 +18,17 @@ Cross-platform chordpro reader app for Android and iOS written with React Native
 
 <p float="left">
   <img src="./screenshots/ArtistList.png" alt="screenshot-1" width="150">
-  <img src="./screenshots/SongView.png" alt="screenshot-2" width="150">
+  <img src="./screenshots/SongList.png" alt="screenshot-2" width="150">
   <img src="./screenshots/ChordDiagram.png" alt="screenshot-3" width="150">
   <img src="./screenshots/Toolbar.png" alt="screenshot-4" width="150">
   <img src="./screenshots/EditSong.png" alt="screenshot-5" width="150">
 </p>
 
-# Features
+# :rocket: Features
 Open Chord is a React Native application for both Android and iOS that allows you to organize your chord charts, lyric sheets and songbooks with a simple app on your tablet or smartphone. Open Chord easily allows you to get rid of all that paper by displaying your music in a flexible, easy to read format.
+
+To perform searches and download the songs the app uses [OpenChordApi](https://cifralivre.com.br/api/).
+OpenChordApi is currently BETA, which means it may be unreliable, unavailable or not working. That said, it's already useful and we're working to make it rock solid.
 
 A few features include:
 
@@ -42,8 +42,8 @@ A few features include:
 | Configure font size              | :heavy_check_mark: |
 | Show guitar chord diagrams       | :heavy_check_mark: |
 | Autoscroll                       | :heavy_check_mark: |
-| Manage playlists                 | :clock2:           |
-| Search saved songs               | :clock2:           |
+| Manage playlists                 | :heavy_check_mark: |
+| Search saved songs               | :heavy_check_mark: |
 | Slide with touch                 | :clock2:           |
 | Slide with volume button         | :clock2:           |
 | Multiple columns visualization   | :clock2:           |
@@ -57,7 +57,7 @@ A few features include:
 
 :heavy_multiplication_x: = currently no plans to support it in the near future
 
-## Try it yourself
+## :hammer: Try it yourself
 
 ### 1. Clone and Install
 
@@ -104,8 +104,11 @@ Obs: The docker container can't attatch to the device via USB. You have to build
 * [ChordSheetJS](https://github.com/martijnversluis/ChordSheetJS) - A JavaScript library for parsing and formatting chord sheets
 * [ChordPro](https://www.chordpro.org/chordpro/index.html) - A text file format to write lead sheets, songs with lyrics and chords
 
-## How can you help
+## :raising_hand: How can you help
 If you find any problems, feature requests, please open an issue or submit a fix as a pull request.
 
-## License
+## :newspaper: License
 [GNU General Public License v3.0](LICENSE)
+
+## :star: Credits
+Made with :heart: by [Artur Miranda](https://github.com/artutra)
