@@ -111,3 +111,55 @@ it('render comment tag correctly', () => {
   res = res + '\n' + res
   expect(formatter.format(song)).toBe(res)
 })
+
+it('render tabs correctly', () => {
+  let chordProSong =
+    "{sot}\n" +
+    "E|--4----------\n" +
+    "B|--4------4---\n" +
+    "G|--3----------\n" +
+    "D|--4----------\n" +
+    "{eot}"
+  let song = new ChordSheetJS.ChordProParser().parse(chordProSong)
+  let formatter = new CustomHtmlDivFormatter()
+  let res =
+    "<div class=\"tab\">" +
+    "<div class=\"tab-line\">EBGD</div>\n" +
+    "<div class=\"tab-line\">||||</div>\n" +
+    "<div class=\"tab-line\">----</div>\n" +
+    "<div class=\"tab-line\">----</div>\n" +
+    "<div class=\"tab-line\">4434</div>\n" +
+    "<div class=\"tab-line\">----</div>\n" +
+    "<div class=\"tab-line\">----</div>\n" +
+    "<div class=\"tab-line\">----</div>\n" +
+    "<div class=\"tab-line\">----</div>\n" +
+    "<div class=\"tab-line\">----</div>\n" +
+    "<div class=\"tab-line\">----</div>\n" +
+    "<div class=\"tab-line\">-4--</div>\n" +
+    "<div class=\"tab-line\">----</div>\n" +
+    "<div class=\"tab-line\">----</div>\n" +
+    "<div class=\"tab-line\">----</div>\n" +
+    "</div>"
+  res = res + '\n'
+  expect(formatter.format(song)).toBe(res)
+})
+
+
+it('dont throw error if close tag {eot} was not typed', () => {
+  let chordProSong =
+    "{sot}\n" +
+    "E|-\n" +
+    "B|-\n" +
+    "G|-\n" +
+    "D|-\n"
+  let song = new ChordSheetJS.ChordProParser().parse(chordProSong)
+  let formatter = new CustomHtmlDivFormatter()
+  let res =
+    "<div class=\"tab\">" +
+    "<div class=\"tab-line\">EBGD</div>\n" +
+    "<div class=\"tab-line\">||||</div>\n" +
+    "<div class=\"tab-line\">----</div>\n" +
+    "</div>"
+  res = res + '\n'
+  expect(formatter.format(song)).toBe(res)
+})
