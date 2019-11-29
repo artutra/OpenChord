@@ -30,6 +30,8 @@ Open Chord is a React Native application for both Android and iOS that allows yo
 To perform searches and download the songs the app uses [OpenChordApi](https://cifralivre.com.br/api/).
 OpenChordApi is currently BETA, which means it may be unreliable, unavailable or not working. That said, it's already useful and we're working to make it rock solid.
 
+Join the community: [Discord Chat](https://discord.gg/HzCSQpx)
+
 A few features include:
 
 | Feature                          | Support            |
