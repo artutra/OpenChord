@@ -7,6 +7,7 @@ Cross-platform chordpro reader app for Android and iOS written with React Native
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![David](https://img.shields.io/david/artutra/OpenChord.svg)](https://david-dm.org/artutra/OpenChord)
+[![Discord](https://img.shields.io/discord/650021747382550528)](https://discord.gg/HzCSQpx)
 
 <p style="display: flex;flex-wrap: wrap; align-items: center;justify-content: center">
   <a href="https://play.google.com/store/apps/details?id=com.openchord">
