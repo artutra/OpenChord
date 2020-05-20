@@ -79,9 +79,9 @@ const ArtistList = (props: Props) => {
         contentContainerStyle={artists.length <= 0 ? { flex: 1 } : {}}
         ListEmptyComponent={
           <EmptyListMessage
-            message="You haven't downloaded any song yet"
+            message="Mbola tsy manana hira enao"
             onPress={() => { props.navigation.navigate(ROUTES.OnlineSearch) }}
-            buttonTitle="GO TO ONLINE SEARCH"
+            buttonTitle="HITADY HIRA"
           />
         }
         renderItem={({ item }) => {

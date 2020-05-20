@@ -71,9 +71,9 @@ const SongList: FunctionComponent<Props> & NavigationScreenComponent<
         contentContainerStyle={songs.length <= 0 ? { flex: 1 } : {}}
         ListEmptyComponent={
           <EmptyListMessage
-            message="You haven't downloaded any song yet"
+            message="Mbola tsy manana hira enao"
             onPress={() => { props.navigation.navigate(ROUTES.OnlineSearch) }}
-            buttonTitle="GO TO ONLINE SEARCH"
+            buttonTitle="HITADY HIRA"
           />
         }
         renderItem={({ item }) => {
@@ -84,9 +84,9 @@ const SongList: FunctionComponent<Props> & NavigationScreenComponent<
               subtitle={item.artist.name}
               onPress={() => onSelectSong(item.id!, item.title)}
               options={[
-                { title: 'Go to Artist', onPress: () => onPressGoToArtist(item.id!) },
-                { title: 'Edit', onPress: () => onPressEditSong(item.id!) },
-                { title: 'Delete', onPress: () => onPressDeleteSong(item.id!) }
+                { title: 'Mpihira', onPress: () => onPressGoToArtist(item.id!) },
+                { title: 'Hovaina', onPress: () => onPressEditSong(item.id!) },
+                { title: 'Esorina', onPress: () => onPressDeleteSong(item.id!) }
               ]}
             />
           )

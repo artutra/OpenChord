@@ -42,19 +42,21 @@ const AppNavigation = createBottomTabNavigator({
     screen: createStackNavigator({
       PlaylistList: {
         screen: PlaylistList,
-        navigationOptions: { title: 'Playlists' }
+        navigationOptions: { title: 'Hirako' }
+        //navigationOptions: { title: 'Hirako' }
       },
       PlaylistView,
       SongView,
       SongEdit,
       PlaylistAddSongs: {
         screen: PlaylistAddSongs,
-        navigationOptions: { title: 'Add songs' }
+        navigationOptions: { title: 'Hampina hira' }
       },
       PlaylistEdit
     }),
     navigationOptions: ({ navigation }) => ({
-      title: 'Playlists',
+      //title: 'Playlists',
+      title: 'Hirako',
       tabBarVisible: navigation.state.index <= 0,
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="playlist-music" />
     })
@@ -63,14 +65,14 @@ const AppNavigation = createBottomTabNavigator({
     screen: createStackNavigator({
       ArtistList: {
         screen: ArtistList,
-        navigationOptions: { title: 'Artists' }
+        navigationOptions: { title: 'Mpihira' }
       },
       ArtistView,
       SongView,
       SongEdit,
     }),
     navigationOptions: ({ navigation }) => ({
-      title: 'Artists',
+      title: 'Mpihira',
       tabBarVisible: navigation.state.index <= 0,
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="artist" />
     })
@@ -79,14 +81,14 @@ const AppNavigation = createBottomTabNavigator({
     screen: createStackNavigator({
       SongList: {
         screen: SongList,
-        navigationOptions: { title: 'Songs' }
+        navigationOptions: { title: 'Hira' }
       },
       ArtistView,
       SongView,
       SongEdit,
     }),
     navigationOptions: ({ navigation }) => ({
-      title: 'Songs',
+      title: 'Hira',
       tabBarVisible: navigation.state.index <= 0,
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="format-list-bulleted-square" />
     })

@@ -40,8 +40,8 @@ const ArtistView = (props: Props) => {
           title={item.title}
           onPress={() => onSelectSong(item.id!, item.title)}
           options={[
-            { title: 'Edit', onPress: () => onPressEditSong(item.id!) },
-            { title: 'Delete', onPress: () => onPressDeleteSong(item.id!) }
+            { title: 'Hovaina', onPress: () => onPressEditSong(item.id!) },
+            { title: 'Esorina', onPress: () => onPressDeleteSong(item.id!) }
           ]}
         />
       }}

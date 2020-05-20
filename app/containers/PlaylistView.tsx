@@ -69,9 +69,9 @@ const PlaylistView: FunctionComponent<Props> & NavigationScreenComponent<
       }}
       ListEmptyComponent={
         <EmptyListMessage
-          message="You haven't added any songs yet"
+          message="Mbola tsy nanampy hira enao"
           onPress={onPressAddSongs}
-          buttonTitle="ADD SONGS"
+          buttonTitle="HANAMPY HIRA"
         />
       }
       renderItem={({ item }) => {
@@ -80,8 +80,8 @@ const PlaylistView: FunctionComponent<Props> & NavigationScreenComponent<
           title={item.title}
           onPress={() => onSelectSong(item.id!, item.title)}
           options={[
-            { title: 'Edit', onPress: () => onPressEditSong(item.id!) },
-            { title: 'Delete', onPress: () => onPressDeleteSong(item.id!) }
+            { title: 'Ovaina', onPress: () => onPressEditSong(item.id!) },
+            { title: 'Esorina', onPress: () => onPressDeleteSong(item.id!) }
           ]}
         />
       }}
