@@ -72,16 +72,7 @@ git clone https://github.com/artutra/OpenChord.git
 cd OpenChord && npm install
 ```
 
-### 2. Generate `songs.json` file
-```bash
-# Run
-npm run build:chordpro
-```
-It will merge all `.cho`, `.crd`, `.chopro`, `.chord` and `.pro` files inside `./assets/chordpro` into a single `songs.json` file that will be imported in the app.
-
-Obs: If you pass the flag `prod` (ex: `npm run build:chordpro prod`) it will only merge files that *not* contains `.test` on the name
-
-### 3. Run it on both iOS and Android
+### 2. Run it on both iOS and Android
 ```bash
 # Run on iOS
 npm run build:ios
