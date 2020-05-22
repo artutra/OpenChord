@@ -21,6 +21,7 @@
     "react": "16.8.6",
     "react-native": "0.60.5",
     "react-native-cheerio": "^1.0.0-rc.4",
+    "react-native-document-picker": "^3.4.0",
     "react-native-draggable-flatlist": "^1.1.9",
     "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.4.1",
