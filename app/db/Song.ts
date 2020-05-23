@@ -72,7 +72,13 @@ export class Song {
       `{artist: ${song.artist.name}}\n`
     return header + headerlessContent
   }
-  static create(artist: Artist, title: string, content: string) {
+  static create(artist: Artist, title: string, content: string, id?: string) {
+    if (id == null) {
+      id = uuid()
+    } else if (Song.getById(id)) {
+      throw new Error('Song id already exists')
+    }
+
     if (title == null || title == "") {
       throw new Error(`Empty title not allowed`)
     }
@@ -87,7 +93,7 @@ export class Song {
     if (song == null) {
       realm.write(() => {
         song = realm.create<Song>('Song', {
-          id: uuid(),
+          id,
           title,
           content,
           artist,
