@@ -22,8 +22,8 @@ export interface DatabaseBundle {
     title: string
     content: string
     artist: string
-    transposeAmount: number | null | undefined
-    fontSize: number | null | undefined
+    transposeAmount?: number | null | undefined
+    fontSize?: number | null | undefined
     showTablature: boolean
     updated_at: string
   }[]
@@ -65,9 +65,36 @@ export function createBundle(): DatabaseBundle {
   })
   return db;
 }
-
 export function importBundle(bundle: DatabaseBundle): void {
-  // TODO
+  let mapExistingSongs: { [key: string]: string } = {}
+  bundle.songs.forEach(bundleSong => {
+    let artistDb: Artist | undefined = Artist.getByName(bundleSong.artist)
+    if (artistDb == null) {
+      artistDb = Artist.create(bundleSong.artist)
+    }
+    let songDb = Song.getById(bundleSong.id)
+    if (songDb) {
+      if (songDb.updated_at < new Date(bundleSong.updated_at)) {
+        Song.update(songDb.id, artistDb, bundleSong.title, bundleSong.content)
+      }
+    } else {
+      let s = Song.create(artistDb, bundleSong.title, bundleSong.content, bundleSong.id)
+      mapExistingSongs[bundleSong.id] = s.id
+    }
+  })
+  bundle.playlists.forEach(bundlePlaylist => {
+    let playlistDb: Playlist | undefined = Playlist.getByName(bundlePlaylist.name)
+    if (playlistDb == null) {
+      playlistDb = Playlist.create(bundlePlaylist.name)
+    }
+    bundlePlaylist.songs.forEach(bundleSong => {
+      let songDb = Song.getById(mapExistingSongs[bundleSong.id])
+      if (songDb == null) {
+        throw new Error('Playlist song not found')
+      }
+      Playlist.addSong(playlistDb!, songDb)
+    })
+  })
 }
 export function jsonToBundle(jsonString: string): DatabaseBundle {
   // TODO
