@@ -9,6 +9,9 @@ import App from '../App';
 import renderer from 'react-test-renderer';
 import realm from '../app/db';
 
+jest.mock('react-native-share', () => () => 'Share')
+jest.mock('react-native-fs', () => () => 'RNFS')
+jest.mock('react-native-document-picker', () => () => 'DocumentPicker')
 jest.mock('react-native-reanimated', () => require('react-native-reanimated/mock'))
 jest.mock('NativeAnimatedHelper')
 jest.mock('@react-native-community/slider', () => () => 'Slider');
