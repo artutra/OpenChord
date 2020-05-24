@@ -1,6 +1,4 @@
 import uuid from 'uuid'
-import allSongs from '../assets/chordpro/songs.json'
-import ChordSheetJS from 'chordsheetjs';
 import { Artist } from './Artist';
 import realm from '.';
 
@@ -36,30 +34,6 @@ export class Song {
   }
   static getByArtist(artistId: string) {
     return realm.objects<Song>('Song').filtered('artist.id = $0', artistId).sorted('title');
-  }
-  static shouldUpdateDb() {
-    let s = this.getAll().find(() => true)
-    let newSongsDate = new Date(allSongs.updated_at)
-    if (s == null)
-      return true
-    else
-      return newSongsDate > s.updated_at
-  }
-  static populateDb() {
-    if (this.shouldUpdateDb()) {
-      for (var i = 0; i < allSongs.data.length; i++) {
-        let s: string = allSongs.data[i]
-        const parser = new ChordSheetJS.ChordProParser();
-        const formatter = new ChordSheetJS.ChordProFormatter();
-        const parsedSong = parser.parse(s);
-        let artistName = parsedSong.getMetaData('artist')!
-        let songTitle = parsedSong.getMetaData('title')!
-        let songContent = formatter.format(parsedSong)
-
-        let artist = Artist.create(artistName)
-        Song.create(artist, songTitle, songContent)
-      }
-    }
   }
 
   static getAll() { return realm.objects<Song>('Song').sorted('title') }
