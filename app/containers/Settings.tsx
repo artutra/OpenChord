@@ -7,6 +7,7 @@ import { StyleSheet, View, Alert } from "react-native";
 import Share from 'react-native-share';
 import RNFS from 'react-native-fs'
 import DocumentPicker from 'react-native-document-picker';
+import LoadingIndicator from "../components/LoadingIndicator";
 
 const Settings: FC & NavigationScreenComponent<
   NavigationStackOptions,
@@ -58,6 +59,7 @@ const Settings: FC & NavigationScreenComponent<
     <View style={styles.container}>
       <ListItem onPress={onPressExport} title="Export All" />
       <ListItem onPress={onPressImport} title="Import" />
+      <LoadingIndicator loading={loading} />
     </View>
   )
 }
