@@ -15,6 +15,7 @@ import PlaylistList from './containers/PlaylistList';
 import PlaylistView from './containers/PlaylistView';
 import PlaylistAddSongs from './containers/PlaylistAddSongs';
 import PlaylistEdit from './containers/PlaylistEdit';
+import Settings from './containers/Settings';
 
 interface TabBarIconProps {
   focused: boolean
@@ -112,6 +113,13 @@ const AppNavigation = createBottomTabNavigator({
       title: 'Online Search',
       tabBarVisible: navigation.state.index <= 0,
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="magnify" />
+    })
+  },
+  Settings: {
+    screen: Settings,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Settings',
+      tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="settings" />
     })
   },
 }, {
