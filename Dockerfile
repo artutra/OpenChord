@@ -58,6 +58,3 @@ RUN $ANDROID_HOME/tools/bin/sdkmanager \
 WORKDIR /usr/src/app
 
 COPY . ./
-
-RUN npm install
-RUN npx jetify
