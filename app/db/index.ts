@@ -2,6 +2,7 @@ import Realm, { List } from 'realm'
 import { Artist } from './Artist';
 import { Song } from './Song';
 import { Playlist } from './Playlist';
+import { JsonDecoder } from '@artutra/ts-data-json';
 
 var realm = new Realm({
   schema: [
@@ -13,25 +14,26 @@ var realm = new Realm({
   migration: () => { }
 })
 export default realm;
-
+interface SongBundle {
+  id: string
+  title: string
+  content: string
+  artist: string
+  transposeAmount?: number | null | undefined
+  fontSize?: number | null | undefined
+  showTablature: boolean
+  updated_at: string
+}
+interface PlaylistBundle {
+  id: string
+  name: string
+  songs: { id: string }[]
+}
 export interface DatabaseBundle {
   version: number
   created_at: string
-  songs: {
-    id: string
-    title: string
-    content: string
-    artist: string
-    transposeAmount?: number | null | undefined
-    fontSize?: number | null | undefined
-    showTablature: boolean
-    updated_at: string
-  }[]
-  playlists: {
-    id: string
-    name: string
-    songs: { id: string }[]
-  }[]
+  songs: SongBundle[]
+  playlists: PlaylistBundle[]
 }
 
 export function createBundle(): DatabaseBundle {
@@ -96,10 +98,34 @@ export function importBundle(bundle: DatabaseBundle): void {
     })
   })
 }
-export function jsonToBundle(jsonString: string): DatabaseBundle {
-  // TODO
-  let db: DatabaseBundle = { version: 1, songs: [], playlists: [], created_at: new Date().toJSON() }
-  return db
+const bundleDecoder = JsonDecoder.object<DatabaseBundle>({
+  version: JsonDecoder.number,
+  created_at: JsonDecoder.string,
+  songs: JsonDecoder.array<SongBundle>(
+    JsonDecoder.object<SongBundle>({
+      id: JsonDecoder.string,
+      title: JsonDecoder.string,
+      content: JsonDecoder.string,
+      artist: JsonDecoder.string,
+      transposeAmount: JsonDecoder.optional(JsonDecoder.number),
+      fontSize: JsonDecoder.optional(JsonDecoder.number),
+      showTablature: JsonDecoder.boolean,
+      updated_at: JsonDecoder.string
+    }, 'SongBundle'), 'songs[]'),
+  playlists: JsonDecoder.array<PlaylistBundle>(
+    JsonDecoder.object<PlaylistBundle>({
+      id: JsonDecoder.string,
+      name: JsonDecoder.string,
+      songs: JsonDecoder.array<{ id: string }>(JsonDecoder.object<{ id: string }>({
+        id: JsonDecoder.string
+      }, 'playlist.songs.id'), 'playlist.songs[]')
+    }, 'PlaylistBundle'), 'playlists[]')
+},
+  'DatabaseBundle')
+
+export async function decodeJsonBundle(jsonString: string): Promise<DatabaseBundle> {
+  let bundle = JSON.parse(jsonString)
+  return await bundleDecoder.decodePromise<DatabaseBundle>(bundle)
 }
 
 export { Song }

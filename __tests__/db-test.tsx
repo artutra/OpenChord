@@ -1,4 +1,4 @@
-import realm, { Song, Artist, createBundle, importBundle, DatabaseBundle } from '../app/db';
+import realm, { Song, Artist, createBundle, importBundle, DatabaseBundle, decodeJsonBundle } from '../app/db';
 import { Playlist } from '../app/db/Playlist';
 
 beforeAll(() => {
@@ -58,6 +58,31 @@ it('import existing song on db to new imported playlist', () => {
     let song = playlist3.songs[i]
     expect(song).toEqual(song1)
   }
+})
+
+it('import existing song on db to new imported playlist', async () => {
+  let bundleString = `{
+    "version":1,
+    "created_at":"",
+    "songs": [{
+      "id": "song-id",
+      "title": "Title 1",
+      "content": "Music lyric",
+      "artist": "Artist 1",
+      "showTablature": false,
+      "updated_at": ""
+    }],
+    "playlists": [{
+      "id": "playlist-id",
+      "name": "Playlist 1",
+      "songs": [{
+        "id": "song-id"
+      }]
+    }]
+  }
+  `
+  let bundle = await decodeJsonBundle(bundleString)
+  expect(bundle.version).toBe(1)
 })
 
 afterAll(() => {
