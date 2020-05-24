@@ -1,8 +1,7 @@
-import Realm, { List } from 'realm'
+import Realm from 'realm'
 import { Artist } from './Artist';
 import { Song } from './Song';
 import { Playlist } from './Playlist';
-import { JsonDecoder } from '@artutra/ts-data-json';
 
 var realm = new Realm({
   schema: [
