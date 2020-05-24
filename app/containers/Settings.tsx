@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FunctionComponent, FC } from "react";
 import { NavigationScreenComponent } from "react-navigation"
-import { createBundle, importBundle, decodeJsonBundle } from '../db'
+import { createBundle, importBundle, decodeJsonBundle } from '../db/bundler'
 import ListItem from "../components/ListItem";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
 import { StyleSheet, View, Alert } from "react-native";

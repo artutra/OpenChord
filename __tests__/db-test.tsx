@@ -1,4 +1,5 @@
-import realm, { Song, Artist, createBundle, importBundle, DatabaseBundle, decodeJsonBundle } from '../app/db';
+import realm, { Song, Artist } from '../app/db';
+import { createBundle, importBundle, DatabaseBundle, decodeJsonBundle } from '../app/db/bundler'
 import { Playlist } from '../app/db/Playlist';
 
 beforeAll(() => {
