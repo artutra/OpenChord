@@ -61,12 +61,8 @@ export default AutoScrollSlider
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
     flexDirection: 'row',
     alignItems: 'center',
-    right: 0,
-    bottom: 0,
-    left: 0,
     height: 60,
     backgroundColor: '#ccc'
   }
