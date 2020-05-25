@@ -11,8 +11,7 @@ interface AutoScrollSliderProps {
 const AutoScrollSlider: FunctionComponent<AutoScrollSliderProps> = (props) => {
   let { show, onClose, onValueChange } = props
   const [isActive, setIsActive] = useState(false)
-  const [sliderValue, setSliderValue] = useState(0)
-  const [initialValue, setInitialValue] = useState(0)
+  const [sliderValue, setSliderValue] = useState(0.5)
 
   function onSliderValueChange(value: number) {
     setSliderValue(value)
@@ -32,8 +31,16 @@ const AutoScrollSlider: FunctionComponent<AutoScrollSliderProps> = (props) => {
   }
 
   useEffect(() => {
-    setInitialValue(sliderValue)
+    if (show) {
+      setIsActive(true)
+    }
   }, [show])
+
+  useEffect(() => {
+    if (isActive) {
+      onSliderValueChange(sliderValue)
+    }
+  }, [isActive])
 
   if (!show) {
     return null
@@ -47,8 +54,10 @@ const AutoScrollSlider: FunctionComponent<AutoScrollSliderProps> = (props) => {
         }
         <Slider
           style={{ flex: 1 }}
-          value={initialValue}
+          value={sliderValue}
           onValueChange={onSliderValueChange}
+          onSlidingStart={onSliderValueChange}
+          onSlidingComplete={onSliderValueChange}
           minimumValue={0}
           maximumValue={1}
         />
