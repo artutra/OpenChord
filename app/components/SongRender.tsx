@@ -105,21 +105,24 @@ body {
   font-size: 20px
 }
 .artist {
+  display: block;
   font-weight: bold;
   color: red;
   cursor: pointer;
+  margin-bottom: 24px;
 }
 .chord:hover {
   color: blue;
 }
 .line {
-  margin: 0;
-  position: relative;
+  margin-top: 0px;
   margin-bottom: 0px;
+  margin-right: 10px;
+  margin-left: 0px;
+  position: relative;
   font-size: 14px;
   font-family: monospace;
   white-space: pre-wrap;
-  margin-right: 10px;
 }
 .line-size-14 { font-size: 14px; }
 .line-size-15 { font-size: 15px; }
