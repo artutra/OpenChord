@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent, useRef } from "react";
-import { View, StyleSheet, Picker, TextInput, ActivityIndicator } from "react-native";
+import { View, StyleSheet, Picker, TextInput, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import ListItem from "../components/ListItem";
 import { NavigationStackProp, NavigationStackOptions } from "react-navigation-stack/lib/typescript/types";
@@ -23,7 +23,7 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
   const searchInput = useRef<TextInput>(null)
   const [baseServices] = useState(services)
   const [serviceName, setServiceName] = useState(services[0].name)
-  const [docs, setDocs] = useState<Doc[]>([])
+  const [docs, setDocs] = useState<Doc[] | null>(null)
   const [query, setQuery] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -77,6 +77,11 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
       <FlatList
         keyExtractor={(item) => item.path}
         data={docs}
+        ListEmptyComponent={() => {
+          return (docs != null && !isLoading) ?
+            <Text style={styles.msgInfo}>Artist or song not found</Text> :
+            null
+        }}
         ListHeaderComponent={<LoadingIndicator error={error} loading={isLoading} />}
         renderItem={({ item, index }) => {
           if (item.type == 'artist') {
@@ -103,6 +108,10 @@ export default withNavigationFocus(OnlineSearch)
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+  msgInfo: {
+    textAlign: 'center',
+    color: '#aaa'
   },
   customHeader: {
     height: Header.HEIGHT,
