@@ -2,6 +2,7 @@ import realm from "."
 import { List } from "realm"
 import { Song } from "./Song"
 import uuid from "uuid"
+import { PlaylistBundle } from "./bundler"
 
 export class Playlist {
   id!: string
@@ -80,6 +81,21 @@ export class Playlist {
       realm.write(() => {
         realm.delete(playlist)
       })
+    }
+  }
+  static toBundle(playlist: Playlist): PlaylistBundle {
+    let playlistSongs: { id: string }[] = []
+    if (playlist.songs instanceof Array) {
+      playlistSongs = playlist.songs.map(s => ({ id: s.id }))
+    } else {
+      for (var s in playlist.songs) {
+        playlistSongs.push({ id: playlist.songs[s].id })
+      }
+    }
+    return {
+      id: playlist.id,
+      name: playlist.name,
+      songs: playlistSongs
     }
   }
 }

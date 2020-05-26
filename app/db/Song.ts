@@ -1,5 +1,6 @@
 import uuid from 'uuid'
 import { Artist } from './Artist';
+import { SongBundle } from './bundler';
 import realm from '.';
 
 export class Song {
@@ -120,5 +121,17 @@ export class Song {
       song.fontSize = fontSize
       song.transposeAmount = transposeAmount
     })
+  }
+  static toBundle(song: Song): SongBundle {
+    return {
+      id: song.id,
+      title: song.title,
+      content: song.content,
+      artist: song.artist.name,
+      transposeAmount: song.transposeAmount,
+      fontSize: song.fontSize,
+      showTablature: song.showTablature,
+      updated_at: song.updated_at.toJSON()
+    }
   }
 }

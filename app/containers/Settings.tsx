@@ -8,6 +8,7 @@ import Share from 'react-native-share';
 import RNFS from 'react-native-fs'
 import DocumentPicker from 'react-native-document-picker';
 import LoadingIndicator from "../components/LoadingIndicator";
+import createFile from "../utils/createFile";
 
 const Settings: FC & NavigationScreenComponent<
   NavigationStackOptions,
@@ -19,14 +20,9 @@ const Settings: FC & NavigationScreenComponent<
     if (loading) return
     setLoading(true)
     try {
-      var path = RNFS.DocumentDirectoryPath + '/openchord.bundle.json';
       let bundle = createBundle()
       let bundleString = JSON.stringify(bundle)
-      let exists = await RNFS.exists(path)
-      if (exists) {
-        await RNFS.unlink(path)
-      }
-      await RNFS.writeFile(path, bundleString, 'utf8')
+      let path = await createFile('backup', bundleString)
       await Share.open({ url: "file://" + path })
     } catch (err) {
       console.warn(err.message)
@@ -57,8 +53,8 @@ const Settings: FC & NavigationScreenComponent<
 
   return (
     <View style={styles.container}>
-      <ListItem onPress={onPressExport} title="Export All" />
-      <ListItem onPress={onPressImport} title="Import" />
+      <ListItem onPress={onPressExport} title="Create Backup" subtitle="Pack all songs and playlists into a .openchord file" />
+      <ListItem onPress={onPressImport} title="Import" subtitle="Backups, Playlists and .openchord files" />
       <LoadingIndicator loading={loading} />
     </View>
   )

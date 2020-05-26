@@ -25,9 +25,30 @@ it('create bundle without errors', () => {
   let song1 = bundle.songs.find(s => s.title === 'Title 1')!
   let song3 = bundle.songs.find(s => s.title === 'Title 3')!
   let playlist1 = bundle.playlists.find(p => p.name === 'Playlist 1')!
+  expect(bundle.songs.length).toBe(4)
+  expect(bundle.playlists.length).toBe(2)
   expect(song1.artist).toBe('Artist 1')
   expect(song3.artist).toBe('Artist 2')
   expect(playlist1.songs).toEqual(expect.arrayContaining([{ id: song1.id }, { id: song3.id }]))
+})
+it('create bundle with 1 playlist only', () => {
+  let playlist1 = Playlist.getByName('Playlist 1')!
+  let bundle = createBundle([playlist1.id], [])
+  let song1 = bundle.songs.find(s => s.title === 'Title 1')!
+  let song3 = bundle.songs.find(s => s.title === 'Title 3')!
+  let bundlePlaylist1 = bundle.playlists.find(p => p.name === 'Playlist 1')!
+  expect(bundle.songs.length).toBe(2)
+  expect(bundle.playlists.length).toBe(1)
+  expect(bundlePlaylist1.name).toBe('Playlist 1')
+  expect(bundlePlaylist1.songs).toEqual(expect.arrayContaining([{ id: song1.id }, { id: song3.id }]))
+})
+
+it('create bundle with 1 song only', () => {
+  let song1 = Song.getById('id-1')!
+  let bundle = createBundle([], [song1.id])
+  expect(bundle.songs.length).toBe(1)
+  expect(bundle.playlists.length).toBe(0)
+  expect(bundle.songs[0].title).toBe('Title 1')
 })
 
 it('import existing song on db to new imported playlist', () => {
@@ -61,7 +82,7 @@ it('import existing song on db to new imported playlist', () => {
   }
 })
 
-it('import existing song on db to new imported playlist', async () => {
+it('decode json string without errors', async () => {
   let bundleString = `{
     "version":1,
     "created_at":"",

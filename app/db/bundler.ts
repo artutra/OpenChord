@@ -2,7 +2,7 @@ import realm, { Artist, Song } from "."
 import { JsonDecoder } from "@artutra/ts-data-json"
 import { Playlist } from "./Playlist"
 
-interface SongBundle {
+export interface SongBundle {
   id: string
   title: string
   content: string
@@ -12,7 +12,7 @@ interface SongBundle {
   showTablature: boolean
   updated_at: string
 }
-interface PlaylistBundle {
+export interface PlaylistBundle {
   id: string
   name: string
   songs: { id: string }[]
@@ -24,35 +24,37 @@ export interface DatabaseBundle {
   playlists: PlaylistBundle[]
 }
 
-export function createBundle(): DatabaseBundle {
+export function createBundle(playlistIds?: string[], songIds?: string[]): DatabaseBundle {
   let db: DatabaseBundle = { version: 1, songs: [], playlists: [], created_at: new Date().toJSON() }
-  realm.objects<Song>('Song').forEach(s => {
-    db.songs.push({
-      id: s.id,
-      title: s.title,
-      content: s.content,
-      artist: s.artist.name,
-      transposeAmount: s.transposeAmount,
-      fontSize: s.fontSize,
-      showTablature: s.showTablature,
-      updated_at: s.updated_at.toJSON()
+  if (songIds) {
+    songIds.forEach(songId => {
+      let s = Song.getById(songId)
+      if (!s) throw new Error('Invalid song ids')
+      db.songs.push(Song.toBundle(s))
     })
-  })
-  realm.objects<Playlist>('Playlist').forEach(p => {
-    let playlistSongs: { id: string }[] = []
-    if (p.songs instanceof Array) {
-      playlistSongs = p.songs.map(s => ({ id: s.id }))
-    } else {
+  } else {
+    realm.objects<Song>('Song').forEach(s => {
+      db.songs.push(Song.toBundle(s))
+    })
+  }
+  if (playlistIds) {
+    playlistIds.forEach(playlistId => {
+      let p = Playlist.getById(playlistId)
+      if (!p) throw new Error('Invalid playlist id')
+
       for (var s in p.songs) {
-        playlistSongs.push({ id: p.songs[s].id })
+        let song = p.songs[s]
+        if (db.songs.find(s => s.id === song.id) == null) {
+          db.songs.push(Song.toBundle(song))
+        }
       }
-    }
-    db.playlists.push({
-      id: p.id,
-      name: p.name,
-      songs: playlistSongs
+      db.playlists.push(Playlist.toBundle(p))
     })
-  })
+  } else {
+    realm.objects<Playlist>('Playlist').forEach(p => {
+      db.playlists.push(Playlist.toBundle(p))
+    })
+  }
   return db;
 }
 export function importBundle(bundle: DatabaseBundle): void {
