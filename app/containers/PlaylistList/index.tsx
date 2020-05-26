@@ -9,6 +9,9 @@ import TouchableIcon from "../../components/TouchableIcon";
 import { removePlaylist } from "../../utils/removePlaylist";
 import EmptyListMessage from "../../components/EmptyListMessage";
 import TextInputModal from "../../components/TextInputModal";
+import { createBundle } from "../../db/bundler";
+import createFile from "../../utils/createFile";
+import Share from "react-native-share";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>
@@ -28,6 +31,16 @@ const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
     removePlaylist(id, () => {
       setPlaylists(Playlist.getAll())
     })
+  }
+  async function onPressShare(id: string, name: string) {
+    try {
+      let bundle = createBundle([id], [])
+      let bundleString = JSON.stringify(bundle)
+      let path = await createFile('playlist_' + name.toLowerCase(), bundleString)
+      await Share.open({ url: "file://" + path, message: 'Download OpenChord, go to Settings>Import and select this file' })
+    } catch (e) {
+      console.warn(e.message)
+    }
   }
 
   useEffect(() => {
@@ -87,6 +100,7 @@ const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
               title={item.name}
               onPress={() => onSelectPlaylist(item.id!, item.name)}
               options={[
+                { title: 'Share', onPress: () => onPressShare(item.id, item.name) },
                 { title: 'Delete', onPress: () => onPressDeletePlaylist(item.id!) }
               ]} />
           )
