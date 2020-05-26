@@ -1,19 +1,19 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
 import { Text, View, StyleSheet, Alert, Switch, Slider, TouchableOpacity } from "react-native";
-import { Song } from '../db'
+import { Song } from '../../db'
 import { NavigationScreenComponent } from "react-navigation";
 import SideMenu from 'react-native-side-menu'
-import SongRender from "../components/SongRender";
-import TouchableIcon from "../components/TouchableIcon";
+import SongRender from "../../components/SongRender";
+import TouchableIcon from "../../components/TouchableIcon";
 import { NavigationStackOptions, NavigationStackProp, } from "react-navigation-stack/lib/typescript/types";
 import Chord from 'chordjs'
-import ChordTab from "../components/ChordTab";
-import SongTransformer from "../components/SongTransformer";
-import AutoScrollSlider from "../components/AutoScrollSlider";
-import { removeSong } from "../utils/removeSong";
-import { ROUTES } from "../AppNavigation";
-import { ArtistViewParams } from "./ArtistView";
-import { SongEditParams } from "./SongEdit";
+import ChordTab from "../../components/ChordTab";
+import SongTransformer from "../../components/SongTransformer";
+import AutoScrollSlider from "../../components/AutoScrollSlider";
+import { removeSong } from "../../utils/removeSong";
+import { ROUTES } from "../../AppNavigation";
+import { ArtistViewParams } from "./../ArtistView";
+import { SongEditParams } from "./../SongEdit";
 
 export type SongViewParams = { id: string, title: string, openSideMenu?: () => void }
 
