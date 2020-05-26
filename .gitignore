@@ -70,3 +70,7 @@ buck-out/
 songs.json
 
 docker-compose.override.yml
+
+# Generated realm files when running tests
+*.realm
+*.realm.lock
