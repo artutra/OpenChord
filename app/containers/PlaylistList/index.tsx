@@ -37,7 +37,10 @@ const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
       let bundle = createBundle([id], [])
       let bundleString = JSON.stringify(bundle)
       let path = await createFile('playlist_' + name.toLowerCase(), bundleString)
-      await Share.open({ url: "file://" + path, message: 'Download OpenChord, go to Settings>Import and select this file' })
+      await Share.open({
+        url: "file://" + path,
+        message: 'Download OpenChord app, go to Settings > Import and select this file'
+      })
     } catch (e) {
       console.warn(e.message)
     }
