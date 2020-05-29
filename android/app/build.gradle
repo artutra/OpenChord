@@ -133,8 +133,8 @@ android {
         applicationId "com.openchord"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9
-        versionName "0.3.1"
+        versionCode 10
+        versionName "0.4.0"
     }
     splits {
         abi {
