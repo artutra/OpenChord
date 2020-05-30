@@ -14,7 +14,7 @@ interface Props {
 }
 const SelectPlaylist: FC<Props> = ({ show, songId, onPressClose }) => {
   const [playlists, setPlaylists] = useState(Playlist.getAll())
-  const [song, setSong] = useState(Song.getById(songId)!)
+  const [song] = useState(Song.getById(songId)!)
   const [showInput, setShowInput] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const screenData = useScreenDimensions()
@@ -62,30 +62,34 @@ const SelectPlaylist: FC<Props> = ({ show, songId, onPressClose }) => {
         placeholder="Playlist Name"
       />
     )
+
+  let scrollHeaderHeight = screenData.height * .7
+  let emptyListItemsQuant = Math.max(2 - playlists.length, 0)
+  let footerHeight = emptyListItemsQuant * 60
   return (
-    <View style={styles.tabContainter}>
-      <FlatList
-        data={playlists}
-        style={{ position: 'absolute', backgroundColor: '#00000040', bottom: 0, right: 0, left: 0, top: 0, }}
-        ListHeaderComponent={() => {
-          return (
-            <View style={[styles.scrollHeader, { height: screenData.height * .7 }]}>
-              <TouchableOpacity onPress={onPressClose} style={{ flex: 1 }}>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={enablePlaylistInput} style={{ backgroundColor: 'white', alignItems: 'center', padding: 16, borderBottomWidth: 1, borderColor: '#ccc', flexDirection: 'row', justifyContent: 'center' }}>
-                <MaterialCommunityIcons
-                  name='plus'
-                  size={20}
-                  color={''} />
-                <Text style={styles.closeButtonText}>Create new Playlist</Text>
-              </TouchableOpacity>
-            </View>
-          )
-        }}
-        contentContainerStyle={{}}
-        keyExtractor={(item, index) => item.id}
-        renderItem={({ item }) => {
-          return <View style={{ backgroundColor: 'white' }}>
+    <FlatList
+      data={playlists}
+      style={styles.scrollContainer}
+      ListHeaderComponent={() => {
+        return (
+          <View style={[styles.scrollHeader, { height: scrollHeaderHeight }]}>
+            <TouchableOpacity onPress={onPressClose} style={styles.scrollHeaderTouchableBackground}>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={enablePlaylistInput} style={styles.createPlaylistButton}>
+              <MaterialCommunityIcons
+                name='plus'
+                size={20} />
+              <Text style={styles.createPlaylistButtonText}>CREATE PLAYLIST</Text>
+            </TouchableOpacity>
+          </View>
+        )
+      }}
+      ListEmptyComponent={<Text style={styles.emptyMessage}>Playlists not found</Text>}
+      contentContainerStyle={{}}
+      keyExtractor={(item, index) => item.id}
+      renderItem={({ item }) => {
+        return (
+          <View style={styles.background}>
             <ListItem
               key={item.id!}
               title={item.name}
@@ -93,53 +97,58 @@ const SelectPlaylist: FC<Props> = ({ show, songId, onPressClose }) => {
               showIcon={Playlist.hasSong(item, song) ? 'check' : 'plus'}
             />
           </View>
-        }}
-      />
-    </View>
+        )
+      }}
+      ListFooterComponent={<View style={[styles.background, { height: footerHeight }]}></View>}
+    />
 
   );
 }
 export default SelectPlaylist
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    position: 'absolute',
+    backgroundColor: '#00000040',
+    bottom: 0,
+    right: 0,
+    left: 0,
+    top: 0
+  },
+  background: {
+    backgroundColor: 'white'
+  },
   scrollHeader: {
     justifyContent: 'flex-end'
   },
-  tabContainter: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
-    left: 0,
-    top: 0,
-    zIndex: 999,
-    justifyContent: 'flex-end'
+  scrollHeaderTouchableBackground: {
+    flex: 1
   },
-  closeButton: {
+  createPlaylistButton: {
+    backgroundColor: 'white',
+    alignItems: 'center',
+    padding: 16,
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  createPlaylistButtonText: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#eee',
+    marginLeft: 10,
     paddingTop: 5,
     paddingBottom: 5,
     marginBottom: 2,
     fontSize: 14,
   },
-  closeButtonText: {
-    fontSize: 16
-  },
-  chordList: {
-    backgroundColor: '#eee'
-  },
-  item: {
-    backgroundColor: 'red',
-    padding: 10,
+  emptyMessage: {
+    flex: 1,
+    textAlign: 'center',
+    backgroundColor: 'white',
+    justifyContent: 'center',
     alignItems: 'center',
-    justifyContent: 'center'
-  },
-  itemTitle: {
-    fontSize: 18
-  },
-  itemSelected: {
-    borderBottomColor: 'tomato',
-    borderBottomWidth: 5
+    color: '#ccc',
+    padding: 10
   }
 });
