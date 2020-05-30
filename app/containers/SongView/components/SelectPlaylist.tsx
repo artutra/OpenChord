@@ -1,11 +1,12 @@
 import React, { useState, FC } from "react";
-import { Text, View, TouchableOpacity, StyleSheet, FlatList, StyleProp, ViewStyle, Dimensions } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, FlatList, StyleProp, ViewStyle, Dimensions, ScrollView } from "react-native";
 import { Playlist } from "../../../db/Playlist";
 import ListItem from "../../../components/ListItem";
 import { Song } from "../../../db";
 import TextInputModal from "../../../components/TextInputModal";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useScreenDimensions } from "../../../utils/useScreenDimensions";
+import { Header } from "react-navigation-stack";
+import { useDimensions } from "../../../utils/useDimensions";
 
 interface Props {
   show: boolean
@@ -17,7 +18,8 @@ const SelectPlaylist: FC<Props> = ({ show, songId, onPressClose }) => {
   const [song] = useState(Song.getById(songId)!)
   const [showInput, setShowInput] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const screenData = useScreenDimensions()
+  const dimensionsData = useDimensions()
+  let windowHeight = dimensionsData.windowData.height
 
   function onSelectPlaylist(id: string) {
     let playlist = Playlist.getById(id)!
@@ -63,45 +65,34 @@ const SelectPlaylist: FC<Props> = ({ show, songId, onPressClose }) => {
       />
     )
 
-  let scrollHeaderHeight = screenData.height * .7
-  let emptyListItemsQuant = Math.max(2 - playlists.length, 0)
-  let footerHeight = emptyListItemsQuant * 60
+  let scrollHeaderHeight = windowHeight * .6 - Header.HEIGHT
+  let listContainerHeight = windowHeight - scrollHeaderHeight - Header.HEIGHT
   return (
-    <FlatList
-      data={playlists}
-      style={styles.scrollContainer}
-      ListHeaderComponent={() => {
-        return (
-          <View style={[styles.scrollHeader, { height: scrollHeaderHeight }]}>
-            <TouchableOpacity onPress={onPressClose} style={styles.scrollHeaderTouchableBackground}>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={enablePlaylistInput} style={styles.createPlaylistButton}>
-              <MaterialCommunityIcons
-                name='plus'
-                size={20} />
-              <Text style={styles.createPlaylistButtonText}>CREATE PLAYLIST</Text>
-            </TouchableOpacity>
-          </View>
-        )
-      }}
-      ListEmptyComponent={<Text style={styles.emptyMessage}>Playlists not found</Text>}
-      contentContainerStyle={{}}
-      keyExtractor={(item, index) => item.id}
-      renderItem={({ item }) => {
-        return (
-          <View style={styles.background}>
+    <ScrollView style={styles.scrollContainer}>
+      <View style={[styles.scrollHeader, { height: scrollHeaderHeight }]}>
+        <TouchableOpacity onPress={onPressClose} style={styles.scrollHeaderTouchableBackground}>
+        </TouchableOpacity>
+      </View>
+      <View style={[styles.background, { minHeight: listContainerHeight }]}>
+        <TouchableOpacity onPress={enablePlaylistInput} style={styles.createPlaylistButton}>
+          <MaterialCommunityIcons
+            name='plus'
+            size={20} />
+          <Text style={styles.createPlaylistButtonText}>CREATE PLAYLIST</Text>
+        </TouchableOpacity>
+        {playlists.length <= 0 && <Text style={styles.emptyMessage}>Playlists not found</Text>}
+        {playlists.map(item => {
+          return (
             <ListItem
               key={item.id!}
               title={item.name}
               onPress={() => onSelectPlaylist(item.id)}
               showIcon={Playlist.hasSong(item, song) ? 'check' : 'plus'}
             />
-          </View>
-        )
-      }}
-      ListFooterComponent={<View style={[styles.background, { height: footerHeight }]}></View>}
-    />
-
+          )
+        })}
+      </View>
+    </ScrollView>
   );
 }
 export default SelectPlaylist
