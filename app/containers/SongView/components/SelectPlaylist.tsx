@@ -32,6 +32,7 @@ const SelectPlaylist: FC<Props> = ({ show, songId, onPressClose }) => {
   }
 
   function enablePlaylistInput() {
+    setError(null)
     setShowInput(true)
   }
 
@@ -128,9 +129,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 10,
-    paddingTop: 5,
-    paddingBottom: 5,
-    marginBottom: 2,
     fontSize: 14,
   },
   emptyMessage: {
