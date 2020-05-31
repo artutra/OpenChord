@@ -1,6 +1,6 @@
-import React, { FunctionComponent, useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useImperativeHandle, forwardRef, RefForwardingComponent } from 'react'
 import WebView from 'react-native-webview'
-import { NativeSyntheticEvent } from 'react-native'
+import { NativeSyntheticEvent, Dimensions } from 'react-native'
 import { WebViewMessage } from 'react-native-webview/lib/WebViewTypes'
 
 interface Props {
@@ -9,10 +9,39 @@ interface Props {
   onPressArtist?: () => void
   scrollSpeed?: number
 }
+
+export interface SongRenderRef {
+  nextPage: () => void
+  previousPage: () => void
+}
+
 const ARTIST_TAG = "<artist>"
-const SongRender: FunctionComponent<Props> = (props) => {
+const SongRender: RefForwardingComponent<SongRenderRef, Props> = (props, ref) => {
   const webRef = useRef<WebView>(null)
   let { scrollSpeed = 0 } = props
+  let height = Dimensions.get('window').height
+
+  useImperativeHandle(ref, () => ({
+    nextPage() {
+      let run = `
+      window.scrollBy(0, ${height}-100)
+      true;
+      `
+      if (webRef.current) {
+        webRef.current.injectJavaScript(run)
+      }
+    },
+    previousPage() {
+      let run = `
+      window.scrollBy(0, -(${height}-100))
+      true;
+      `
+      if (webRef.current) {
+        webRef.current.injectJavaScript(run)
+      }
+    }
+  }))
+
   useEffect(() => {
     let run: string
     if (scrollSpeed <= 0) {
@@ -92,6 +121,9 @@ const onClickChordPostMessage = `
 true;
 `
 const styles = `
+html {
+  scroll-behavior: smooth;
+}
 body {
   font-family: monospace;
   -webkit-touch-callout: none;
@@ -177,4 +209,4 @@ body {
   padding-bottom: 20px;
 }
 `
-export default SongRender
+export default forwardRef(SongRender)
