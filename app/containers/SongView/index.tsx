@@ -1,19 +1,20 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
 import { Text, View, StyleSheet, Alert, Switch, Slider, TouchableOpacity } from "react-native";
-import { Song } from '../db'
+import { Song } from '../../db'
 import { NavigationScreenComponent } from "react-navigation";
 import SideMenu from 'react-native-side-menu'
-import SongRender from "../components/SongRender";
-import TouchableIcon from "../components/TouchableIcon";
+import SongRender from "../../components/SongRender";
+import TouchableIcon from "../../components/TouchableIcon";
 import { NavigationStackOptions, NavigationStackProp, } from "react-navigation-stack/lib/typescript/types";
 import Chord from 'chordjs'
-import ChordTab from "../components/ChordTab";
-import SongTransformer from "../components/SongTransformer";
-import AutoScrollSlider from "../components/AutoScrollSlider";
-import { removeSong } from "../utils/removeSong";
-import { ROUTES } from "../AppNavigation";
-import { ArtistViewParams } from "./ArtistView";
-import { SongEditParams } from "./SongEdit";
+import ChordTab from "../../components/ChordTab";
+import SongTransformer from "../../components/SongTransformer";
+import AutoScrollSlider from "../../components/AutoScrollSlider";
+import { removeSong } from "../../utils/removeSong";
+import { ROUTES } from "../../AppNavigation";
+import { ArtistViewParams } from "./../ArtistView";
+import { SongEditParams } from "./../SongEdit";
+import SelectPlaylist from "./components/SelectPlaylist"
 
 export type SongViewParams = { id: string, title: string, openSideMenu?: () => void }
 
@@ -35,6 +36,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   const [fontSize, setFontSize] = useState<number>(DEFAULT_FONT_SIZE)
   const [selectedChord, selectChord] = useState<Chord | null>(null)
   const [showTabs, setShowTabs] = useState(true)
+  const [showPlaylistSelection, setShowPlaylistSelection] = useState(false)
 
   function transposeUp() { setTone(tone + 1 >= 12 ? 0 : tone + 1); selectChord(null) }
   function transposeDown() { setTone(tone - 1 <= -12 ? 0 : tone - 1); selectChord(null) }
@@ -106,6 +108,15 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
               <Switch onValueChange={setShowTabs} value={showTabs} />
               <Text style={styles.toolLabel}>Show Tabs</Text>
             </View>
+            <View style={styles.tool}>
+              <TouchableIcon
+                onPress={() => {
+                  setIsSideMenuOpen(false)
+                  setShowPlaylistSelection(!showAutoScrollSlider)
+                }}
+                size={25}
+                name="playlist-plus" />
+            </View>
           </View>
           <View style={styles.secondaryToolbarContainer}>
             <TouchableIcon onPress={editSong} name="pencil" />
@@ -148,6 +159,11 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
               show={showAutoScrollSlider}
               onValueChange={setScrollSpeed}
               onClose={() => setShowAutoScrollSlider(false)}
+            />
+            <SelectPlaylist
+              songId={songId}
+              show={showPlaylistSelection}
+              onPressClose={() => setShowPlaylistSelection(false)}
             />
           </View>
         )}
