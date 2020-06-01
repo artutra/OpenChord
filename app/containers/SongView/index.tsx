@@ -1,9 +1,9 @@
-import React, { useState, useEffect, FunctionComponent } from "react";
+import React, { useState, useEffect, FunctionComponent, useRef } from "react";
 import { Text, View, StyleSheet, Alert, Switch, Slider, TouchableOpacity } from "react-native";
 import { Song } from '../../db'
 import { NavigationScreenComponent } from "react-navigation";
 import SideMenu from 'react-native-side-menu'
-import SongRender from "../../components/SongRender";
+import SongRender, { SongRenderRef } from "../../components/SongRender";
 import TouchableIcon from "../../components/TouchableIcon";
 import { NavigationStackOptions, NavigationStackProp, } from "react-navigation-stack/lib/typescript/types";
 import Chord from 'chordjs'
@@ -15,6 +15,7 @@ import { ROUTES } from "../../AppNavigation";
 import { ArtistViewParams } from "./../ArtistView";
 import { SongEditParams } from "./../SongEdit";
 import SelectPlaylist from "./components/SelectPlaylist"
+import PageTurner from "./components/PageTurner";
 
 export type SongViewParams = { id: string, title: string, openSideMenu?: () => void }
 
@@ -37,12 +38,16 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   const [selectedChord, selectChord] = useState<Chord | null>(null)
   const [showTabs, setShowTabs] = useState(true)
   const [showPlaylistSelection, setShowPlaylistSelection] = useState(false)
+  const [showPageTurner, setShowPageTurner] = useState(false)
+  const songRenderRef = useRef<SongRenderRef>(null)
 
   function transposeUp() { setTone(tone + 1 >= 12 ? 0 : tone + 1); selectChord(null) }
   function transposeDown() { setTone(tone - 1 <= -12 ? 0 : tone - 1); selectChord(null) }
   function increaseFontSize() { setFontSize(fontSize + 2 >= 24 ? 24 : fontSize + 2) }
   function decreaseFontSize() { setFontSize(fontSize - 2 <= 14 ? 14 : fontSize - 2) }
   function openSideMenu() { setIsSideMenuOpen(!isSideMenuOpen) }
+  function onPressNextPage() { if (songRenderRef.current) songRenderRef.current.nextPage() }
+  function onPressPreviousPage() { if (songRenderRef.current) songRenderRef.current.previousPage() }
 
   function onClickChord(allChords: Array<Chord>, chordString: string) {
     selectChord(allChords.find(c => c.toString() == chordString)!)
@@ -62,6 +67,13 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
     let song = Song.getById(id)!
     let params: ArtistViewParams = { id: song.artist.id!, title: song.artist.name }
     props.navigation.navigate(ROUTES.ArtistView, params)
+  }
+  function tooglePageTurner(value: boolean) {
+    if (value) {
+      setShowAutoScrollSlider(false)
+      setScrollSpeed(0)
+    }
+    setShowPageTurner(value)
   }
 
   useEffect(() => {
@@ -98,6 +110,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
             </View>
             <View style={styles.tool}>
               <TouchableOpacity onPress={() => {
+                setShowPageTurner(false)
                 setIsSideMenuOpen(false)
                 setShowAutoScrollSlider(true)
               }}>
@@ -109,10 +122,14 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
               <Text style={styles.toolLabel}>Show Tabs</Text>
             </View>
             <View style={styles.tool}>
+              <Switch onValueChange={tooglePageTurner} value={showPageTurner} />
+              <Text style={styles.toolLabel}>Page Turner</Text>
+            </View>
+            <View style={styles.tool}>
               <TouchableIcon
                 onPress={() => {
                   setIsSideMenuOpen(false)
-                  setShowPlaylistSelection(!showAutoScrollSlider)
+                  setShowPlaylistSelection(!showPlaylistSelection)
                 }}
                 size={25}
                 name="playlist-plus" />
@@ -145,6 +162,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
         {songProps => (
           <View style={{ flex: 1 }}>
             <SongRender
+              ref={songRenderRef}
               onPressArtist={onPressArtist}
               onPressChord={(chordString) => onClickChord(songProps.chords, chordString)}
               chordProContent={songProps.htmlSong}
@@ -164,6 +182,11 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
               songId={songId}
               show={showPlaylistSelection}
               onPressClose={() => setShowPlaylistSelection(false)}
+            />
+            <PageTurner
+              show={showPageTurner}
+              onPressNext={onPressNextPage}
+              onPressPrevious={onPressPreviousPage}
             />
           </View>
         )}
