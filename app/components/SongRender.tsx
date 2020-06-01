@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useImperativeHandle, forwardRef, RefForwardin
 import WebView from 'react-native-webview'
 import { NativeSyntheticEvent, Dimensions } from 'react-native'
 import { WebViewMessage } from 'react-native-webview/lib/WebViewTypes'
+import { useDimensions } from '../utils/useDimensions'
 
 interface Props {
   chordProContent: string
@@ -19,25 +20,18 @@ const ARTIST_TAG = "<artist>"
 const SongRender: RefForwardingComponent<SongRenderRef, Props> = (props, ref) => {
   const webRef = useRef<WebView>(null)
   let { scrollSpeed = 0 } = props
-  let height = Dimensions.get('window').height
+  let dimensionsData = useDimensions()
+  let height = dimensionsData.windowData.height
 
   useImperativeHandle(ref, () => ({
     nextPage() {
-      let run = `
-      window.scrollBy(0, ${height}-100)
-      true;
-      `
       if (webRef.current) {
-        webRef.current.injectJavaScript(run)
+        webRef.current.injectJavaScript(scriptScrollBy(height * 0.8))
       }
     },
     previousPage() {
-      let run = `
-      window.scrollBy(0, -(${height}-100))
-      true;
-      `
       if (webRef.current) {
-        webRef.current.injectJavaScript(run)
+        webRef.current.injectJavaScript(scriptScrollBy(-height * 0.8))
       }
     }
   }))
@@ -78,12 +72,13 @@ const SongRender: RefForwardingComponent<SongRenderRef, Props> = (props, ref) =>
     }
   }
 
+  let htmlStyles = (scrollSpeed > 0) ? styles : smoothScrollStyle + styles
   return (
     <WebView
       ref={webRef}
       startInLoadingState={true}
       overScrollMode={'never'}
-      source={{ html: renderHtml(props.chordProContent, styles) }}
+      source={{ html: renderHtml(props.chordProContent, htmlStyles) }}
       injectedJavaScript={onClickChordPostMessage}
       onMessage={onReceiveMessage}
     />
@@ -95,6 +90,12 @@ function renderHtml(body: string, styles: string) {
     <body>${body}</body>
     <style>${styles}</style>
   </html>`
+}
+const scriptScrollBy = (scrollY: number) => {
+  return `
+  window.scrollBy(0, (${scrollY}))
+  true;
+  `
 }
 const onClickChordPostMessage = `
 (
@@ -120,10 +121,12 @@ const onClickChordPostMessage = `
 
 true;
 `
-const styles = `
+const smoothScrollStyle = `
 html {
   scroll-behavior: smooth;
 }
+`
+const styles = `
 body {
   font-family: monospace;
   -webkit-touch-callout: none;
