@@ -1,7 +1,8 @@
-import React, { FunctionComponent, useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useImperativeHandle, forwardRef, RefForwardingComponent } from 'react'
 import WebView from 'react-native-webview'
-import { NativeSyntheticEvent } from 'react-native'
+import { NativeSyntheticEvent, Dimensions } from 'react-native'
 import { WebViewMessage } from 'react-native-webview/lib/WebViewTypes'
+import { useDimensions } from '../utils/useDimensions'
 
 interface Props {
   chordProContent: string
@@ -9,10 +10,32 @@ interface Props {
   onPressArtist?: () => void
   scrollSpeed?: number
 }
+
+export interface SongRenderRef {
+  nextPage: () => void
+  previousPage: () => void
+}
+
 const ARTIST_TAG = "<artist>"
-const SongRender: FunctionComponent<Props> = (props) => {
+const SongRender: RefForwardingComponent<SongRenderRef, Props> = (props, ref) => {
   const webRef = useRef<WebView>(null)
   let { scrollSpeed = 0 } = props
+  let dimensionsData = useDimensions()
+  let height = dimensionsData.windowData.height
+
+  useImperativeHandle(ref, () => ({
+    nextPage() {
+      if (webRef.current) {
+        webRef.current.injectJavaScript(scriptScrollBy(height * 0.8))
+      }
+    },
+    previousPage() {
+      if (webRef.current) {
+        webRef.current.injectJavaScript(scriptScrollBy(-height * 0.8))
+      }
+    }
+  }))
+
   useEffect(() => {
     let run: string
     if (scrollSpeed <= 0) {
@@ -49,12 +72,13 @@ const SongRender: FunctionComponent<Props> = (props) => {
     }
   }
 
+  let htmlStyles = (scrollSpeed > 0) ? styles : smoothScrollStyle + styles
   return (
     <WebView
       ref={webRef}
       startInLoadingState={true}
       overScrollMode={'never'}
-      source={{ html: renderHtml(props.chordProContent, styles) }}
+      source={{ html: renderHtml(props.chordProContent, htmlStyles) }}
       injectedJavaScript={onClickChordPostMessage}
       onMessage={onReceiveMessage}
     />
@@ -66,6 +90,12 @@ function renderHtml(body: string, styles: string) {
     <body>${body}</body>
     <style>${styles}</style>
   </html>`
+}
+const scriptScrollBy = (scrollY: number) => {
+  return `
+  window.scrollBy(0, (${scrollY}))
+  true;
+  `
 }
 const onClickChordPostMessage = `
 (
@@ -90,6 +120,11 @@ const onClickChordPostMessage = `
 })();
 
 true;
+`
+const smoothScrollStyle = `
+html {
+  scroll-behavior: smooth;
+}
 `
 const styles = `
 body {
@@ -177,4 +212,4 @@ body {
   padding-bottom: 20px;
 }
 `
-export default SongRender
+export default forwardRef(SongRender)
