@@ -3,12 +3,14 @@ import { NavigationScreenComponent } from "react-navigation"
 import { createBundle, importBundle, decodeJsonBundle } from '../db/bundler'
 import ListItem from "../components/ListItem";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
-import { StyleSheet, View, Alert } from "react-native";
+import { StyleSheet, View, Alert, Platform } from "react-native";
 import Share from 'react-native-share';
 import RNFS from 'react-native-fs'
 import DocumentPicker from 'react-native-document-picker';
 import LoadingIndicator from "../components/LoadingIndicator";
 import createFile from "../utils/createFile";
+import { PermissionsAndroid } from 'react-native';
+import pad from "../utils/pad";
 
 const Settings: FC & NavigationScreenComponent<
   NavigationStackOptions,
@@ -16,15 +18,50 @@ const Settings: FC & NavigationScreenComponent<
 > = () => {
   const [loading, setLoading] = useState(false)
 
+  async function requestWritePermission() {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      {
+        title: 'Open Chord App Storage Permission',
+        message:
+          'Open Chord App needs access to your storage ' +
+          'so you can save your backups.',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK'
+      }
+    )
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('You can write on the external storage');
+    } else {
+      throw new Error('Write store permission denied')
+    }
+  }
+
   async function onPressExport() {
     if (loading) return
     setLoading(true)
     try {
+      if (Platform.OS === 'android') {
+        let hasPermission = await PermissionsAndroid
+          .check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE)
+        if (!hasPermission) {
+          await requestWritePermission()
+        }
+      }
       let bundle = createBundle()
       let bundleString = JSON.stringify(bundle)
-      let path = await createFile('backup', bundleString)
-      await Share.open({ url: "file://" + path })
+      let today = new Date()
+      let day = pad(today.getDate())
+      let month = pad(today.getMonth() + 1)
+      let year = today.getFullYear()
+      let path = await createFile(`backup-${year}_${month}_${day}`, bundleString)
+      if (Platform.OS === 'android') {
+        Alert.alert('Success', 'Backup saved at: ' + path)
+      } else {
+        await Share.open({ url: "file://" + path })
+      }
     } catch (err) {
+      Alert.alert('Error', err.message)
       console.warn(err.message)
     }
     setLoading(false)
