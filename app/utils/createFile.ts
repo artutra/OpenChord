@@ -1,7 +1,12 @@
 import RNFS from 'react-native-fs'
+import { Platform } from 'react-native';
 
 export default async function createFile(filename: string, fileContent: string): Promise<string> {
-  var path = RNFS.DocumentDirectoryPath + '/' + filename + '.openchord';
+  let basePath = RNFS.DocumentDirectoryPath
+  if (Platform.OS === 'android') {
+    basePath = RNFS.DownloadDirectoryPath
+  }
+  var path = basePath + '/' + filename + '.openchord';
   let exists = await RNFS.exists(path)
   if (exists) {
     await RNFS.unlink(path)
