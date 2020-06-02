@@ -1,9 +1,9 @@
-import React, { useState, useEffect, FunctionComponent, FC } from "react";
+import React, { useState, useEffect, FunctionComponent, FC, useContext } from "react";
 import { NavigationScreenComponent } from "react-navigation"
 import { createBundle, importBundle, decodeJsonBundle } from '../db/bundler'
 import ListItem from "../components/ListItem";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
-import { StyleSheet, View, Alert, Platform } from "react-native";
+import { StyleSheet, View, Alert, Platform, Picker } from "react-native";
 import Share from 'react-native-share';
 import RNFS from 'react-native-fs'
 import DocumentPicker from 'react-native-document-picker';
@@ -11,12 +11,14 @@ import LoadingIndicator from "../components/LoadingIndicator";
 import createFile from "../utils/createFile";
 import { PermissionsAndroid } from 'react-native';
 import pad from "../utils/pad";
+import LanguageContext, { languages, translations } from "../languages/LanguageContext";
 
-const Settings: FC & NavigationScreenComponent<
+const Settings: FunctionComponent & NavigationScreenComponent<
   NavigationStackOptions,
   NavigationStackProp
 > = () => {
   const [loading, setLoading] = useState(false)
+  const { t, changeLanguage, language } = useContext(LanguageContext)
 
   async function requestWritePermission() {
     const granted = await PermissionsAndroid.request(
@@ -93,6 +95,13 @@ const Settings: FC & NavigationScreenComponent<
       <ListItem onPress={onPressExport} title="Create Backup" subtitle="Pack all songs and playlists into a .openchord file" />
       <ListItem onPress={onPressImport} title="Import" subtitle="Backups, Playlists and .openchord files" />
       <LoadingIndicator loading={loading} />
+      <Picker
+        selectedValue={language}
+        onValueChange={(value) => changeLanguage(value)}>
+        {languages.map(l => {
+          return <Picker.Item key={l} label={translations[l].language_name} value={l} />
+        })}
+      </Picker>
     </View>
   )
 }
