@@ -8,6 +8,7 @@ import ChordSheetJS from 'chordsheetjs'
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { ROUTES } from "../AppNavigation";
 import { HeaderBackButton } from "react-navigation-stack";
+import StackHeaderTitle from "../navigation/StackHeaderTitle";
 
 export type SongEditParams = { id: string | null | undefined, saveSong?: () => void }
 
@@ -147,9 +148,9 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
   );
 }
 
-SongEdit.navigationOptions = ({ navigation }) => {
+SongEdit.navigationOptions = ({ navigation }): NavigationStackOptions => {
   return {
-    title: 'Edit Song',
+    headerTitle: <StackHeaderTitle text='edit_song' />,
     headerRight: <TouchableIcon onPress={navigation.getParam('saveSong')} name="content-save" />,
   }
 }

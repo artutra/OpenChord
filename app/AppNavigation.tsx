@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Component } from 'react';
 import { createBottomTabNavigator } from 'react-navigation-tabs'
 import { createStackNavigator } from 'react-navigation-stack'
@@ -16,6 +16,8 @@ import PlaylistView from './containers/PlaylistView';
 import PlaylistAddSongs from './containers/PlaylistAddSongs';
 import PlaylistEdit from './containers/PlaylistEdit';
 import Settings from './containers/Settings';
+import StackHeaderTitle from './navigation/StackHeaderTitle';
+import TabBarLabel from './navigation/TabBarLabel';
 
 interface TabBarIconProps {
   focused: boolean
@@ -43,19 +45,19 @@ const AppNavigation = createBottomTabNavigator({
     screen: createStackNavigator({
       PlaylistList: {
         screen: PlaylistList,
-        navigationOptions: { title: 'Playlists' }
+        navigationOptions: { headerTitle: <StackHeaderTitle text="playlists" /> }
       },
       PlaylistView,
       SongView,
       SongEdit,
       PlaylistAddSongs: {
         screen: PlaylistAddSongs,
-        navigationOptions: { title: 'Add songs' }
+        navigationOptions: { headerTitle: <StackHeaderTitle text="add_songs" /> }
       },
       PlaylistEdit
     }),
     navigationOptions: ({ navigation }) => ({
-      title: 'Playlists',
+      tabBarLabel: <TabBarLabel text="playlists" />,
       tabBarVisible: navigation.state.index <= 0,
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="playlist-music" />
     })
@@ -64,14 +66,16 @@ const AppNavigation = createBottomTabNavigator({
     screen: createStackNavigator({
       ArtistList: {
         screen: ArtistList,
-        navigationOptions: { title: 'Artists' }
+        navigationOptions: {
+          headerTitle: <StackHeaderTitle text="artists" />
+        }
       },
       ArtistView,
       SongView,
       SongEdit,
     }),
     navigationOptions: ({ navigation }) => ({
-      title: 'Artists',
+      tabBarLabel: <TabBarLabel text="artists" />,
       tabBarVisible: navigation.state.index <= 0,
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="artist" />
     })
@@ -80,14 +84,16 @@ const AppNavigation = createBottomTabNavigator({
     screen: createStackNavigator({
       SongList: {
         screen: SongList,
-        navigationOptions: { title: 'Songs' }
+        navigationOptions: {
+          headerTitle: <StackHeaderTitle text="songs" />
+        }
       },
       ArtistView,
       SongView,
       SongEdit,
     }),
     navigationOptions: ({ navigation }) => ({
-      title: 'Songs',
+      tabBarLabel: <TabBarLabel text="songs" />,
       tabBarVisible: navigation.state.index <= 0,
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="format-list-bulleted-square" />
     })
@@ -103,14 +109,14 @@ const AppNavigation = createBottomTabNavigator({
       SongPreview: {
         screen: SongPreview,
         navigationOptions: {
-          title: 'Preview'
+          headerTitle: <StackHeaderTitle text="preview" />
         }
       },
       OnlineArtistView,
       SongView
     }),
     navigationOptions: ({ navigation }) => ({
-      title: 'Online Search',
+      tabBarLabel: <TabBarLabel text="online_search" />,
       tabBarVisible: navigation.state.index <= 0,
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="magnify" />
     })
@@ -118,7 +124,7 @@ const AppNavigation = createBottomTabNavigator({
   Settings: {
     screen: Settings,
     navigationOptions: ({ navigation }) => ({
-      title: 'Settings',
+      tabBarLabel: <TabBarLabel text="settings" />,
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="settings" />
     })
   },
