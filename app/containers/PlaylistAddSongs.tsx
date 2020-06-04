@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Text, FlatList, View, Button, TextInput, StyleSheet } from "react-native";
 import { NavigationScreenProp } from "react-navigation"
 import { Song, Artist } from "../db";
@@ -6,6 +6,7 @@ import ListItem from "../components/ListItem";
 import { Playlist } from "../db/Playlist";
 import { ROUTES } from "../AppNavigation";
 import SearchBar from "../components/SearchBar";
+import LanguageContext from "../languages/LanguageContext";
 
 interface Props {
   navigation: NavigationScreenProp<any, { id: string, title: string }>
@@ -15,6 +16,7 @@ const PlaylistAddSongs = (props: Props) => {
   const [playlist] = useState(Playlist.getById(id)!)
   const [songs, setSongs] = useState(Song.getAll())
   const [query, setQuery] = useState('')
+  const { t } = useContext(LanguageContext)
   const searchInput = useRef<TextInput>(null)
 
   function onSelectSong(id: string, title: string) {
@@ -39,6 +41,7 @@ const PlaylistAddSongs = (props: Props) => {
         onSubmitEditing={onSubmitEditing}
         onChangeText={(value) => setQuery(value)}
         query={query}
+        placeholder={t('search')}
       />
       <FlatList
         data={songs}
