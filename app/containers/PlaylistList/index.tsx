@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from "react";
+import React, { useState, useEffect, FunctionComponent, useContext } from "react";
 import { Text, View, Button, FlatList } from "react-native";
 import { NavigationScreenProp, NavigationScreenComponent } from "react-navigation"
 import ListItem from "../../components/ListItem";
@@ -12,6 +12,7 @@ import TextInputModal from "../../components/TextInputModal";
 import { createBundle } from "../../db/bundler";
 import createFile from "../../utils/createFile";
 import Share from "react-native-share";
+import LanguageContext from "../../languages/LanguageContext";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>
@@ -23,6 +24,7 @@ const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
   const [playlists, setPlaylists] = useState(Playlist.getAll())
   const [showAddPlaylistModal, setShowAddPlaylistModal] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { t } = useContext(LanguageContext)
 
   function onSelectPlaylist(id: string, name: string) {
     props.navigation.navigate(ROUTES.PlaylistView, { id, title: name })
@@ -83,17 +85,17 @@ const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
           setShowAddPlaylistModal(false)
         }}
         onSubmit={onSubmit}
-        submitButtonTitle="CREATE"
-        placeholder="Playlist Name"
+        submitButtonTitle={t('create').toUpperCase()}
+        placeholder={t('playlist_name')}
       />
       <FlatList
         contentContainerStyle={playlists.length <= 0 ? { flex: 1 } : {}}
         data={playlists}
         ListEmptyComponent={
           <EmptyListMessage
-            message="You haven't created any playlist yet"
+            message={t('you_havent_created_any_playlist_yet')}
             onPress={() => setShowAddPlaylistModal(true)}
-            buttonTitle="CREATE NEW PLAYLIST"
+            buttonTitle={t('create_new_playlist').toUpperCase()}
           />
         }
         renderItem={({ item }) => {
@@ -103,8 +105,8 @@ const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
               title={item.name}
               onPress={() => onSelectPlaylist(item.id!, item.name)}
               options={[
-                { title: 'Share', onPress: () => onPressShare(item.id, item.name) },
-                { title: 'Delete', onPress: () => onPressDeletePlaylist(item.id!) }
+                { title: t('share'), onPress: () => onPressShare(item.id, item.name) },
+                { title: t('delete'), onPress: () => onPressDeletePlaylist(item.id!) }
               ]} />
           )
         }}
