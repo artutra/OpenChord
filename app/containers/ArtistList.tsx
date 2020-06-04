@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, StyleSheet } from "react-native";
 import { NavigationScreenProp } from "react-navigation"
 import { FlatList } from "react-native-gesture-handler";
@@ -8,6 +8,7 @@ import { removeArtist } from "../utils/removeArtist";
 import TextInputModal from "../components/TextInputModal";
 import EmptyListMessage from "../components/EmptyListMessage";
 import { ROUTES } from "../AppNavigation";
+import LanguageContext from "../languages/LanguageContext";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>
@@ -18,6 +19,7 @@ const ArtistList = (props: Props) => {
   const [showEditArtistModal, setShowEditArtistModal] = useState(false)
   const [artistEditName, setArtistEditName] = useState<string>('')
   const [artistEditId, setArtistEditId] = useState<string | null>(null)
+  const { t } = useContext(LanguageContext)
 
   function onSelectArtist(id: string, name: string) {
     props.navigation.navigate('ArtistView', { id, title: name })
@@ -79,9 +81,9 @@ const ArtistList = (props: Props) => {
         contentContainerStyle={artists.length <= 0 ? { flex: 1 } : {}}
         ListEmptyComponent={
           <EmptyListMessage
-            message="You haven't downloaded any song yet"
+            message={t('you_havent_downloaded_any_song_yet')}
             onPress={() => { props.navigation.navigate(ROUTES.OnlineSearch) }}
-            buttonTitle="GO TO ONLINE SEARCH"
+            buttonTitle={t('go_to_online_search').toUpperCase()}
           />
         }
         renderItem={({ item }) => {
@@ -91,8 +93,8 @@ const ArtistList = (props: Props) => {
               title={item.name}
               onPress={() => onSelectArtist(item.id!, item.name)}
               options={[
-                { title: 'Edit', onPress: () => onPressEditArtist(item.id, item.name) },
-                { title: 'Delete', onPress: () => onPressDeleteArtist(item.id!) }
+                { title: t('edit'), onPress: () => onPressEditArtist(item.id, item.name) },
+                { title: t('delete'), onPress: () => onPressDeleteArtist(item.id!) }
               ]} />
           )
         }}
