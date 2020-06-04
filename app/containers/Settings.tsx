@@ -110,6 +110,7 @@ const Settings: FunctionComponent & NavigationScreenComponent<
         onDismiss={() => setShowLanguageSelect(false)}
         value={language}
         options={languages.map(l => ({
+          key: 'lang-option-' + l,
           label: translations[l].language_name,
           description: translations[l].language_english_name,
           value: l

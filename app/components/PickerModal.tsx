@@ -6,6 +6,7 @@ interface Props<T> {
   show: boolean
   value: T
   options: {
+    key?: string
     label: string
     description?: string
     value: T
@@ -33,6 +34,7 @@ function PickerModal<T>(props: Props<T>) {
           {options.map(o => {
             return (
               <ListItem
+                key={o.key}
                 onPress={() => onChange(o.value)}
                 title={o.label}
                 subtitle={o.description}
