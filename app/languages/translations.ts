@@ -1,6 +1,8 @@
 export const languages = ['en_us', 'pt_br'] as const;
 export const sentences = [
   'language_name',
+  'language_english_name',
+  'language',
   'settings',
   'playlists',
   'online_search',
@@ -45,6 +47,8 @@ export type Languages = Record<LanguageID, Translation>
 const translations: Languages = {
   en_us: {
     language_name: "English",
+    language_english_name: "English",
+    language: 'Language',
     settings: 'Settings',
     playlists: 'Playlists',
     artists: 'Artists',
@@ -83,6 +87,8 @@ const translations: Languages = {
   },
   pt_br: {
     language_name: "Português (Brasil)",
+    language_english_name: "Portuguese (Brazil)",
+    language: 'Idioma',
     settings: "Configurações",
     playlists: 'Listas',
     artists: 'Artistas',
