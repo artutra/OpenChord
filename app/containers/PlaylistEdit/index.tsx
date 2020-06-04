@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from "react";
+import React, { useState, useEffect, FunctionComponent, useContext } from "react";
 import { Text, View, TextInput, StyleSheet, Alert } from "react-native";
 import { NavigationScreenProp, NavigationScreenComponent } from "react-navigation"
 import { Playlist } from "../../db/Playlist";
@@ -9,6 +9,7 @@ import { NavigationStackOptions, NavigationStackProp } from "react-navigation-st
 import { Header } from "react-navigation-stack";
 import ErrorText from "../../components/ErrorText";
 import DraggableItem from "./compoents/DraggableItem";
+import LanguageContext from "../../languages/LanguageContext";
 
 interface Props {
   navigation: NavigationScreenProp<any, { id: string, title: string }>
@@ -23,6 +24,7 @@ const PlaylistEdit: FunctionComponent<Props> & NavigationScreenComponent<
   const [name, setName] = useState(playlist.name)
   const [songs, setSongs] = useState(Array.from(playlist.songs))
   const [error, setError] = useState<string | null>(null)
+  const { t } = useContext(LanguageContext)
 
   function onPressCancel() {
     props.navigation.goBack()
@@ -59,7 +61,7 @@ const PlaylistEdit: FunctionComponent<Props> & NavigationScreenComponent<
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableIcon name="close" onPress={onPressCancel} />
-        <Text style={styles.headerTitle}>Playlist Edit</Text>
+        <Text style={styles.headerTitle}>{t('playlist_edit')}</Text>
         <TouchableIcon name="check" onPress={onPressSavePlaylist} />
       </View>
       <View style={styles.playlistNameInputContiner}>
@@ -67,7 +69,7 @@ const PlaylistEdit: FunctionComponent<Props> & NavigationScreenComponent<
           style={styles.playlistNameInput}
           value={name}
           onChangeText={value => setName(value)}
-          placeholder="Playlist name"
+          placeholder={t('playlist_name')}
         />
         <ErrorText>{error}</ErrorText>
       </View>
