@@ -1,4 +1,4 @@
-import React, { useState, FC } from "react";
+import React, { useState, FC, useContext } from "react";
 import { Text, View, TouchableOpacity, StyleSheet, FlatList, StyleProp, ViewStyle, Dimensions, ScrollView } from "react-native";
 import { Playlist } from "../../../db/Playlist";
 import ListItem from "../../../components/ListItem";
@@ -7,6 +7,7 @@ import TextInputModal from "../../../components/TextInputModal";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Header } from "react-navigation-stack";
 import { useDimensions } from "../../../utils/useDimensions";
+import LanguageContext from "../../../languages/LanguageContext";
 
 interface Props {
   show: boolean
@@ -18,6 +19,7 @@ const SelectPlaylist: FC<Props> = ({ show, songId, onPressClose }) => {
   const [song] = useState(Song.getById(songId)!)
   const [showInput, setShowInput] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const { t } = useContext(LanguageContext)
   const dimensionsData = useDimensions()
   let windowHeight = dimensionsData.windowData.height
 
@@ -61,8 +63,8 @@ const SelectPlaylist: FC<Props> = ({ show, songId, onPressClose }) => {
           setShowInput(false)
         }}
         onSubmit={onSubmit}
-        submitButtonTitle="CREATE"
-        placeholder="Playlist Name"
+        submitButtonTitle={t('create').toUpperCase()}
+        placeholder={t('playlist_name')}
       />
     )
 
@@ -79,9 +81,9 @@ const SelectPlaylist: FC<Props> = ({ show, songId, onPressClose }) => {
           <MaterialCommunityIcons
             name='plus'
             size={20} />
-          <Text style={styles.createPlaylistButtonText}>CREATE PLAYLIST</Text>
+          <Text style={styles.createPlaylistButtonText}>{t('create_new_playlist').toUpperCase()}</Text>
         </TouchableOpacity>
-        {playlists.length <= 0 && <Text style={styles.emptyMessage}>Playlists not found</Text>}
+        {playlists.length <= 0 && <Text style={styles.emptyMessage}>{t('playlists_not_found')}</Text>}
         {playlists.map(item => {
           return (
             <ListItem

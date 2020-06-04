@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent, useRef } from "react";
+import React, { useState, useEffect, FunctionComponent, useRef, useContext } from "react";
 import { Text, View, StyleSheet, Alert, Switch, Slider, TouchableOpacity } from "react-native";
 import { Song } from '../../db'
 import { NavigationScreenComponent } from "react-navigation";
@@ -16,6 +16,7 @@ import { ArtistViewParams } from "./../ArtistView";
 import { SongEditParams } from "./../SongEdit";
 import SelectPlaylist from "./components/SelectPlaylist"
 import PageTurner from "./components/PageTurner";
+import LanguageContext from "../../languages/LanguageContext";
 
 export type SongViewParams = { id: string, title: string, openSideMenu?: () => void }
 
@@ -40,6 +41,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   const [showPlaylistSelection, setShowPlaylistSelection] = useState(false)
   const [showPageTurner, setShowPageTurner] = useState(false)
   const songRenderRef = useRef<SongRenderRef>(null)
+  const { t } = useContext(LanguageContext)
 
   function transposeUp() { setTone(tone + 1 >= 12 ? 0 : tone + 1); selectChord(null) }
   function transposeDown() { setTone(tone - 1 <= -12 ? 0 : tone - 1); selectChord(null) }
@@ -114,16 +116,16 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
                 setIsSideMenuOpen(false)
                 setShowAutoScrollSlider(true)
               }}>
-                <Text style={styles.toolLabel}>Auto Scroll</Text>
+                <Text style={styles.toolLabel}>{t('auto_scroll')}</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.tool}>
               <Switch onValueChange={setShowTabs} value={showTabs} />
-              <Text style={styles.toolLabel}>Show Tabs</Text>
+              <Text style={styles.toolLabel}>{t('show_tabs')}</Text>
             </View>
             <View style={styles.tool}>
               <Switch onValueChange={tooglePageTurner} value={showPageTurner} />
-              <Text style={styles.toolLabel}>Page Turner</Text>
+              <Text style={styles.toolLabel}>{t('page_turner')}</Text>
             </View>
             <View style={styles.tool}>
               <TouchableIcon
@@ -172,6 +174,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
               onPressClose={() => selectChord(null)}
               selectedChord={selectedChord}
               allChords={songProps.chords}
+              closeLabel={t('close')}
             />
             <AutoScrollSlider
               show={showAutoScrollSlider}
