@@ -92,8 +92,8 @@ const Settings: FunctionComponent & NavigationScreenComponent<
 
   return (
     <View style={styles.container}>
-      <ListItem onPress={onPressExport} title="Create Backup" subtitle="Pack all songs and playlists into a .openchord file" />
-      <ListItem onPress={onPressImport} title="Import" subtitle="Backups, Playlists and .openchord files" />
+      <ListItem onPress={onPressExport} title={t('create_backup')} subtitle={t('create_backup_description')} />
+      <ListItem onPress={onPressImport} title={t('import')} subtitle={t('import_description')} />
       <LoadingIndicator loading={loading} />
       <Picker
         selectedValue={language}
