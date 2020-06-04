@@ -13,12 +13,14 @@ import { PermissionsAndroid } from 'react-native';
 import pad from "../utils/pad";
 import LanguageContext, { languages, translations, LanguageID } from "../languages/LanguageContext";
 import { GlobalSettings } from "../db/GlobalSettings";
+import PickerModal from "../components/PickerModal";
 
 const Settings: FunctionComponent & NavigationScreenComponent<
   NavigationStackOptions,
   NavigationStackProp
 > = () => {
   const [loading, setLoading] = useState(false)
+  const [showLanguageSelect, setShowLanguageSelect] = useState(false)
   const { t, changeLanguage, language } = useContext(LanguageContext)
 
   async function requestWritePermission() {
@@ -100,14 +102,19 @@ const Settings: FunctionComponent & NavigationScreenComponent<
     <View style={styles.container}>
       <ListItem onPress={onPressExport} title={t('create_backup')} subtitle={t('create_backup_description')} />
       <ListItem onPress={onPressImport} title={t('import')} subtitle={t('import_description')} />
+      <ListItem onPress={() => setShowLanguageSelect(true)} title={t('language')} subtitle={t('language_name')} />
       <LoadingIndicator loading={loading} />
-      <Picker
-        selectedValue={language}
-        onValueChange={onChangeLanguage}>
-        {languages.map(l => {
-          return <Picker.Item key={l} label={translations[l].language_name} value={l} />
-        })}
-      </Picker>
+      <PickerModal
+        show={showLanguageSelect}
+        onChange={onChangeLanguage}
+        onDismiss={() => setShowLanguageSelect(false)}
+        value={language}
+        options={languages.map(l => ({
+          label: translations[l].language_name,
+          description: translations[l].language_english_name,
+          value: l
+        }))}
+      />
     </View>
   )
 }
