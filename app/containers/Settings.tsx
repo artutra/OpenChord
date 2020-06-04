@@ -11,7 +11,8 @@ import LoadingIndicator from "../components/LoadingIndicator";
 import createFile from "../utils/createFile";
 import { PermissionsAndroid } from 'react-native';
 import pad from "../utils/pad";
-import LanguageContext, { languages, translations } from "../languages/LanguageContext";
+import LanguageContext, { languages, translations, LanguageID } from "../languages/LanguageContext";
+import { GlobalSettings } from "../db/GlobalSettings";
 
 const Settings: FunctionComponent & NavigationScreenComponent<
   NavigationStackOptions,
@@ -90,6 +91,11 @@ const Settings: FunctionComponent & NavigationScreenComponent<
     setLoading(false)
   }
 
+  function onChangeLanguage(value: LanguageID) {
+    GlobalSettings.setLanguage(value)
+    changeLanguage(value)
+  }
+
   return (
     <View style={styles.container}>
       <ListItem onPress={onPressExport} title={t('create_backup')} subtitle={t('create_backup_description')} />
@@ -97,7 +103,7 @@ const Settings: FunctionComponent & NavigationScreenComponent<
       <LoadingIndicator loading={loading} />
       <Picker
         selectedValue={language}
-        onValueChange={(value) => changeLanguage(value)}>
+        onValueChange={onChangeLanguage}>
         {languages.map(l => {
           return <Picker.Item key={l} label={translations[l].language_name} value={l} />
         })}
