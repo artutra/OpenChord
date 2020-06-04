@@ -33,7 +33,7 @@ const PlaylistEdit: FunctionComponent<Props> & NavigationScreenComponent<
     try {
       Playlist.update(playlist.id, name, songs)
       props.navigation.goBack()
-      Alert.alert('Info', 'Playlist saved')
+      Alert.alert(t('info'), t('playlist_saved'))
     } catch (e) {
       if (e instanceof Error) {
         setError(e.message)

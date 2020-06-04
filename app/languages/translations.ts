@@ -37,7 +37,21 @@ export const sentences = [
   'show_tabs',
   'page_turner',
   'playlists_not_found',
-  'close'
+  'close',
+  'info',
+  'playlist_saved',
+  'share_message',
+  'empty_name_not_allowed',
+  'artist_or_song_not_found',
+  'permission_title',
+  'permission_message',
+  'permission_button_negative',
+  'permission_button_positive',
+  'permission_denied',
+  'success',
+  'backup_saved_at_path',
+  'songs_imported_successfully',
+  'song_downloaded',
 ] as const;
 export type SentenceID = typeof sentences[number];
 export type LanguageID = typeof languages[number];
@@ -83,7 +97,21 @@ const translations: Languages = {
     page_turner: 'Page Turner',
     playlists_not_found: 'Playlists not found',
     show_tabs: 'Show Tabs',
-    close: 'Close'
+    close: 'Close',
+    info: 'Info',
+    playlist_saved: 'Playlist saved',
+    share_message: 'Download OpenChord app, go to Settings > Import and select this file',
+    empty_name_not_allowed: 'Empty name not allowed',
+    artist_or_song_not_found: 'Artist or song not found',
+    permission_title: 'Open Chord App Storage Permission',
+    permission_message: 'Open Chord App needs access to your storage so you can save your backups.',
+    permission_button_positive: 'OK',
+    permission_button_negative: 'Cancel',
+    permission_denied: 'Write store permission denied',
+    success: 'Success',
+    backup_saved_at_path: 'Backup saved at path',
+    songs_imported_successfully: 'Songs imported successfully',
+    song_downloaded: 'Song downloaded'
   },
   pt_br: {
     language_name: "Português (Brasil)",
@@ -123,7 +151,21 @@ const translations: Languages = {
     page_turner: 'Passador de páginas',
     playlists_not_found: 'Playlists não encontradas',
     show_tabs: 'Mostrar tablaturas',
-    close: 'Fechar'
+    close: 'Fechar',
+    info: 'Aviso',
+    playlist_saved: 'Playlist salva',
+    share_message: 'Baixe o aplicativo OpenChord, vá para Settings > Import e selecione este arquivo',
+    empty_name_not_allowed: 'Nome vazio não permitido',
+    artist_or_song_not_found: 'Artista ou Música não encontrada',
+    permission_title: 'Permissão de Armazenamento do Open Chord App',
+    permission_message: 'Open Chord App precisa acessar seu armazenamento para salvar seus backups.',
+    permission_button_positive: 'OK',
+    permission_button_negative: 'Cancelar',
+    permission_denied: 'Permissão de armazenamento negada',
+    success: 'Sucesso',
+    backup_saved_at_path: 'Backup salvo no caminho',
+    songs_imported_successfully: 'Músicas importadas com sucesso',
+    song_downloaded: 'Música baixada'
   }
 }
 export default translations

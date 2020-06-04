@@ -27,18 +27,16 @@ const Settings: FunctionComponent & NavigationScreenComponent<
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
       {
-        title: 'Open Chord App Storage Permission',
-        message:
-          'Open Chord App needs access to your storage ' +
-          'so you can save your backups.',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK'
+        title: t('permission_title'),
+        message: t('permission_message'),
+        buttonNegative: t('permission_button_negative'),
+        buttonPositive: t('permission_button_negative')
       }
     )
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       console.log('You can write on the external storage');
     } else {
-      throw new Error('Write store permission denied')
+      throw new Error(t('permission_denied'))
     }
   }
 
@@ -61,7 +59,7 @@ const Settings: FunctionComponent & NavigationScreenComponent<
       let year = today.getFullYear()
       let path = await createFile(`backup-${year}_${month}_${day}`, bundleString)
       if (Platform.OS === 'android') {
-        Alert.alert('Success', 'Backup saved at: ' + path)
+        Alert.alert(t('success'), t('backup_saved_at_path') + ': ' + path)
       } else {
         await Share.open({ url: "file://" + path })
       }
@@ -82,7 +80,7 @@ const Settings: FunctionComponent & NavigationScreenComponent<
       let success = await RNFS.readFile(res.uri, 'utf8')
       let bundle = await decodeJsonBundle(success)
       importBundle(bundle)
-      Alert.alert('Info', 'Songs imported successfully')
+      Alert.alert(t('info'), t('songs_imported_successfully'))
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on

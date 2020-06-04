@@ -38,7 +38,7 @@ const ArtistList = (props: Props) => {
   function onSubmitArtistName() {
     try {
       if (artistEditName == '') {
-        throw new Error('Empty name not allowed')
+        throw new Error(t('empty_name_not_allowed'))
       } else if (artistEditId) {
         Artist.update(artistEditId, artistEditName)
         setShowEditArtistModal(false)

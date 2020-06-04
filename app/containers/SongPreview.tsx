@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from "react";
+import React, { useState, useEffect, FunctionComponent, useContext } from "react";
 import { View, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { NavigationScreenComponent } from "react-navigation";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
@@ -11,6 +11,7 @@ import { Artist, Song } from "../db";
 import { ROUTES } from "../AppNavigation";
 import { SongViewParams } from "./SongView";
 import LoadingIndicator from "../components/LoadingIndicator";
+import LanguageContext from "../languages/LanguageContext";
 
 interface SongPreviewProps {
   navigation: NavigationStackProp<{}, { path: string, serviceName: string }>
@@ -23,6 +24,7 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
   const [isSaving, setIsSaving] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const { t } = useContext(LanguageContext)
   let serviceName = props.navigation.getParam('serviceName')
   let path = props.navigation.getParam('path')
 
@@ -65,7 +67,7 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
 
     let params: SongViewParams = { id: song.id, title: song.title }
     props.navigation.replace(ROUTES.SongView, params)
-    Alert.alert('Info', 'Song downloaded')
+    Alert.alert(t('info'), t('song_downloaded'))
   }
 
   return (

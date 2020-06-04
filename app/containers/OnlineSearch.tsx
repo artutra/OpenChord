@@ -82,7 +82,7 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
         data={docs}
         ListEmptyComponent={() => {
           return (docs != null && !isLoading) ?
-            <Text style={styles.msgInfo}>Artist or song not found</Text> :
+            <Text style={styles.msgInfo}>{t('artist_or_song_not_found')}</Text> :
             null
         }}
         ListHeaderComponent={<LoadingIndicator error={error} loading={isLoading} />}
