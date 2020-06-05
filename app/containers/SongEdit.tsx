@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from "react";
+import React, { useState, useEffect, FunctionComponent, useContext } from "react";
 import { Text, View, StyleSheet, TextInput, KeyboardAvoidingView, Button, Platform } from "react-native";
 import { Song, Artist } from '../db'
 import { NavigationScreenComponent } from "react-navigation";
@@ -8,6 +8,8 @@ import ChordSheetJS from 'chordsheetjs'
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { ROUTES } from "../AppNavigation";
 import { HeaderBackButton } from "react-navigation-stack";
+import StackHeaderTitle from "../navigation/StackHeaderTitle";
+import LanguageContext from "../languages/LanguageContext";
 
 export type SongEditParams = { id: string | null | undefined, saveSong?: () => void }
 
@@ -24,6 +26,7 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
   const [content, setContent] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [mode, setMode] = useState<'CHORD_PRO' | 'CHORD_SHEET'>('CHORD_PRO')
+  const { t } = useContext(LanguageContext)
 
   function removeMetaTags(text: string) {
     text = text.replace(/{title:[^}]+}\n?/g, '')
@@ -43,9 +46,9 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
   }, [])
 
   function saveSong() {
-    if (title.trim() == '') return setError('Invalid Title')
-    if (artist.trim() == '') return setError('Invalid Artist')
-    if (content.trim() == '') return setError('Invalid content')
+    if (title.trim() == '') return setError(t('invalid_title'))
+    if (artist.trim() == '') return setError(t('invalid_artist'))
+    if (content.trim() == '') return setError(t('invalid_content'))
     let artistName = artist.trim()
     let songTitle = title.trim()
     let chordPro = content
@@ -101,7 +104,7 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
         {error != null && <Text style={{ color: 'red' }}>{error}</Text>}
         <TextInput
           style={styles.input}
-          placeholder="Song Title"
+          placeholder={t('song_title')}
           autoFocus={false}
           autoCorrect={false}
           autoCapitalize='words'
@@ -110,7 +113,7 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
         />
         <TextInput
           style={styles.input}
-          placeholder="Artist Name"
+          placeholder={t('artist_name')}
           autoFocus={false}
           autoCorrect={false}
           autoCapitalize='words'
@@ -126,7 +129,7 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
           <TouchableOpacity
             style={mode == 'CHORD_SHEET' ? styles.tabActive : styles.tabInactive}
             onPress={switchToChordSheet} disabled={mode == 'CHORD_SHEET'}>
-            <Text>Chord over lyrics</Text>
+            <Text>{t('chords_over_lyrics')}</Text>
           </TouchableOpacity>
         </View>
         <TextInput
@@ -147,9 +150,9 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
   );
 }
 
-SongEdit.navigationOptions = ({ navigation }) => {
+SongEdit.navigationOptions = ({ navigation }): NavigationStackOptions => {
   return {
-    title: 'Edit Song',
+    headerTitle: <StackHeaderTitle text='edit_song' />,
     headerRight: <TouchableIcon onPress={navigation.getParam('saveSong')} name="content-save" />,
   }
 }

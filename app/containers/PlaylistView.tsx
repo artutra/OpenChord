@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from "react";
+import React, { useState, useEffect, FunctionComponent, useContext } from "react";
 import { FlatList } from "react-native";
 import { NavigationScreenProp, withNavigationFocus, NavigationScreenComponent } from "react-navigation"
 import ListItem from "../components/ListItem";
@@ -9,6 +9,7 @@ import { NavigationStackOptions, NavigationStackProp } from "react-navigation-st
 import TouchableIcon from "../components/TouchableIcon";
 import EmptyListMessage from "../components/EmptyListMessage";
 import PrimaryButton from "../components/PrimaryButton";
+import LanguageContext from "../languages/LanguageContext";
 
 interface Params {
   id: string
@@ -27,6 +28,7 @@ const PlaylistView: FunctionComponent<Props> & NavigationScreenComponent<
   let playlist = Playlist.getById(id)!
   const [name, setName] = useState(playlist.name)
   const [songs, setSongs] = useState(playlist.songs)
+  const { t } = useContext(LanguageContext)
 
   function onSelectSong(id: string, title: string) {
     props.navigation.navigate('SongView', { id, title })
@@ -63,15 +65,15 @@ const PlaylistView: FunctionComponent<Props> & NavigationScreenComponent<
       data={songs}
       ListHeaderComponent={() => {
         if (songs.length > 0)
-          return <PrimaryButton style={{ margin: 10 }} onPress={onPressAddSongs} title="ADD SONGS" outline />
+          return <PrimaryButton style={{ margin: 10 }} onPress={onPressAddSongs} title={t('add_songs').toUpperCase()} outline />
         else
           return null
       }}
       ListEmptyComponent={
         <EmptyListMessage
-          message="You haven't added any songs yet"
+          message={t('you_havent_downloaded_any_song_yet')}
           onPress={onPressAddSongs}
-          buttonTitle="ADD SONGS"
+          buttonTitle={t('add_songs').toUpperCase()}
         />
       }
       renderItem={({ item }) => {
@@ -80,8 +82,8 @@ const PlaylistView: FunctionComponent<Props> & NavigationScreenComponent<
           title={item.title}
           onPress={() => onSelectSong(item.id!, item.title)}
           options={[
-            { title: 'Edit', onPress: () => onPressEditSong(item.id!) },
-            { title: 'Delete', onPress: () => onPressDeleteSong(item.id!) }
+            { title: t('edit'), onPress: () => onPressEditSong(item.id!) },
+            { title: t('delete'), onPress: () => onPressDeleteSong(item.id!) }
           ]}
         />
       }}

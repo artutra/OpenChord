@@ -7,8 +7,9 @@ interface Props {
   selectedChord: Chord | null | undefined
   allChords: Array<Chord>
   onPressClose: () => void
+  closeLabel: string
 }
-const ChordTab: FunctionComponent<Props> = ({ selectedChord, allChords, onPressClose }) => {
+const ChordTab: FunctionComponent<Props> = ({ selectedChord, allChords, onPressClose, closeLabel }) => {
   const flatList = useRef<FlatList<Chord>>(null)
 
   if (selectedChord != null && flatList.current != null)
@@ -20,7 +21,7 @@ const ChordTab: FunctionComponent<Props> = ({ selectedChord, allChords, onPressC
   return (
     <View style={styles.tabContainter}>
       <TouchableOpacity style={styles.closeButton} onPress={onPressClose}>
-        <Text style={styles.closeButtonText}>Close</Text>
+        <Text style={styles.closeButtonText}>{closeLabel}</Text>
       </TouchableOpacity>
       <FlatList
         ref={flatList}

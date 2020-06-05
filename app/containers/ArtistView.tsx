@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Text, FlatList } from "react-native";
 import { NavigationScreenProp } from "react-navigation"
 import { Song, Artist } from "../db";
 import ListItem from "../components/ListItem";
 import { removeSong } from "../utils/removeSong";
+import LanguageContext from "../languages/LanguageContext";
 
 export type ArtistViewParams = { id: string, title: string }
 interface Props {
@@ -14,6 +15,7 @@ const ArtistView = (props: Props) => {
   let artist = Artist.getById(id)!
   const [name] = useState(artist.name)
   const [musics, setMusics] = useState(Song.getByArtist(artist.id!))
+  const { t } = useContext(LanguageContext)
 
   function onSelectSong(id: string, title: string) {
     props.navigation.navigate('SongView', { id, title })
@@ -40,8 +42,8 @@ const ArtistView = (props: Props) => {
           title={item.title}
           onPress={() => onSelectSong(item.id!, item.title)}
           options={[
-            { title: 'Edit', onPress: () => onPressEditSong(item.id!) },
-            { title: 'Delete', onPress: () => onPressDeleteSong(item.id!) }
+            { title: t('edit'), onPress: () => onPressEditSong(item.id!) },
+            { title: t('delete'), onPress: () => onPressDeleteSong(item.id!) }
           ]}
         />
       }}

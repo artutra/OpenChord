@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from "react";
+import React, { useState, useEffect, FunctionComponent, useContext } from "react";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -8,6 +8,7 @@ interface SearchBarProps {
   inputRef?: React.RefObject<TextInput> | null | undefined
   onChangeText: (text: string) => void
   onSubmitEditing?: () => void
+  placeholder: string
 }
 const SearchBar: FunctionComponent<SearchBarProps> = (props) => {
   return (
@@ -18,7 +19,7 @@ const SearchBar: FunctionComponent<SearchBarProps> = (props) => {
           ref={props.inputRef}
           style={styles.searchText}
           keyboardType="default"
-          placeholder="Search"
+          placeholder={props.placeholder}
           placeholderTextColor="#aaa"
           autoFocus={false}
           autoCorrect={false}

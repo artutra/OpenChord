@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent } from "react";
+import React, { useState, useEffect, FunctionComponent, useContext } from "react";
 import { NavigationScreenProp, NavigationScreenComponent, withNavigationFocus } from "react-navigation"
 import { Song } from '../db'
 import ListItem from "../components/ListItem";
@@ -9,6 +9,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import SearchBar from "../components/SearchBar";
 import EmptyListMessage from "../components/EmptyListMessage";
 import { ROUTES } from "../AppNavigation";
+import LanguageContext from "../languages/LanguageContext";
 
 interface Props {
   navigation: NavigationScreenProp<any, { addSong: () => void }>
@@ -20,6 +21,7 @@ const SongList: FunctionComponent<Props> & NavigationScreenComponent<
 > = (props: Props) => {
   const [songs, setSongs] = useState(Song.getAll())
   const [query, setQuery] = useState('')
+  const { t } = useContext(LanguageContext)
 
   function onSelectSong(id: string, title: string) {
     props.navigation.navigate('SongView', { id, title })
@@ -65,15 +67,16 @@ const SongList: FunctionComponent<Props> & NavigationScreenComponent<
       <SearchBar
         onChangeText={(value) => setQuery(value)}
         query={query}
+        placeholder={t('search')}
       />
       <FlatList
         data={songs}
         contentContainerStyle={songs.length <= 0 ? { flex: 1 } : {}}
         ListEmptyComponent={
           <EmptyListMessage
-            message="You haven't downloaded any song yet"
+            message={t('you_havent_downloaded_any_song_yet')}
             onPress={() => { props.navigation.navigate(ROUTES.OnlineSearch) }}
-            buttonTitle="GO TO ONLINE SEARCH"
+            buttonTitle={t('go_to_online_search').toUpperCase()}
           />
         }
         renderItem={({ item }) => {
@@ -84,9 +87,9 @@ const SongList: FunctionComponent<Props> & NavigationScreenComponent<
               subtitle={item.artist.name}
               onPress={() => onSelectSong(item.id!, item.title)}
               options={[
-                { title: 'Go to Artist', onPress: () => onPressGoToArtist(item.id!) },
-                { title: 'Edit', onPress: () => onPressEditSong(item.id!) },
-                { title: 'Delete', onPress: () => onPressDeleteSong(item.id!) }
+                { title: t('go_to_artist'), onPress: () => onPressGoToArtist(item.id!) },
+                { title: t('edit'), onPress: () => onPressEditSong(item.id!) },
+                { title: t('delete'), onPress: () => onPressDeleteSong(item.id!) }
               ]}
             />
           )

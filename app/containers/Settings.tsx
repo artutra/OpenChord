@@ -1,9 +1,9 @@
-import React, { useState, useEffect, FunctionComponent, FC } from "react";
+import React, { useState, useEffect, FunctionComponent, FC, useContext } from "react";
 import { NavigationScreenComponent } from "react-navigation"
 import { createBundle, importBundle, decodeJsonBundle } from '../db/bundler'
 import ListItem from "../components/ListItem";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
-import { StyleSheet, View, Alert, Platform } from "react-native";
+import { StyleSheet, View, Alert, Platform, Picker } from "react-native";
 import Share from 'react-native-share';
 import RNFS from 'react-native-fs'
 import DocumentPicker from 'react-native-document-picker';
@@ -11,29 +11,32 @@ import LoadingIndicator from "../components/LoadingIndicator";
 import createFile from "../utils/createFile";
 import { PermissionsAndroid } from 'react-native';
 import pad from "../utils/pad";
+import LanguageContext, { languages, translations, LanguageID } from "../languages/LanguageContext";
+import { GlobalSettings } from "../db/GlobalSettings";
+import PickerModal from "../components/PickerModal";
 
-const Settings: FC & NavigationScreenComponent<
+const Settings: FunctionComponent & NavigationScreenComponent<
   NavigationStackOptions,
   NavigationStackProp
 > = () => {
   const [loading, setLoading] = useState(false)
+  const [showLanguageSelect, setShowLanguageSelect] = useState(false)
+  const { t, changeLanguage, language } = useContext(LanguageContext)
 
   async function requestWritePermission() {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
       {
-        title: 'Open Chord App Storage Permission',
-        message:
-          'Open Chord App needs access to your storage ' +
-          'so you can save your backups.',
-        buttonNegative: 'Cancel',
-        buttonPositive: 'OK'
+        title: t('permission_title'),
+        message: t('permission_message'),
+        buttonNegative: t('permission_button_negative'),
+        buttonPositive: t('permission_button_negative')
       }
     )
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       console.log('You can write on the external storage');
     } else {
-      throw new Error('Write store permission denied')
+      throw new Error(t('permission_denied'))
     }
   }
 
@@ -56,7 +59,7 @@ const Settings: FC & NavigationScreenComponent<
       let year = today.getFullYear()
       let path = await createFile(`backup-${year}_${month}_${day}`, bundleString)
       if (Platform.OS === 'android') {
-        Alert.alert('Success', 'Backup saved at: ' + path)
+        Alert.alert(t('success'), t('backup_saved_at_path') + ': ' + path)
       } else {
         await Share.open({ url: "file://" + path })
       }
@@ -77,7 +80,7 @@ const Settings: FC & NavigationScreenComponent<
       let success = await RNFS.readFile(res.uri, 'utf8')
       let bundle = await decodeJsonBundle(success)
       importBundle(bundle)
-      Alert.alert('Info', 'Songs imported successfully')
+      Alert.alert(t('info'), t('songs_imported_successfully'))
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on
@@ -88,11 +91,29 @@ const Settings: FC & NavigationScreenComponent<
     setLoading(false)
   }
 
+  function onChangeLanguage(value: LanguageID) {
+    GlobalSettings.setLanguage(value)
+    changeLanguage(value)
+  }
+
   return (
     <View style={styles.container}>
-      <ListItem onPress={onPressExport} title="Create Backup" subtitle="Pack all songs and playlists into a .openchord file" />
-      <ListItem onPress={onPressImport} title="Import" subtitle="Backups, Playlists and .openchord files" />
+      <ListItem onPress={onPressExport} title={t('create_backup')} subtitle={t('create_backup_description')} />
+      <ListItem onPress={onPressImport} title={t('import')} subtitle={t('import_description')} />
+      <ListItem onPress={() => setShowLanguageSelect(true)} title={t('language')} subtitle={t('language_name')} />
       <LoadingIndicator loading={loading} />
+      <PickerModal
+        show={showLanguageSelect}
+        onChange={onChangeLanguage}
+        onDismiss={() => setShowLanguageSelect(false)}
+        value={language}
+        options={languages.map(l => ({
+          key: 'lang-option-' + l,
+          label: translations[l].language_name,
+          description: translations[l].language_english_name,
+          value: l
+        }))}
+      />
     </View>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FunctionComponent, useRef } from "react";
+import React, { useState, useEffect, FunctionComponent, useRef, useContext } from "react";
 import { View, StyleSheet, Picker, TextInput, Text } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import ListItem from "../components/ListItem";
@@ -10,6 +10,7 @@ import { Header } from "react-navigation-stack";
 import SearchBar from "../components/SearchBar";
 import SafeAreaView from "react-native-safe-area-view";
 import LoadingIndicator from "../components/LoadingIndicator";
+import LanguageContext from "../languages/LanguageContext";
 
 interface OnlineSearchProps {
   navigation: NavigationStackProp<{}, {}>
@@ -27,6 +28,7 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
   const [query, setQuery] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const { t } = useContext(LanguageContext)
 
   async function makeSearch() {
     if (query.length > 0) {
@@ -73,13 +75,14 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
         onSubmitEditing={makeSearch}
         onChangeText={(value) => setQuery(value)}
         query={query}
+        placeholder={t('search')}
       />
       <FlatList
         keyExtractor={(item) => item.path}
         data={docs}
         ListEmptyComponent={() => {
           return (docs != null && !isLoading) ?
-            <Text style={styles.msgInfo}>Artist or song not found</Text> :
+            <Text style={styles.msgInfo}>{t('artist_or_song_not_found')}</Text> :
             null
         }}
         ListHeaderComponent={<LoadingIndicator error={error} loading={isLoading} />}
