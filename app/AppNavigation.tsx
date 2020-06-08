@@ -16,6 +16,7 @@ import PlaylistView from './containers/PlaylistView';
 import PlaylistAddSongs from './containers/PlaylistAddSongs';
 import PlaylistEdit from './containers/PlaylistEdit';
 import Settings from './containers/Settings';
+import FontSizeSelect from './containers/Settings/FontSizeSelect';
 import StackHeaderTitle from './navigation/StackHeaderTitle';
 import TabBarLabel from './navigation/TabBarLabel';
 
@@ -37,7 +38,9 @@ export enum ROUTES {
   PlaylistView = 'PlaylistView',
   PlaylistList = 'PlaylistList',
   PlaylistAddSongs = 'PlaylistAddSongs',
-  PlaylistEdit = 'PlaylistEdit'
+  PlaylistEdit = 'PlaylistEdit',
+  Settings = 'Settings',
+  FontSizeSelect = 'FontSizeSelect'
 }
 
 const AppNavigation = createBottomTabNavigator({
@@ -122,7 +125,18 @@ const AppNavigation = createBottomTabNavigator({
     })
   },
   Settings: {
-    screen: Settings,
+    screen: createStackNavigator({
+      Settings: {
+        screen: Settings,
+        navigationOptions: { header: null }
+      },
+      FontSizeSelect: {
+        screen: FontSizeSelect,
+        navigationOptions: {
+          headerTitle: <StackHeaderTitle text="text_size" />
+        }
+      }
+    }),
     navigationOptions: ({ navigation }) => ({
       tabBarLabel: <TabBarLabel text="settings" />,
       tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="settings" />

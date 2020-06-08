@@ -3,11 +3,13 @@ import { LanguageID } from "../languages/translations"
 
 export class GlobalSettings {
   language!: LanguageID
+  fontSize!: number
 
   static schema: Realm.ObjectSchema = {
     name: 'GlobalSettings',
     properties: {
       language: 'string',
+      fontSize: { type: 'int', default: 14 }
     }
   }
 
@@ -28,6 +30,13 @@ export class GlobalSettings {
     let globalSettings = this.get()
     realm.write(() => {
       globalSettings.language = language
+    })
+  }
+
+  static setFontSize(fontSize: number) {
+    let globalSettings = this.get()
+    realm.write(() => {
+      globalSettings.fontSize = fontSize
     })
   }
 }

@@ -8,8 +8,8 @@ export class Song {
   title!: string
   content!: string
   artist!: Artist
-  transposeAmount?: number
-  fontSize?: number
+  transposeAmount?: number | null
+  fontSize?: number | null
   showTablature!: boolean
   updated_at!: Date
 
@@ -112,10 +112,14 @@ export class Song {
   }
   static setPreferences(song: Song, preferences: {
     showTablature?: boolean,
-    fontSize?: number,
-    transposeAmount?: number
+    fontSize?: number | null,
+    transposeAmount?: number | null
   }) {
-    let { showTablature = true, fontSize, transposeAmount } = preferences
+    let {
+      showTablature = song.showTablature,
+      fontSize = song.fontSize,
+      transposeAmount = song.transposeAmount
+    } = preferences
     realm.write(() => {
       song.showTablature = showTablature
       song.fontSize = fontSize
