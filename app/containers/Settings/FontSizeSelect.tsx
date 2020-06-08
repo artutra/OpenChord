@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { NavigationScreenProp } from "react-navigation"
 import Slider from "@react-native-community/slider";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import SongTransformer from "../../components/SongTransformer";
 import SongRender from "../../components/SongRender";
 import { GlobalSettings } from "../../db/GlobalSettings";
@@ -28,10 +28,17 @@ const FontSizeSelect = (props: Props) => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ paddingBottom: 24, paddingTop: 24, paddingHorizontal: 20, flexDirection: 'row', borderBottomColor: '#00000020', borderBottomWidth: 1, marginBottom: 10 }}>
-        <Slider style={{ flex: 1 }} value={fontSize} step={FONT_SIZE_STEP} onValueChange={onChange} minimumValue={MIN_FONT_SIZE} maximumValue={MAX_FONT_SIZE} />
-        <Text style={{ marginLeft: 10 }}>{fontSize}</Text>
+    <View style={styles.f1}>
+      <View style={styles.sliderContainer}>
+        <Slider
+          style={styles.f1}
+          value={fontSize}
+          step={FONT_SIZE_STEP}
+          minimumValue={MIN_FONT_SIZE}
+          maximumValue={MAX_FONT_SIZE}
+          onValueChange={onChange}
+        />
+        <Text style={styles.sliderLabel}>{fontSize}</Text>
       </View>
       <SongTransformer
         fontSize={fontSize}
@@ -39,7 +46,7 @@ const FontSizeSelect = (props: Props) => {
         chordProSong={chordSheet}
       >
         {({ chords, htmlSong }) => (
-          <View style={{ flex: 1 }}>
+          <View style={styles.f1}>
             <SongRender
               chordProContent={htmlSong}
             />
@@ -49,4 +56,21 @@ const FontSizeSelect = (props: Props) => {
     </View>
   )
 }
+const styles = StyleSheet.create({
+  sliderContainer: {
+    paddingBottom: 24,
+    paddingTop: 24,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    borderBottomColor: '#00000020',
+    borderBottomWidth: 1,
+    marginBottom: 10
+  },
+  sliderLabel: {
+    marginLeft: 10
+  },
+  f1: {
+    flex: 1
+  }
+});
 export default FontSizeSelect
