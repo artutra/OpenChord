@@ -17,6 +17,9 @@ import { SongEditParams } from "./../SongEdit";
 import SelectPlaylist from "./components/SelectPlaylist"
 import PageTurner from "./components/PageTurner";
 import LanguageContext from "../../languages/LanguageContext";
+import { GlobalSettings } from "../../db/GlobalSettings";
+import { MAX_FONT_SIZE, MIN_FONT_SIZE, FONT_SIZE_STEP } from "../Settings/FontSizeSelect";
+import clamp from "../../utils/clamp";
 
 export type SongViewParams = { id: string, title: string, openSideMenu?: () => void }
 
@@ -28,14 +31,13 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   NavigationStackOptions,
   NavigationStackProp
 > = (props) => {
-  const DEFAULT_FONT_SIZE = 14
   const songId = props.navigation.getParam('id')
   const [content, setContent] = useState<string>("")
   const [isSideMenuOpen, setIsSideMenuOpen] = useState<boolean>(false)
   const [tone, setTone] = useState<number>(0)
   const [showAutoScrollSlider, setShowAutoScrollSlider] = useState(false)
   const [scrollSpeed, setScrollSpeed] = useState<number>(0)
-  const [fontSize, setFontSize] = useState<number>(DEFAULT_FONT_SIZE)
+  const [fontSize, setFontSize] = useState<number>(GlobalSettings.get().fontSize)
   const [selectedChord, selectChord] = useState<Chord | null>(null)
   const [showTabs, setShowTabs] = useState(true)
   const [showPlaylistSelection, setShowPlaylistSelection] = useState(false)
@@ -45,8 +47,13 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
 
   function transposeUp() { setTone(tone + 1 >= 12 ? 0 : tone + 1); selectChord(null) }
   function transposeDown() { setTone(tone - 1 <= -12 ? 0 : tone - 1); selectChord(null) }
-  function increaseFontSize() { setFontSize(fontSize + 2 >= 24 ? 24 : fontSize + 2) }
-  function decreaseFontSize() { setFontSize(fontSize - 2 <= 14 ? 14 : fontSize - 2) }
+  function changeFontSize(amount: number) {
+    let newFontSize = clamp(fontSize + amount, MIN_FONT_SIZE, MAX_FONT_SIZE)
+    setFontSize(newFontSize)
+    Song.setPreferences(Song.getById(songId)!, { fontSize: newFontSize })
+  }
+  function increaseFontSize() { changeFontSize(FONT_SIZE_STEP) }
+  function decreaseFontSize() { changeFontSize(-FONT_SIZE_STEP) }
   function openSideMenu() { setIsSideMenuOpen(!isSideMenuOpen) }
   function onPressNextPage() { if (songRenderRef.current) songRenderRef.current.nextPage() }
   function onPressPreviousPage() { if (songRenderRef.current) songRenderRef.current.previousPage() }
@@ -83,14 +90,14 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
     let song = Song.getById(id)!
     setContent(Song.getChordPro(song))
     setTone(song.transposeAmount ? song.transposeAmount : 0)
-    setFontSize(song.fontSize ? song.fontSize : DEFAULT_FONT_SIZE)
+    setFontSize(song.fontSize != null ? song.fontSize : fontSize)
     setShowTabs(song.showTablature)
   }, [])
 
   useEffect(() => {
     let song = Song.getById(songId)!
-    Song.setPreferences(song, { fontSize, showTablature: showTabs, transposeAmount: tone })
-  }, [fontSize, showTabs, tone])
+    Song.setPreferences(song, { showTablature: showTabs, transposeAmount: tone })
+  }, [showTabs, tone])
 
   useEffect(() => {
     props.navigation.setParams({ 'openSideMenu': openSideMenu })
