@@ -1,26 +1,29 @@
 import React, { useState, useEffect, FunctionComponent, FC, useContext } from "react";
-import { NavigationScreenComponent } from "react-navigation"
-import { createBundle, importBundle, decodeJsonBundle } from '../db/bundler'
-import ListItem from "../components/ListItem";
+import { NavigationScreenComponent, NavigationScreenProp, withNavigationFocus } from "react-navigation"
+import { createBundle, importBundle, decodeJsonBundle } from '../../db/bundler'
+import ListItem from "../../components/ListItem";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
 import { StyleSheet, View, Alert, Platform, Picker } from "react-native";
 import Share from 'react-native-share';
 import RNFS from 'react-native-fs'
 import DocumentPicker from 'react-native-document-picker';
-import LoadingIndicator from "../components/LoadingIndicator";
-import createFile from "../utils/createFile";
+import LoadingIndicator from "../../components/LoadingIndicator";
+import createFile from "../../utils/createFile";
 import { PermissionsAndroid } from 'react-native';
-import pad from "../utils/pad";
-import LanguageContext, { languages, translations, LanguageID } from "../languages/LanguageContext";
-import { GlobalSettings } from "../db/GlobalSettings";
-import PickerModal from "../components/PickerModal";
+import pad from "../../utils/pad";
+import LanguageContext, { languages, translations, LanguageID } from "../../languages/LanguageContext";
+import { GlobalSettings } from "../../db/GlobalSettings";
+import PickerModal from "../../components/PickerModal";
+import { ROUTES } from "../../AppNavigation";
 
-const Settings: FunctionComponent & NavigationScreenComponent<
-  NavigationStackOptions,
-  NavigationStackProp
-> = () => {
+interface Props {
+  navigation: NavigationScreenProp<any, any>
+  isFocused: boolean // Provided by the withNavigationFocus HOC
+}
+const Settings: FunctionComponent<Props> = (props) => {
   const [loading, setLoading] = useState(false)
   const [showLanguageSelect, setShowLanguageSelect] = useState(false)
+  const [fontSize, setFontSize] = useState(GlobalSettings.get().fontSize)
   const { t, changeLanguage, language } = useContext(LanguageContext)
 
   async function requestWritePermission() {
@@ -95,12 +98,19 @@ const Settings: FunctionComponent & NavigationScreenComponent<
     GlobalSettings.setLanguage(value)
     changeLanguage(value)
   }
+  function configureFontSize() {
+    props.navigation.navigate(ROUTES.FontSizeSelect)
+  }
+  useEffect(() => {
+    setFontSize(GlobalSettings.get().fontSize)
+  }, [props.isFocused])
 
   return (
     <View style={styles.container}>
       <ListItem onPress={onPressExport} title={t('create_backup')} subtitle={t('create_backup_description')} />
       <ListItem onPress={onPressImport} title={t('import')} subtitle={t('import_description')} />
       <ListItem onPress={() => setShowLanguageSelect(true)} title={t('language')} subtitle={t('language_name')} />
+      <ListItem onPress={configureFontSize} title={t('text_size')} subtitle={fontSize.toString()} />
       <LoadingIndicator loading={loading} />
       <PickerModal
         show={showLanguageSelect}
@@ -124,4 +134,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Settings
+export default withNavigationFocus(Settings)
