@@ -9,6 +9,9 @@ import { GlobalSettings } from "../../db/GlobalSettings";
 interface Props {
   navigation: NavigationScreenProp<any, any>
 }
+export const MIN_FONT_SIZE = 14
+export const MAX_FONT_SIZE = 24
+export const FONT_SIZE_STEP = 2
 const FontSizeSelect = (props: Props) => {
   const [fontSize, setFontSize] = useState(GlobalSettings.get().fontSize)
 
@@ -27,7 +30,7 @@ const FontSizeSelect = (props: Props) => {
   return (
     <View style={{ flex: 1 }}>
       <View style={{ paddingBottom: 24, paddingTop: 24, paddingHorizontal: 20, flexDirection: 'row', borderBottomColor: '#00000020', borderBottomWidth: 1, marginBottom: 10 }}>
-        <Slider style={{ flex: 1 }} value={fontSize} step={2} onValueChange={onChange} maximumValue={24} minimumValue={14} />
+        <Slider style={{ flex: 1 }} value={fontSize} step={FONT_SIZE_STEP} onValueChange={onChange} minimumValue={MIN_FONT_SIZE} maximumValue={MAX_FONT_SIZE} />
         <Text style={{ marginLeft: 10 }}>{fontSize}</Text>
       </View>
       <SongTransformer
