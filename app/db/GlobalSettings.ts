@@ -4,19 +4,22 @@ import { LanguageID } from "../languages/translations"
 const DEFAULTS: GlobalSettings = {
   language: 'en_us',
   fontSize: 14,
-  showTablature: true
+  showTablature: true,
+  enablePageTurner: false,
 }
 export class GlobalSettings {
   language!: LanguageID
   fontSize!: number
   showTablature!: boolean
+  enablePageTurner!: boolean
 
   static schema: Realm.ObjectSchema = {
     name: 'GlobalSettings',
     properties: {
       language: { type: 'string', default: DEFAULTS.language },
       fontSize: { type: 'int', default: DEFAULTS.fontSize },
-      showTablature: { type: 'bool', default: DEFAULTS.showTablature }
+      showTablature: { type: 'bool', default: DEFAULTS.showTablature },
+      enablePageTurner: { type: 'bool', default: DEFAULTS.enablePageTurner },
     }
   }
 
@@ -50,6 +53,13 @@ export class GlobalSettings {
     let globalSettings = this.get()
     realm.write(() => {
       globalSettings.showTablature = showTablature
+    })
+  }
+
+  static setEnablePageTurner(enablePageTurner: boolean) {
+    let globalSettings = this.get()
+    realm.write(() => {
+      globalSettings.enablePageTurner = enablePageTurner
     })
   }
 }
