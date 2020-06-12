@@ -4,12 +4,14 @@ import { LanguageID } from "../languages/translations"
 export class GlobalSettings {
   language!: LanguageID
   fontSize!: number
+  showTablature!: boolean
 
   static schema: Realm.ObjectSchema = {
     name: 'GlobalSettings',
     properties: {
       language: 'string',
-      fontSize: { type: 'int', default: 14 }
+      fontSize: { type: 'int', default: 14 },
+      showTablature: { type: 'bool', default: true }
     }
   }
 
@@ -37,6 +39,13 @@ export class GlobalSettings {
     let globalSettings = this.get()
     realm.write(() => {
       globalSettings.fontSize = fontSize
+    })
+  }
+
+  static setShowTablature(showTablature: boolean) {
+    let globalSettings = this.get()
+    realm.write(() => {
+      globalSettings.showTablature = showTablature
     })
   }
 }
