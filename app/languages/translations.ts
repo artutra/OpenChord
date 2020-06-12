@@ -55,6 +55,8 @@ export const sentences = [
   'text_size',
   'show_tabs_by_default',
   'hide_tabs_by_default',
+  'enable_page_turner_by_default',
+  'disable_page_turner_by_default',
 ] as const;
 export type SentenceID = typeof sentences[number];
 export type LanguageID = typeof languages[number];
@@ -118,6 +120,8 @@ const translations: Languages = {
     text_size: 'Text size',
     show_tabs_by_default: 'Show tabs by default',
     hide_tabs_by_default: 'Hide tabs by default',
+    enable_page_turner_by_default: 'Enable page turner by default',
+    disable_page_turner_by_default: 'Disable page turner by default',
   },
   pt_br: {
     language_name: "Português (Brasil)",
@@ -175,6 +179,8 @@ const translations: Languages = {
     text_size: 'Tamanho do texto',
     show_tabs_by_default: 'Mostrar tablaturas por padrão',
     hide_tabs_by_default: 'Esconder tablaturas por padrão',
+    enable_page_turner_by_default: 'Ativar passa-páginas por padrão',
+    disable_page_turner_by_default: 'Desativar passa-páginas por padrão',
   }
 }
 export default translations
