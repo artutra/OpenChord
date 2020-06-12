@@ -1,15 +1,22 @@
 import realm from "."
 import { LanguageID } from "../languages/translations"
 
+const DEFAULTS: GlobalSettings = {
+  language: 'en_us',
+  fontSize: 14,
+  showTablature: true
+}
 export class GlobalSettings {
   language!: LanguageID
   fontSize!: number
+  showTablature!: boolean
 
   static schema: Realm.ObjectSchema = {
     name: 'GlobalSettings',
     properties: {
-      language: 'string',
-      fontSize: { type: 'int', default: 14 }
+      language: { type: 'string', default: DEFAULTS.language },
+      fontSize: { type: 'int', default: DEFAULTS.fontSize },
+      showTablature: { type: 'bool', default: DEFAULTS.showTablature }
     }
   }
 
@@ -17,13 +24,12 @@ export class GlobalSettings {
     let globalSettings = realm.objects<GlobalSettings>('GlobalSettings').find(() => true)
     if (globalSettings == null) {
       realm.write(() => {
-        let globalSettings = realm.create<GlobalSettings>('GlobalSettings', {
-          language: "en_us"
-        })
-        return globalSettings
+        realm.create<GlobalSettings>('GlobalSettings', {})
       })
+      return DEFAULTS
+    } else {
+      return globalSettings!
     }
-    return globalSettings!
   }
 
   static setLanguage(language: LanguageID) {
@@ -37,6 +43,13 @@ export class GlobalSettings {
     let globalSettings = this.get()
     realm.write(() => {
       globalSettings.fontSize = fontSize
+    })
+  }
+
+  static setShowTablature(showTablature: boolean) {
+    let globalSettings = this.get()
+    realm.write(() => {
+      globalSettings.showTablature = showTablature
     })
   }
 }

@@ -39,7 +39,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   const [scrollSpeed, setScrollSpeed] = useState<number>(0)
   const [fontSize, setFontSize] = useState<number>(GlobalSettings.get().fontSize)
   const [selectedChord, selectChord] = useState<Chord | null>(null)
-  const [showTabs, setShowTabs] = useState(true)
+  const [showTabs, setShowTabs] = useState(GlobalSettings.get().showTablature)
   const [showPlaylistSelection, setShowPlaylistSelection] = useState(false)
   const [showPageTurner, setShowPageTurner] = useState(false)
   const songRenderRef = useRef<SongRenderRef>(null)
@@ -57,7 +57,10 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   function openSideMenu() { setIsSideMenuOpen(!isSideMenuOpen) }
   function onPressNextPage() { if (songRenderRef.current) songRenderRef.current.nextPage() }
   function onPressPreviousPage() { if (songRenderRef.current) songRenderRef.current.previousPage() }
-
+  function onChangeShowTabs(value: boolean) {
+    setShowTabs(value)
+    Song.setPreferences(Song.getById(songId)!, { showTablature: value })
+  }
   function onClickChord(allChords: Array<Chord>, chordString: string) {
     selectChord(allChords.find(c => c.toString() == chordString)!)
   }
@@ -90,14 +93,18 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
     let song = Song.getById(id)!
     setContent(Song.getChordPro(song))
     setTone(song.transposeAmount ? song.transposeAmount : 0)
-    setFontSize(song.fontSize != null ? song.fontSize : fontSize)
-    setShowTabs(song.showTablature)
+    if (song.fontSize != null) {
+      setFontSize(song.fontSize)
+    }
+    if (song.showTablature != null) {
+      setShowTabs(song.showTablature)
+    }
   }, [])
 
   useEffect(() => {
     let song = Song.getById(songId)!
-    Song.setPreferences(song, { showTablature: showTabs, transposeAmount: tone })
-  }, [showTabs, tone])
+    Song.setPreferences(song, { transposeAmount: tone })
+  }, [tone])
 
   useEffect(() => {
     props.navigation.setParams({ 'openSideMenu': openSideMenu })
@@ -127,7 +134,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
               </TouchableOpacity>
             </View>
             <View style={styles.tool}>
-              <Switch onValueChange={setShowTabs} value={showTabs} />
+              <Switch onValueChange={onChangeShowTabs} value={showTabs} />
               <Text style={styles.toolLabel}>{t('show_tabs')}</Text>
             </View>
             <View style={styles.tool}>
