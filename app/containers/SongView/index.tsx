@@ -41,7 +41,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   const [selectedChord, selectChord] = useState<Chord | null>(null)
   const [showTabs, setShowTabs] = useState(GlobalSettings.get().showTablature)
   const [showPlaylistSelection, setShowPlaylistSelection] = useState(false)
-  const [showPageTurner, setShowPageTurner] = useState(false)
+  const [showPageTurner, setShowPageTurner] = useState(GlobalSettings.get().enablePageTurner)
   const songRenderRef = useRef<SongRenderRef>(null)
   const { t } = useContext(LanguageContext)
 
