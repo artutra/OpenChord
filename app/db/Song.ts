@@ -10,7 +10,7 @@ export class Song {
   artist!: Artist
   transposeAmount?: number | null
   fontSize?: number | null
-  showTablature!: boolean
+  showTablature?: boolean
   updated_at!: Date
 
   static schema: Realm.ObjectSchema = {
@@ -22,7 +22,7 @@ export class Song {
       content: 'string',
       transposeAmount: 'int?',
       fontSize: 'int?',
-      showTablature: { type: 'bool', default: true },
+      showTablature: 'bool?',
       artist: { type: 'Artist' },
       updated_at: 'date'
     }
@@ -134,7 +134,7 @@ export class Song {
       artist: song.artist.name,
       transposeAmount: song.transposeAmount,
       fontSize: song.fontSize,
-      showTablature: song.showTablature,
+      showTablature: song.showTablature != null ? song.showTablature : true,
       updated_at: song.updated_at.toJSON()
     }
   }
