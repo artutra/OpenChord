@@ -24,12 +24,18 @@ const Settings: FunctionComponent<Props> = (props) => {
   const [loading, setLoading] = useState(false)
   const [activeLanguageSelect, setActiveLanguageSelect] = useState(false)
   const [activeShowTablatureSelect, setActiveShowTablatureSelect] = useState(false)
+  const [activeEnablePageTurnerSelect, setActiveEnablePageTurnerSelect] = useState(false)
   const [fontSize, setFontSize] = useState(GlobalSettings.get().fontSize)
   const [showTablature, setShowTablature] = useState(GlobalSettings.get().showTablature)
+  const [enablePageTurner, setEnablePageTurner] = useState(GlobalSettings.get().enablePageTurner)
   const { t, changeLanguage, language } = useContext(LanguageContext)
   const showTablatureOptions = [
     { key: 'default-show-true', label: t('show_tabs_by_default'), value: true },
     { key: 'default-show-false', label: t('hide_tabs_by_default'), value: false },
+  ]
+  const enablePageTurnerOptions = [
+    { key: 'page-turner-true', label: t('enable_page_turner_by_default'), value: true },
+    { key: 'page-turner-false', label: t('disable_page_turner_by_default'), value: false },
   ]
 
   async function requestWritePermission() {
@@ -108,6 +114,10 @@ const Settings: FunctionComponent<Props> = (props) => {
     GlobalSettings.setShowTablature(value)
     setShowTablature(value)
   }
+  function onChangeEnablePageTurner(value: boolean) {
+    GlobalSettings.setEnablePageTurner(value)
+    setEnablePageTurner(value)
+  }
   function configureFontSize() {
     props.navigation.navigate(ROUTES.FontSizeSelect)
   }
@@ -124,6 +134,10 @@ const Settings: FunctionComponent<Props> = (props) => {
       <ListItem
         onPress={() => setActiveShowTablatureSelect(true)}
         title={showTablatureOptions.find(o => o.value === showTablature)!.label}
+      />
+      <ListItem
+        onPress={() => setActiveEnablePageTurnerSelect(true)}
+        title={enablePageTurnerOptions.find(o => o.value === enablePageTurner)!.label}
       />
       <LoadingIndicator loading={loading} />
       <PickerModal
@@ -144,6 +158,13 @@ const Settings: FunctionComponent<Props> = (props) => {
         onDismiss={() => setActiveShowTablatureSelect(false)}
         value={showTablature}
         options={showTablatureOptions}
+      />
+      <PickerModal
+        show={activeEnablePageTurnerSelect}
+        onChange={onChangeEnablePageTurner}
+        onDismiss={() => setActiveEnablePageTurnerSelect(false)}
+        value={enablePageTurner}
+        options={enablePageTurnerOptions}
       />
     </View>
   )
