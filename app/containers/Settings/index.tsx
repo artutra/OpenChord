@@ -22,9 +22,15 @@ interface Props {
 }
 const Settings: FunctionComponent<Props> = (props) => {
   const [loading, setLoading] = useState(false)
-  const [showLanguageSelect, setShowLanguageSelect] = useState(false)
+  const [activeLanguageSelect, setActiveLanguageSelect] = useState(false)
+  const [activeShowTablatureSelect, setActiveShowTablatureSelect] = useState(false)
   const [fontSize, setFontSize] = useState(GlobalSettings.get().fontSize)
+  const [showTablature, setShowTablature] = useState(GlobalSettings.get().showTablature)
   const { t, changeLanguage, language } = useContext(LanguageContext)
+  const showTablatureOptions = [
+    { key: 'default-show-true', label: t('show_tabs_by_default'), value: true },
+    { key: 'default-show-false', label: t('hide_tabs_by_default'), value: false },
+  ]
 
   async function requestWritePermission() {
     const granted = await PermissionsAndroid.request(
@@ -98,6 +104,10 @@ const Settings: FunctionComponent<Props> = (props) => {
     GlobalSettings.setLanguage(value)
     changeLanguage(value)
   }
+  function onChangeShowTablature(value: boolean) {
+    GlobalSettings.setShowTablature(value)
+    setShowTablature(value)
+  }
   function configureFontSize() {
     props.navigation.navigate(ROUTES.FontSizeSelect)
   }
@@ -109,13 +119,17 @@ const Settings: FunctionComponent<Props> = (props) => {
     <View style={styles.container}>
       <ListItem onPress={onPressExport} title={t('create_backup')} subtitle={t('create_backup_description')} />
       <ListItem onPress={onPressImport} title={t('import')} subtitle={t('import_description')} />
-      <ListItem onPress={() => setShowLanguageSelect(true)} title={t('language')} subtitle={t('language_name')} />
+      <ListItem onPress={() => setActiveLanguageSelect(true)} title={t('language')} subtitle={t('language_name')} />
       <ListItem onPress={configureFontSize} title={t('text_size')} subtitle={fontSize.toString()} />
+      <ListItem
+        onPress={() => setActiveShowTablatureSelect(true)}
+        title={showTablatureOptions.find(o => o.value === showTablature)!.label}
+      />
       <LoadingIndicator loading={loading} />
       <PickerModal
-        show={showLanguageSelect}
+        show={activeLanguageSelect}
         onChange={onChangeLanguage}
-        onDismiss={() => setShowLanguageSelect(false)}
+        onDismiss={() => setActiveLanguageSelect(false)}
         value={language}
         options={languages.map(l => ({
           key: 'lang-option-' + l,
@@ -123,6 +137,13 @@ const Settings: FunctionComponent<Props> = (props) => {
           description: translations[l].language_english_name,
           value: l
         }))}
+      />
+      <PickerModal
+        show={activeShowTablatureSelect}
+        onChange={onChangeShowTablature}
+        onDismiss={() => setActiveShowTablatureSelect(false)}
+        value={showTablature}
+        options={showTablatureOptions}
       />
     </View>
   )
