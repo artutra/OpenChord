@@ -53,6 +53,8 @@ export const sentences = [
   'songs_imported_successfully',
   'song_downloaded',
   'text_size',
+  'show_tabs_by_default',
+  'hide_tabs_by_default',
 ] as const;
 export type SentenceID = typeof sentences[number];
 export type LanguageID = typeof languages[number];
@@ -114,6 +116,8 @@ const translations: Languages = {
     songs_imported_successfully: 'Songs imported successfully',
     song_downloaded: 'Song downloaded',
     text_size: 'Text size',
+    show_tabs_by_default: 'Show tabs by default',
+    hide_tabs_by_default: 'Hide tabs by default',
   },
   pt_br: {
     language_name: "Português (Brasil)",
@@ -169,6 +173,8 @@ const translations: Languages = {
     songs_imported_successfully: 'Músicas importadas com sucesso',
     song_downloaded: 'Música baixada',
     text_size: 'Tamanho do texto',
+    show_tabs_by_default: 'Mostrar tablaturas por padrão',
+    hide_tabs_by_default: 'Esconder tablaturas por padrão',
   }
 }
 export default translations
