@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent, FC, useContext } from "react";
-import { NavigationScreenComponent, NavigationScreenProp, withNavigationFocus } from "react-navigation"
+import { NavigationScreenComponent, NavigationScreenProp, withNavigationFocus, ScrollView } from "react-navigation"
 import { createBundle, importBundle, decodeJsonBundle } from '../../db/bundler'
 import ListItem from "../../components/ListItem";
 import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
@@ -15,6 +15,7 @@ import LanguageContext, { languages, translations, LanguageID } from "../../lang
 import { GlobalSettings } from "../../db/GlobalSettings";
 import PickerModal from "../../components/PickerModal";
 import { ROUTES } from "../../AppNavigation";
+import AboutDev from "./components/AboutDev";
 
 interface Props {
   navigation: NavigationScreenProp<any, any>
@@ -126,20 +127,23 @@ const Settings: FunctionComponent<Props> = (props) => {
   }, [props.isFocused])
 
   return (
-    <View style={styles.container}>
-      <ListItem onPress={onPressExport} title={t('create_backup')} subtitle={t('create_backup_description')} />
-      <ListItem onPress={onPressImport} title={t('import')} subtitle={t('import_description')} />
-      <ListItem onPress={() => setActiveLanguageSelect(true)} title={t('language')} subtitle={t('language_name')} />
-      <ListItem onPress={configureFontSize} title={t('text_size')} subtitle={fontSize.toString()} />
-      <ListItem
-        onPress={() => setActiveShowTablatureSelect(true)}
-        title={showTablatureOptions.find(o => o.value === showTablature)!.label}
-      />
-      <ListItem
-        onPress={() => setActiveEnablePageTurnerSelect(true)}
-        title={enablePageTurnerOptions.find(o => o.value === enablePageTurner)!.label}
-      />
-      <LoadingIndicator loading={loading} />
+    <>
+      <ScrollView style={styles.container}>
+        <ListItem onPress={onPressExport} title={t('create_backup')} subtitle={t('create_backup_description')} />
+        <ListItem onPress={onPressImport} title={t('import')} subtitle={t('import_description')} />
+        <ListItem onPress={() => setActiveLanguageSelect(true)} title={t('language')} subtitle={t('language_name')} />
+        <ListItem onPress={configureFontSize} title={t('text_size')} subtitle={fontSize.toString()} />
+        <ListItem
+          onPress={() => setActiveShowTablatureSelect(true)}
+          title={showTablatureOptions.find(o => o.value === showTablature)!.label}
+        />
+        <ListItem
+          onPress={() => setActiveEnablePageTurnerSelect(true)}
+          title={enablePageTurnerOptions.find(o => o.value === enablePageTurner)!.label}
+        />
+        <LoadingIndicator loading={loading} />
+        <AboutDev />
+      </ScrollView>
       <PickerModal
         show={activeLanguageSelect}
         onChange={onChangeLanguage}
@@ -166,7 +170,7 @@ const Settings: FunctionComponent<Props> = (props) => {
         value={enablePageTurner}
         options={enablePageTurnerOptions}
       />
-    </View>
+    </>
   )
 }
 
