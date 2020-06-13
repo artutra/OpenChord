@@ -1,5 +1,5 @@
 import realm from "."
-import { List } from "realm"
+import { List, Results } from "realm"
 import { Song } from "./Song"
 import uuid from "uuid"
 import { PlaylistBundle } from "./bundler"
@@ -98,4 +98,32 @@ export class Playlist {
       songs: playlistSongs
     }
   }
+  static getSongs(playlist: Playlist, sortBy: SortBy, reverse: boolean) {
+    let songs: Results<Song> | List<Song> | Song[] = playlist.songs
+    if (songs instanceof Array) {
+      let asc = reverse ? -1 : 1
+      if (sortBy === 'ARTIST') {
+        songs = songs.sort((a, b) => {
+          if (a.artist.name < b.artist.name) { return asc * -1 }
+          if (a.artist.name > b.artist.name) { return asc * 1 }
+          return 0
+        })
+      } else if (sortBy === 'TITLE') {
+        songs = songs.sort((a, b) => {
+          if (a.title < b.title) { return asc * -1 }
+          if (a.title > b.title) { return asc * 1 }
+          return 0
+        })
+      }
+    } else {
+      if (sortBy === 'ARTIST') {
+        songs = songs.sorted('artist.name', reverse)
+      } else if (sortBy === 'TITLE') {
+        songs = songs.sorted('title', reverse)
+      }
+    }
+    return songs
+  }
 }
+
+export type SortBy = 'TITLE' | 'ARTIST' | 'CUSTOM'
