@@ -2,11 +2,14 @@ import React, { useState, useEffect, FunctionComponent } from "react";
 import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import TouchableIcon from "./TouchableIcon";
 import OptionsMenu, { Option } from "./OptionsMenu";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
+export type LeftIconOptions = null | 'empty-space' | 'arrow-up' | 'arrow-down'
 interface ListItemProps {
   title: string
   subtitle?: string
   onPress: () => void
+  leftIcon?: LeftIconOptions
   showIcon?: undefined | null | 'plus' | 'check'
   options?: Option[]
 }
@@ -14,6 +17,12 @@ const ListItem: FunctionComponent<ListItemProps> = (props) => {
   const [isMenuEnabled, setMenuEnabled] = useState(false)
   return (
     <TouchableOpacity onPress={props.onPress} style={styles.item}>
+      {props.leftIcon == 'empty-space' && <View style={styles.leftIcon}></View>}
+      {props.leftIcon != null && props.leftIcon != 'empty-space' &&
+        <MaterialCommunityIcons
+          style={styles.leftIcon}
+          name={props.leftIcon}
+          size={14} />}
       <View style={styles.textContainer}>
         <Text style={styles.title}>{props.title}</Text>
         {props.subtitle && <Text style={styles.subtitle}>{props.subtitle}</Text>}
@@ -54,5 +63,8 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 14
+  },
+  leftIcon: {
+    width: 30
   }
 });

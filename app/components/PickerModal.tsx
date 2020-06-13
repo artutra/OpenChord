@@ -1,16 +1,18 @@
 import React from "react";
 import { View, TouchableOpacity, StyleSheet, Modal } from "react-native";
-import ListItem from "./ListItem";
+import ListItem, { LeftIconOptions } from "./ListItem";
 
+export interface PickerOption<T> {
+  key?: string
+  label: string
+  description?: string
+  leftIcon?: LeftIconOptions
+  value: T
+}
 interface Props<T> {
   show: boolean
   value: T
-  options: {
-    key?: string
-    label: string
-    description?: string
-    value: T
-  }[]
+  options: PickerOption<T>[]
   onChange: (name: T) => void
   onDismiss: () => void
 }
@@ -37,6 +39,7 @@ function PickerModal<T>(props: Props<T>) {
                 key={o.key}
                 onPress={() => onChange(o.value)}
                 title={o.label}
+                leftIcon={o.leftIcon}
                 subtitle={o.description}
                 showIcon={o.value === value ? 'check' : null} />
             )

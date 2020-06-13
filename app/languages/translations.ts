@@ -57,6 +57,9 @@ export const sentences = [
   'hide_tabs_by_default',
   'enable_page_turner_by_default',
   'disable_page_turner_by_default',
+  'sort_by_title',
+  'sort_by_artist',
+  'custom_sort',
   'developed_by',
 ] as const;
 export type SentenceID = typeof sentences[number];
@@ -123,6 +126,9 @@ const translations: Languages = {
     hide_tabs_by_default: 'Hide tabs by default',
     enable_page_turner_by_default: 'Enable page turner by default',
     disable_page_turner_by_default: 'Disable page turner by default',
+    sort_by_title: 'Sort by title',
+    sort_by_artist: 'Sort by artist',
+    custom_sort: 'Custom sort',
     developed_by: 'Developed by',
   },
   pt_br: {
@@ -183,6 +189,9 @@ const translations: Languages = {
     hide_tabs_by_default: 'Esconder tablaturas por padrão',
     enable_page_turner_by_default: 'Ativar passa-páginas por padrão',
     disable_page_turner_by_default: 'Desativar passa-páginas por padrão',
+    sort_by_title: 'Ordenar por título',
+    sort_by_artist: 'Ordenar por artista',
+    custom_sort: 'Classificação personalizada',
     developed_by: 'Desenvolvido por',
   }
 }
