@@ -57,6 +57,7 @@ export const sentences = [
   'hide_tabs_by_default',
   'enable_page_turner_by_default',
   'disable_page_turner_by_default',
+  'developed_by',
 ] as const;
 export type SentenceID = typeof sentences[number];
 export type LanguageID = typeof languages[number];
@@ -122,6 +123,7 @@ const translations: Languages = {
     hide_tabs_by_default: 'Hide tabs by default',
     enable_page_turner_by_default: 'Enable page turner by default',
     disable_page_turner_by_default: 'Disable page turner by default',
+    developed_by: 'Developed by',
   },
   pt_br: {
     language_name: "Português (Brasil)",
@@ -181,6 +183,7 @@ const translations: Languages = {
     hide_tabs_by_default: 'Esconder tablaturas por padrão',
     enable_page_turner_by_default: 'Ativar passa-páginas por padrão',
     disable_page_turner_by_default: 'Desativar passa-páginas por padrão',
+    developed_by: 'Desenvolvido por',
   }
 }
 export default translations
