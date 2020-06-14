@@ -3,7 +3,7 @@ FROM openjdk:8
 # nodejs, zip, to unzip things
 RUN apt-get update && \
   apt-get -y install zip expect && \
-  curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+  curl -sL https://deb.nodesource.com/setup_12.x | bash - && \
   apt-get install -y nodejs
 
 # Install 32bit support for Android SDK
