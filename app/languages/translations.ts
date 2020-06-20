@@ -61,6 +61,7 @@ export const sentences = [
   'sort_by_artist',
   'custom_sort',
   'developed_by',
+  'home',
 ] as const;
 export type SentenceID = typeof sentences[number];
 export type LanguageID = typeof languages[number];
@@ -130,6 +131,7 @@ const translations: Languages = {
     sort_by_artist: 'Sort by artist',
     custom_sort: 'Custom sort',
     developed_by: 'Developed by',
+    home: 'Home',
   },
   pt_br: {
     language_name: "Português (Brasil)",
@@ -193,6 +195,7 @@ const translations: Languages = {
     sort_by_artist: 'Ordenar por artista',
     custom_sort: 'Classificação personalizada',
     developed_by: 'Desenvolvido por',
+    home: 'Início',
   }
 }
 export default translations

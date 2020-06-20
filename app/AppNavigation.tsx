@@ -82,7 +82,7 @@ const AppNavigation = () => {
   const { t } = useContext(LanguageContext)
   return (
     <RootStack.Navigator>
-      <RootStack.Screen name="MainTab" component={MainTab} options={{ headerShown: false }} />
+      <RootStack.Screen name="MainTab" component={MainTab} options={{ headerShown: false, title: t('home') }} />
       <RootStack.Screen
         name="OnlineArtistView"
         component={OnlineArtistView}
