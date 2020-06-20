@@ -1,10 +1,8 @@
-import React, { useState, useEffect, FunctionComponent, useContext } from "react";
-import { Text, View, Button, FlatList } from "react-native";
-import { NavigationScreenProp, NavigationScreenComponent } from "react-navigation"
+import React, { useState, FunctionComponent, useContext, useCallback } from "react";
+import { FlatList } from "react-native";
 import ListItem from "../../components/ListItem";
 import { Playlist } from "../../db/Playlist";
-import { ROUTES } from "../../AppNavigation";
-import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
+import { MainTabParamList, RootStackParamList } from "../../AppNavigation";
 import TouchableIcon from "../../components/TouchableIcon";
 import { removePlaylist } from "../../utils/removePlaylist";
 import EmptyListMessage from "../../components/EmptyListMessage";
@@ -13,21 +11,26 @@ import { createBundle } from "../../db/bundler";
 import createFile from "../../utils/createFile";
 import Share from "react-native-share";
 import LanguageContext from "../../languages/LanguageContext";
+import { CompositeNavigationProp, useFocusEffect } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import CustomHeader from "../../components/CustomHeader";
 
-interface Props {
-  navigation: NavigationScreenProp<any, any>
+type PlaylistListScreenNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<MainTabParamList, 'PlaylistList'>,
+  StackNavigationProp<RootStackParamList, 'MainTab'>
+>
+type Props = {
+  navigation: PlaylistListScreenNavigationProp
 }
-const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
-  NavigationStackOptions,
-  NavigationStackProp
-> = (props: Props) => {
+const PlaylistList: FunctionComponent<Props> = (props: Props) => {
   const [playlists, setPlaylists] = useState(Playlist.getAll())
   const [showAddPlaylistModal, setShowAddPlaylistModal] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const { t } = useContext(LanguageContext)
 
   function onSelectPlaylist(id: string, name: string) {
-    props.navigation.navigate(ROUTES.PlaylistView, { id, title: name })
+    props.navigation.navigate('PlaylistView', { id, title: name })
   }
   function onPressDeletePlaylist(id: string) {
     removePlaylist(id, () => {
@@ -48,15 +51,11 @@ const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
     }
   }
 
-  useEffect(() => {
-    const didBlurSubscription = props.navigation.addListener(
-      'didFocus',
-      payload => {
-        setPlaylists(Playlist.getAll())
-      }
-    )
-    return () => didBlurSubscription.remove()
-  }, [playlists])
+  useFocusEffect(
+    useCallback(() => {
+      setPlaylists(Playlist.getAll())
+    }, [])
+  );
 
   function onSubmit(playlistName: string) {
     try {
@@ -72,11 +71,12 @@ const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
     }
   }
 
-  useEffect(() => {
-    props.navigation.setParams({ 'onPressCreatePlaylist': () => setShowAddPlaylistModal(true) })
-  }, [playlists])
   return (
-    <View style={{ flex: 1 }}>
+    <>
+      <CustomHeader
+        title={t('playlists')}
+        headerRight={<TouchableIcon onPress={() => setShowAddPlaylistModal(true)} name="plus" />}
+      />
       <TextInputModal
         error={error}
         enabled={showAddPlaylistModal}
@@ -111,15 +111,8 @@ const PlaylistList: FunctionComponent<Props> & NavigationScreenComponent<
           )
         }}
       />
-    </View>
-
-  );
-}
-PlaylistList.navigationOptions = ({ navigation }) => {
-  return {
-    headerRight: <TouchableIcon onPress={navigation.getParam('onPressCreatePlaylist')} name="plus" />,
-    title: navigation.getParam('title')
-  }
+    </>
+  )
 }
 
 export default PlaylistList
