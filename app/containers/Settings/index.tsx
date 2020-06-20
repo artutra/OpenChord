@@ -1,9 +1,7 @@
-import React, { useState, useEffect, FunctionComponent, FC, useContext } from "react";
-import { NavigationScreenComponent, NavigationScreenProp, withNavigationFocus, ScrollView } from "react-navigation"
+import React, { useState, FC, useContext, useCallback } from "react";
 import { createBundle, importBundle, decodeJsonBundle } from '../../db/bundler'
 import ListItem from "../../components/ListItem";
-import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
-import { StyleSheet, View, Alert, Platform, Picker } from "react-native";
+import { StyleSheet, Alert, Platform, ScrollView } from "react-native";
 import Share from 'react-native-share';
 import RNFS from 'react-native-fs'
 import DocumentPicker from 'react-native-document-picker';
@@ -14,14 +12,19 @@ import pad from "../../utils/pad";
 import LanguageContext, { languages, translations, LanguageID } from "../../languages/LanguageContext";
 import { GlobalSettings } from "../../db/GlobalSettings";
 import PickerModal from "../../components/PickerModal";
-import { ROUTES } from "../../AppNavigation";
+import { SettingsStackParamList } from "../../AppNavigation";
 import AboutDev from "./components/AboutDev";
+import { useFocusEffect } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-interface Props {
-  navigation: NavigationScreenProp<any, any>
-  isFocused: boolean // Provided by the withNavigationFocus HOC
+type SettingsScreenNavigationProp = StackNavigationProp<
+  SettingsStackParamList,
+  'Settings'
+>
+type Props = {
+  navigation: SettingsScreenNavigationProp
 }
-const Settings: FunctionComponent<Props> = (props) => {
+const Settings: FC<Props> = (props) => {
   const [loading, setLoading] = useState(false)
   const [activeLanguageSelect, setActiveLanguageSelect] = useState(false)
   const [activeShowTablatureSelect, setActiveShowTablatureSelect] = useState(false)
@@ -120,11 +123,14 @@ const Settings: FunctionComponent<Props> = (props) => {
     setEnablePageTurner(value)
   }
   function configureFontSize() {
-    props.navigation.navigate(ROUTES.FontSizeSelect)
+    props.navigation.navigate('FontSizeSelect')
   }
-  useEffect(() => {
-    setFontSize(GlobalSettings.get().fontSize)
-  }, [props.isFocused])
+
+  useFocusEffect(
+    useCallback(() => {
+      setFontSize(GlobalSettings.get().fontSize)
+    }, [])
+  );
 
   return (
     <>
@@ -180,4 +186,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default withNavigationFocus(Settings)
+export default Settings
