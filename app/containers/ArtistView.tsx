@@ -1,19 +1,25 @@
-import React, { useState, useContext } from "react";
-import { Text, FlatList } from "react-native";
-import { NavigationScreenProp } from "react-navigation"
+import React, { useState, useContext, FC } from "react";
+import { FlatList } from "react-native";
 import { Song, Artist } from "../db";
 import ListItem from "../components/ListItem";
 import { removeSong } from "../utils/removeSong";
 import LanguageContext from "../languages/LanguageContext";
+import { RouteProp } from "@react-navigation/native";
+import { RootStackParamList } from "../AppNavigation";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-export type ArtistViewParams = { id: string, title: string }
-interface Props {
-  navigation: NavigationScreenProp<any, ArtistViewParams>
+type ArtistViewScreenRouteProp = RouteProp<RootStackParamList, 'ArtistView'>;
+type ArtistViewScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'ArtistView'
+>;
+type Props = {
+  route: ArtistViewScreenRouteProp
+  navigation: ArtistViewScreenNavigationProp;
 }
-const ArtistView = (props: Props) => {
-  let id = props.navigation.getParam('id')
+const ArtistView: FC<Props> = (props) => {
+  let id = props.route.params.id
   let artist = Artist.getById(id)!
-  const [name] = useState(artist.name)
   const [musics, setMusics] = useState(Song.getByArtist(artist.id!))
   const { t } = useContext(LanguageContext)
 
@@ -50,8 +56,5 @@ const ArtistView = (props: Props) => {
     />
   );
 }
-ArtistView.navigationOptions = (props: Props) => ({
-  title: props.navigation.getParam('title')
-});
 
 export default ArtistView
