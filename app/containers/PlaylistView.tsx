@@ -3,7 +3,7 @@ import { FlatList, View, TouchableOpacity, Text } from "react-native";
 import ListItem, { LeftIconOptions } from "../components/ListItem";
 import { removeSong } from "../utils/removeSong";
 import { Playlist, SortBy } from "../db/Playlist";
-import { ROUTES, RootStackParamList } from "../AppNavigation";
+import { RootStackParamList } from "../AppNavigation";
 import TouchableIcon from "../components/TouchableIcon";
 import EmptyListMessage from "../components/EmptyListMessage";
 import PrimaryButton from "../components/PrimaryButton";
@@ -51,10 +51,10 @@ const PlaylistView: FunctionComponent<Props> = (props: Props) => {
     })
   }
   function onPressAddSongs() {
-    props.navigation.navigate(ROUTES.PlaylistAddSongs, { id })
+    props.navigation.navigate('PlaylistAddSongs', { id })
   }
   function onPressEditPlaylist() {
-    props.navigation.navigate(ROUTES.PlaylistEdit, { id })
+    props.navigation.navigate('PlaylistEdit', { id })
   }
 
   useFocusEffect(
