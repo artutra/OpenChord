@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback } from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList, StatusBar } from "react-native";
 import { Artist } from '../db'
 import ListItem from "../components/ListItem";
 import { removeArtist } from "../utils/removeArtist";
@@ -70,6 +70,7 @@ const ArtistList = (props: Props) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar barStyle='dark-content' backgroundColor='white' />
       <CustomHeader title={t('artists')} />
       <TextInputModal
         error={error}

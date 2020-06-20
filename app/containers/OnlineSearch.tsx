@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent, useRef, useContext } from "react";
-import { StyleSheet, TextInput, Text, Keyboard } from "react-native";
+import { StyleSheet, TextInput, Text, Keyboard, StatusBar } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import ListItem from "../components/ListItem";
 import { services, getService } from "../services";
@@ -67,6 +67,7 @@ const OnlineSearch: FunctionComponent<Props> = (props) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle='dark-content' backgroundColor='white' />
       <SearchBar
         inputRef={searchInput}
         onSubmitEditing={makeSearch}

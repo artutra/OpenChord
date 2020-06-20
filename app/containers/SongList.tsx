@@ -3,7 +3,7 @@ import { Song } from '../db'
 import ListItem from "../components/ListItem";
 import TouchableIcon from "../components/TouchableIcon";
 import { removeSong } from "../utils/removeSong";
-import { FlatList } from "react-native";
+import { FlatList, StatusBar } from "react-native";
 import SearchBar from "../components/SearchBar";
 import EmptyListMessage from "../components/EmptyListMessage";
 import { MainTabParamList, RootStackParamList } from "../AppNavigation";
@@ -66,6 +66,7 @@ const SongList: FunctionComponent<Props> = (props: Props) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar barStyle='dark-content' backgroundColor='white' />
       <CustomHeader
         title={t('songs')}
         headerRight={<TouchableIcon onPress={addNewSong} name="plus" />}
