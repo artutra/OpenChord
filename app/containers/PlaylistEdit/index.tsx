@@ -1,25 +1,28 @@
-import React, { useState, useEffect, FunctionComponent, useContext } from "react";
+import React, { useState, FunctionComponent, useContext } from "react";
 import { Text, View, TextInput, StyleSheet, Alert } from "react-native";
-import { NavigationScreenProp, NavigationScreenComponent } from "react-navigation"
 import { Playlist } from "../../db/Playlist";
 import DraggableFlatList, { RenderItemInfo } from 'react-native-draggable-flatlist'
 import TouchableIcon from "../../components/TouchableIcon";
 import { Song } from "../../db";
-import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
-import { Header } from "react-navigation-stack";
 import ErrorText from "../../components/ErrorText";
 import DraggableItem from "./compoents/DraggableItem";
 import LanguageContext from "../../languages/LanguageContext";
+import { RootStackParamList } from "../../AppNavigation";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-interface Props {
-  navigation: NavigationScreenProp<any, { id: string, title: string }>
-  isFocused: boolean
+type PlaylistEditScreenRouteProp = RouteProp<RootStackParamList, 'PlaylistEdit'>
+type PlaylistEditScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'PlaylistEdit'
+>
+type Props = {
+  route: PlaylistEditScreenRouteProp
+  navigation: PlaylistEditScreenNavigationProp
 }
-const PlaylistEdit: FunctionComponent<Props> & NavigationScreenComponent<
-  NavigationStackOptions,
-  NavigationStackProp
-> = (props: Props) => {
-  let id = props.navigation.getParam('id')
+const HEADER_HEIGHT = 60
+const PlaylistEdit: FunctionComponent<Props> = (props: Props) => {
+  let id = props.route.params.id
   let playlist = Playlist.getById(id)!
   const [name, setName] = useState(playlist.name)
   const [songs, setSongs] = useState(Array.from(playlist.songs))
@@ -83,11 +86,6 @@ const PlaylistEdit: FunctionComponent<Props> & NavigationScreenComponent<
     </View>
   )
 }
-PlaylistEdit.navigationOptions = ({ navigation }) => ({
-  title: navigation.getParam('title'),
-  headerTransparent: true,
-  headerLeft: null
-});
 
 export default PlaylistEdit
 
@@ -115,7 +113,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: Header.HEIGHT
+    height: HEADER_HEIGHT
   },
   item: {
     flexDirection: 'row',
