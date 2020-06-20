@@ -1,18 +1,26 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { Text, FlatList, View, Button, TextInput, StyleSheet } from "react-native";
-import { NavigationScreenProp } from "react-navigation"
-import { Song, Artist } from "../db";
+import { FlatList, View, TextInput, StyleSheet } from "react-native";
+import { Song } from "../db";
 import ListItem from "../components/ListItem";
 import { Playlist } from "../db/Playlist";
-import { ROUTES } from "../AppNavigation";
+import { RootStackParamList } from "../AppNavigation";
 import SearchBar from "../components/SearchBar";
 import LanguageContext from "../languages/LanguageContext";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
 
-interface Props {
-  navigation: NavigationScreenProp<any, { id: string, title: string }>
+type PlaylistAddSongsScreenRouteProp = RouteProp<RootStackParamList, 'PlaylistAddSongs'>
+type PlaylistAddSongsScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'PlaylistAddSongs'
+>
+type Props = {
+  route: PlaylistAddSongsScreenRouteProp
+  navigation: PlaylistAddSongsScreenNavigationProp
 }
 const PlaylistAddSongs = (props: Props) => {
-  const id = props.navigation.getParam('id')
+  const { route } = props
+  const id = route.params.id
   const [playlist] = useState(Playlist.getById(id)!)
   const [songs, setSongs] = useState(Song.getAll())
   const [query, setQuery] = useState('')
@@ -56,7 +64,6 @@ const PlaylistAddSongs = (props: Props) => {
         }}
       />
     </View>
-
   );
 }
 const styles = StyleSheet.create({
