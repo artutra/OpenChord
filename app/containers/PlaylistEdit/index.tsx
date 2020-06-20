@@ -10,6 +10,7 @@ import LanguageContext from "../../languages/LanguageContext";
 import { RootStackParamList } from "../../AppNavigation";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type PlaylistEditScreenRouteProp = RouteProp<RootStackParamList, 'PlaylistEdit'>
 type PlaylistEditScreenNavigationProp = StackNavigationProp<
@@ -61,7 +62,7 @@ const PlaylistEdit: FunctionComponent<Props> = (props: Props) => {
     )
   }
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.header}>
         <TouchableIcon name="close" onPress={onPressCancel} />
         <Text style={styles.headerTitle}>{t('playlist_edit')}</Text>
@@ -83,7 +84,7 @@ const PlaylistEdit: FunctionComponent<Props> = (props: Props) => {
         scrollPercent={5}
         onMoveEnd={({ data }) => { if (data != null) setSongs(Array.from(data)) }}
       />
-    </View>
+    </SafeAreaView>
   )
 }
 

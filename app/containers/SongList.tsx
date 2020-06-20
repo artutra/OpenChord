@@ -12,6 +12,7 @@ import { CompositeNavigationProp, useFocusEffect } from "@react-navigation/nativ
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { StackNavigationProp } from "@react-navigation/stack";
 import CustomHeader from "../components/CustomHeader";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type SongListScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabParamList, 'SongList'>,
@@ -64,7 +65,7 @@ const SongList: FunctionComponent<Props> = (props: Props) => {
   )
 
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }}>
       <CustomHeader
         title={t('songs')}
         headerRight={<TouchableIcon onPress={addNewSong} name="plus" />}
@@ -100,7 +101,7 @@ const SongList: FunctionComponent<Props> = (props: Props) => {
           )
         }}
       />
-    </>
+    </SafeAreaView>
   )
 }
 

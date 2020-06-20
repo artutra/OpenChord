@@ -11,6 +11,7 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { CompositeNavigationProp, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import CustomHeader from "../components/CustomHeader";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type ArtistListScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabParamList, 'ArtistList'>,
@@ -68,7 +69,7 @@ const ArtistList = (props: Props) => {
   )
 
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }}>
       <CustomHeader title={t('artists')} />
       <TextInputModal
         error={error}
@@ -104,7 +105,7 @@ const ArtistList = (props: Props) => {
           )
         }}
       />
-    </>
+    </SafeAreaView>
   );
 }
 

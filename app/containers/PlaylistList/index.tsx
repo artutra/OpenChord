@@ -15,6 +15,7 @@ import { CompositeNavigationProp, useFocusEffect } from "@react-navigation/nativ
 import { StackNavigationProp } from "@react-navigation/stack";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import CustomHeader from "../../components/CustomHeader";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type PlaylistListScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabParamList, 'PlaylistList'>,
@@ -72,7 +73,7 @@ const PlaylistList: FunctionComponent<Props> = (props: Props) => {
   }
 
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }}>
       <CustomHeader
         title={t('playlists')}
         headerRight={<TouchableIcon onPress={() => setShowAddPlaylistModal(true)} name="plus" />}
@@ -111,7 +112,7 @@ const PlaylistList: FunctionComponent<Props> = (props: Props) => {
           )
         }}
       />
-    </>
+    </SafeAreaView>
   )
 }
 
