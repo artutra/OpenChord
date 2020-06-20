@@ -1,7 +1,6 @@
 import React, { useContext } from 'react'
-import { Component } from 'react';
-import { createBottomTabNavigator } from 'react-navigation-tabs'
-import { createStackNavigator } from 'react-navigation-stack'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createStackNavigator } from '@react-navigation/stack';
 import ArtistList from "./containers/ArtistList";
 import ArtistView from './containers/ArtistView';
 import SongView from './containers/SongView';
@@ -17,137 +16,105 @@ import PlaylistAddSongs from './containers/PlaylistAddSongs';
 import PlaylistEdit from './containers/PlaylistEdit';
 import Settings from './containers/Settings';
 import FontSizeSelect from './containers/Settings/FontSizeSelect';
-import StackHeaderTitle from './navigation/StackHeaderTitle';
-import TabBarLabel from './navigation/TabBarLabel';
+import LanguageContext from './languages/LanguageContext';
 
-interface TabBarIconProps {
-  focused: boolean
-  horizontal: boolean
-  tintColor: string
+export type SettingsStackParamList = {
+  Settings: undefined;
+  FontSizeSelect: undefined;
+};
+const SettingsStack = createStackNavigator<SettingsStackParamList>();
+const SettingsTab = () => (
+  <SettingsStack.Navigator>
+    <SettingsStack.Screen name="Settings" component={Settings} />
+    <SettingsStack.Screen name="FontSizeSelect" component={FontSizeSelect} />
+  </SettingsStack.Navigator>
+)
+export type MainTabParamList = {
+  PlaylistList: undefined
+  ArtistList: undefined
+  SongList: undefined
+  OnlineSearch: undefined
+  Settings: undefined
+}
+const Tab = createBottomTabNavigator<MainTabParamList>();
+const MainTab = () => {
+  const { t } = useContext(LanguageContext)
+  return (
+    <Tab.Navigator tabBarOptions={{ activeTintColor: 'tomato' }}>
+      <Tab.Screen
+        name="PlaylistList"
+        options={{ title: t('playlists'), tabBarIcon: (props) => <TabBarIcon {...props} name="playlist-music" /> }}
+        component={PlaylistList} />
+      <Tab.Screen
+        name="ArtistList"
+        options={{ title: t('artists'), tabBarIcon: (props) => <TabBarIcon {...props} name="artist" /> }}
+        component={ArtistList} />
+      <Tab.Screen
+        name="SongList"
+        options={{ title: t('songs'), tabBarIcon: (props) => <TabBarIcon {...props} name="format-list-bulleted-square" /> }}
+        component={SongList}
+      />
+      <Tab.Screen
+        name="OnlineSearch"
+        options={{ title: t('online_search'), tabBarIcon: (props) => <TabBarIcon {...props} name="magnify" /> }}
+        component={OnlineSearch} />
+      <Tab.Screen
+        name="Settings"
+        options={{ title: t('settings'), tabBarIcon: (props) => <TabBarIcon {...props} name="settings" /> }}
+        component={SettingsTab} />
+    </Tab.Navigator>
+  )
 }
 
-export enum ROUTES {
-  ArtistList = 'ArtistList',
-  ArtistView = 'ArtistView',
-  OnlineArtistView = 'OnlineArtistView',
-  OnlineSearch = 'OnlineSearch',
-  SongEdit = 'SongEdit',
-  SongList = 'SongList',
-  SongPreview = 'SongPreview',
-  SongView = 'SongView',
-  PlaylistView = 'PlaylistView',
-  PlaylistList = 'PlaylistList',
-  PlaylistAddSongs = 'PlaylistAddSongs',
-  PlaylistEdit = 'PlaylistEdit',
-  Settings = 'Settings',
-  FontSizeSelect = 'FontSizeSelect'
+export type RootStackParamList = {
+  MainTab: undefined
+  OnlineArtistView: { serviceName: string, path: string, title: string }
+  SongPreview: { serviceName: string, path: string }
+  ArtistView: { id: string, title: string }
+  SongView: { id: string, title: string }
+  SongEdit: { id: string }
+  PlaylistView: { id: string, title: string }
+  PlaylistAddSongs: { id: string }
+  PlaylistEdit: { id: string }
 }
-
-const AppNavigation = createBottomTabNavigator({
-  PlaylistList: {
-    screen: createStackNavigator({
-      PlaylistList: {
-        screen: PlaylistList,
-        navigationOptions: { headerTitle: <StackHeaderTitle text="playlists" /> }
-      },
-      PlaylistView,
-      SongView,
-      SongEdit,
-      PlaylistAddSongs: {
-        screen: PlaylistAddSongs,
-        navigationOptions: { headerTitle: <StackHeaderTitle text="add_songs" /> }
-      },
-      PlaylistEdit
-    }),
-    navigationOptions: ({ navigation }) => ({
-      tabBarLabel: <TabBarLabel text="playlists" />,
-      tabBarVisible: navigation.state.index <= 0,
-      tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="playlist-music" />
-    })
-  },
-  ArtistList: {
-    screen: createStackNavigator({
-      ArtistList: {
-        screen: ArtistList,
-        navigationOptions: {
-          headerTitle: <StackHeaderTitle text="artists" />
-        }
-      },
-      ArtistView,
-      SongView,
-      SongEdit,
-    }),
-    navigationOptions: ({ navigation }) => ({
-      tabBarLabel: <TabBarLabel text="artists" />,
-      tabBarVisible: navigation.state.index <= 0,
-      tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="artist" />
-    })
-  },
-  SongList: {
-    screen: createStackNavigator({
-      SongList: {
-        screen: SongList,
-        navigationOptions: {
-          headerTitle: <StackHeaderTitle text="songs" />
-        }
-      },
-      ArtistView,
-      SongView,
-      SongEdit,
-    }),
-    navigationOptions: ({ navigation }) => ({
-      tabBarLabel: <TabBarLabel text="songs" />,
-      tabBarVisible: navigation.state.index <= 0,
-      tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="format-list-bulleted-square" />
-    })
-  },
-  OnlineSearch: {
-    screen: createStackNavigator({
-      OnlineSearch: {
-        screen: OnlineSearch,
-        navigationOptions: {
-          header: null
-        }
-      },
-      SongPreview: {
-        screen: SongPreview,
-        navigationOptions: {
-          headerTitle: <StackHeaderTitle text="preview" />
-        }
-      },
-      OnlineArtistView,
-      SongView
-    }),
-    navigationOptions: ({ navigation }) => ({
-      tabBarLabel: <TabBarLabel text="online_search" />,
-      tabBarVisible: navigation.state.index <= 0,
-      tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="magnify" />
-    })
-  },
-  Settings: {
-    screen: createStackNavigator({
-      Settings: {
-        screen: Settings,
-        navigationOptions: { header: null }
-      },
-      FontSizeSelect: {
-        screen: FontSizeSelect,
-        navigationOptions: {
-          headerTitle: <StackHeaderTitle text="text_size" />
-        }
-      }
-    }),
-    navigationOptions: ({ navigation }) => ({
-      tabBarLabel: <TabBarLabel text="settings" />,
-      tabBarIcon: (props: TabBarIconProps) => <TabBarIcon {...props} name="settings" />
-    })
-  },
-}, {
-  tabBarOptions: {
-    activeTintColor: 'tomato',
-    inactiveTintColor: 'gray',
-  },
-  initialRouteName: ROUTES.SongList
-})
-
+const RootStack = createStackNavigator<RootStackParamList>()
+const AppNavigation = () => {
+  const { t } = useContext(LanguageContext)
+  return (
+    <RootStack.Navigator>
+      <RootStack.Screen name="MainTab" component={MainTab} options={{ headerShown: false }} />
+      <RootStack.Screen
+        name="OnlineArtistView"
+        component={OnlineArtistView}
+        options={({ route }) => ({ title: route.params.title })} />
+      <RootStack.Screen
+        name="SongPreview"
+        component={SongPreview}
+        options={{ title: t('preview') }} />
+      <RootStack.Screen
+        name="ArtistView"
+        component={ArtistView}
+        options={({ route }) => ({ title: route.params.title })} />
+      <RootStack.Screen
+        name="SongView"
+        component={SongView}
+        options={({ route }) => ({ title: route.params.title })} />
+      <RootStack.Screen
+        name="SongEdit"
+        component={SongEdit} />
+      <RootStack.Screen
+        name="PlaylistView"
+        component={PlaylistView}
+        options={({ route }) => ({ title: route.params.title })} />
+      <RootStack.Screen
+        name="PlaylistAddSongs"
+        component={PlaylistAddSongs}
+        options={{ title: t('add_songs') }} />
+      <RootStack.Screen
+        name="PlaylistEdit"
+        component={PlaylistEdit}
+        options={{ headerShown: false }} />
+    </RootStack.Navigator>
+  )
+}
 export default AppNavigation;
