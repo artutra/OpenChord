@@ -1,11 +1,10 @@
 import React, { useState, FC, useContext } from "react";
-import { Text, View, TouchableOpacity, StyleSheet, FlatList, StyleProp, ViewStyle, Dimensions, ScrollView } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { Playlist } from "../../../db/Playlist";
 import ListItem from "../../../components/ListItem";
 import { Song } from "../../../db";
 import TextInputModal from "../../../components/TextInputModal";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { Header } from "react-navigation-stack";
 import { useDimensions } from "../../../utils/useDimensions";
 import LanguageContext from "../../../languages/LanguageContext";
 
@@ -14,6 +13,7 @@ interface Props {
   songId: string
   onPressClose: () => void
 }
+const HEADER_HEIGHT = 30
 const SelectPlaylist: FC<Props> = ({ show, songId, onPressClose }) => {
   const [playlists, setPlaylists] = useState(Playlist.getAll())
   const [song] = useState(Song.getById(songId)!)
@@ -67,9 +67,8 @@ const SelectPlaylist: FC<Props> = ({ show, songId, onPressClose }) => {
         placeholder={t('playlist_name')}
       />
     )
-
-  let scrollHeaderHeight = windowHeight * .6 - Header.HEIGHT
-  let listContainerHeight = windowHeight - scrollHeaderHeight - Header.HEIGHT
+  let scrollHeaderHeight = windowHeight * .6 - HEADER_HEIGHT
+  let listContainerHeight = windowHeight - scrollHeaderHeight - HEADER_HEIGHT
   return (
     <ScrollView style={styles.scrollContainer}>
       <View style={[styles.scrollHeader, { height: scrollHeaderHeight }]}>
