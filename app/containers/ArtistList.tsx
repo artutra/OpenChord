@@ -1,18 +1,25 @@
-import React, { useState, useEffect, useContext } from "react";
-import { View, StyleSheet } from "react-native";
-import { NavigationScreenProp } from "react-navigation"
-import { FlatList } from "react-native-gesture-handler";
+import React, { useState, useContext, useCallback } from "react";
+import { View, StyleSheet, FlatList } from "react-native";
 import { Artist } from '../db'
 import ListItem from "../components/ListItem";
 import { removeArtist } from "../utils/removeArtist";
 import TextInputModal from "../components/TextInputModal";
 import EmptyListMessage from "../components/EmptyListMessage";
-import { ROUTES } from "../AppNavigation";
+import { RootStackParamList, MainTabParamList } from "../AppNavigation";
 import LanguageContext from "../languages/LanguageContext";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { CompositeNavigationProp, useFocusEffect } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-interface Props {
-  navigation: NavigationScreenProp<any, any>
+type ArtistListScreenNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<MainTabParamList, 'ArtistList'>,
+  StackNavigationProp<RootStackParamList, 'MainTab'>
+>;
+
+type Props = {
+  navigation: ArtistListScreenNavigationProp;
 }
+
 const ArtistList = (props: Props) => {
   const [artists, setArtists] = useState(Artist.getAll())
   const [error, setError] = useState<string | null>(null)
@@ -53,15 +60,11 @@ const ArtistList = (props: Props) => {
     }
   }
 
-  useEffect(() => {
-    const didBlurSubscription = props.navigation.addListener(
-      'didFocus',
-      payload => {
-        setArtists(Artist.getAll())
-      }
-    )
-    return () => didBlurSubscription.remove()
-  }, [artists])
+  useFocusEffect(
+    useCallback(() => {
+      setArtists(Artist.getAll())
+    }, [])
+  )
 
   return (
     <View style={styles.container}>
@@ -82,7 +85,7 @@ const ArtistList = (props: Props) => {
         ListEmptyComponent={
           <EmptyListMessage
             message={t('you_havent_downloaded_any_song_yet')}
-            onPress={() => { props.navigation.navigate(ROUTES.OnlineSearch) }}
+            onPress={() => { props.navigation.navigate('OnlineSearch') }}
             buttonTitle={t('go_to_online_search').toUpperCase()}
           />
         }
