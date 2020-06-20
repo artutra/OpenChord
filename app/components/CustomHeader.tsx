@@ -3,7 +3,7 @@ import { Text, StyleSheet, View } from "react-native";
 
 interface Props {
   title: string
-  headerRight: ReactNode
+  headerRight?: ReactNode
 }
 const CustomHeader: FunctionComponent<Props> = ({ title, headerRight }) => (
   <View style={styles.container}>

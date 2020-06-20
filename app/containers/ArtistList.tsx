@@ -10,6 +10,7 @@ import LanguageContext from "../languages/LanguageContext";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { CompositeNavigationProp, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import CustomHeader from "../components/CustomHeader";
 
 type ArtistListScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabParamList, 'ArtistList'>,
@@ -67,7 +68,8 @@ const ArtistList = (props: Props) => {
   )
 
   return (
-    <View style={styles.container}>
+    <>
+      <CustomHeader title={t('artists')} />
       <TextInputModal
         error={error}
         value={artistEditName}
@@ -102,13 +104,8 @@ const ArtistList = (props: Props) => {
           )
         }}
       />
-    </View>
+    </>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-})
 export default ArtistList
