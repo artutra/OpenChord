@@ -35,7 +35,7 @@ const SongEdit: FunctionComponent<Props> = (props) => {
     return text
   }
   useEffect(() => {
-    let id = props.route.params.id
+    let id = props.route.params?.id
     if (id != null) {
       let song = Song.getById(id)!
       setTitle(song.title)
@@ -56,7 +56,7 @@ const SongEdit: FunctionComponent<Props> = (props) => {
       let chordSheetSong = new ChordSheetJS.ChordSheetParser({ preserveWhitespace: false }).parse(content)
       chordPro = formatter.format(chordSheetSong)
     }
-    let songId = props.route.params.id
+    let songId = props.route.params?.id
     let artistDb: Artist | undefined = Artist.getByName(artistName)
     if (artistDb == null) {
       artistDb = Artist.create(artistName)

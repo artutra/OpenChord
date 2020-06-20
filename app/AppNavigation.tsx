@@ -72,7 +72,7 @@ export type RootStackParamList = {
   SongPreview: { serviceName: string, path: string }
   ArtistView: { id: string, title: string }
   SongView: { id: string, title: string }
-  SongEdit: { id: string }
+  SongEdit: undefined | { id: string }
   PlaylistView: { id: string, title: string }
   PlaylistAddSongs: { id: string }
   PlaylistEdit: { id: string }
