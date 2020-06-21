@@ -14,7 +14,7 @@ const SearchBar: FunctionComponent<SearchBarProps> = (props) => {
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
-        <Icon name="magnify" size={20} color="#aaa" />
+        <Icon name="magnify" size={24} color="#aaa" />
         <TextInput
           ref={props.inputRef}
           style={styles.searchText}
@@ -35,7 +35,8 @@ export default SearchBar
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10
+    padding: 10,
+    backgroundColor: 'white',
   },
   inputContainer: {
     flexDirection: 'row',
@@ -46,7 +47,8 @@ const styles = StyleSheet.create({
   },
   searchText: {
     flex: 1,
-    padding: 5,
-    fontSize: 14
+    paddingVertical: 8,
+    paddingLeft: 8,
+    fontSize: 18
   }
 });
