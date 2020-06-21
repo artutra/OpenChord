@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { StyleSheet, Modal, TouchableOpacity, ScrollView } from "react-native";
 import { useDimensions } from "../../../utils/useDimensions";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface Props {
   isOpen: boolean
@@ -16,9 +17,11 @@ const SideMenu: FC<Props> = ({ isOpen, onDismiss, children }) => {
   return (
     <Modal transparent onDismiss={onDismiss}  >
       <TouchableOpacity style={styles.backgroundOverlayer} onPress={onDismiss} />
-      <ScrollView style={[styles.fixed, heightStyle]} contentContainerStyle={[styles.card]}>
-        {children}
-      </ScrollView>
+      <SafeAreaView style={[styles.fixed, heightStyle]}>
+        <ScrollView contentContainerStyle={[styles.card]}>
+          {children}
+        </ScrollView>
+      </SafeAreaView>
     </Modal>
   )
 }
