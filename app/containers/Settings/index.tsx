@@ -93,8 +93,9 @@ const Settings: FC<Props> = (props) => {
     if (loading) return
     setLoading(true)
     try {
+      const iosAllFileTypes: any = 'public.item'
       const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles],
+        type: [DocumentPicker.types.allFiles, iosAllFileTypes],
       });
       let success = await RNFS.readFile(res.uri, 'utf8')
       let bundle = await decodeJsonBundle(success)
