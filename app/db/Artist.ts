@@ -46,7 +46,7 @@ export class Artist {
       artist = realm.create<Artist>('Artist', {
         id: uuid(),
         name,
-        updated_at: new Date()
+        updated_at: new Date().toJSON()
       })
     })
     return artist!

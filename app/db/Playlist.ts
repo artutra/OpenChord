@@ -52,7 +52,7 @@ export class Playlist {
       playlist = realm.create<Playlist>('Playlist', {
         id: uuid(),
         name,
-        updated_at: new Date()
+        updated_at: new Date().toJSON()
       })
     })
     return playlist!
