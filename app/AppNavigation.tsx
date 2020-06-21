@@ -23,12 +23,15 @@ export type SettingsStackParamList = {
   FontSizeSelect: undefined;
 };
 const SettingsStack = createStackNavigator<SettingsStackParamList>();
-const SettingsTab = () => (
-  <SettingsStack.Navigator>
-    <SettingsStack.Screen name="Settings" component={Settings} />
-    <SettingsStack.Screen name="FontSizeSelect" component={FontSizeSelect} />
-  </SettingsStack.Navigator>
-)
+const SettingsTab = () => {
+  const { t } = useContext(LanguageContext)
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen name="Settings" options={{ title: t('settings') }} component={Settings} />
+      <SettingsStack.Screen name="FontSizeSelect" options={{ title: t('text_size') }} component={FontSizeSelect} />
+    </SettingsStack.Navigator>
+  )
+}
 export type MainTabParamList = {
   PlaylistList: undefined
   ArtistList: undefined

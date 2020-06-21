@@ -24,7 +24,7 @@ const FontSizeSelect: FC = () => {
   }
 
   return (
-    <View style={styles.f1}>
+    <View style={[styles.f1, styles.bgWhite]}>
       <View style={styles.sliderContainer}>
         <Slider
           style={styles.f1}
@@ -53,6 +53,9 @@ const FontSizeSelect: FC = () => {
   )
 }
 const styles = StyleSheet.create({
+  bgWhite: {
+    backgroundColor: 'white'
+  },
   sliderContainer: {
     paddingBottom: 24,
     paddingTop: 24,
