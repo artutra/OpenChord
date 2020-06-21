@@ -29,7 +29,7 @@ const TextInputModal: FunctionComponent<TextInputModalProps> = (props) => {
   const textInput = useRef<TextInput>(null)
   useEffect(() => {
     if (enabled && textInput.current) {
-      textInput.current.focus()
+      setTimeout(() => textInput.current?.focus(), 100)
     }
   }, [enabled])
   function onChangeText(value: string) {
@@ -41,14 +41,14 @@ const TextInputModal: FunctionComponent<TextInputModalProps> = (props) => {
 
   return (
     <Modal transparent onDismiss={onDismiss}>
-      <KeyboardAvoidingView behavior='height' style={styles.backgroundOverlayer}>
+      <View style={styles.container}>
         <TouchableOpacity style={styles.outsideContainer} onPress={onDismiss} />
-        <View style={styles.container}>
+        <KeyboardAvoidingView behavior='height' contentContainerStyle={styles.backgroundOverlayer}>
           <TextInput style={styles.input} ref={textInput} placeholder={placeholder} onChangeText={onChangeText} value={props.value} />
           <ErrorText>{error}</ErrorText>
-          <PrimaryButton onPress={() => onSubmit(value)} title={submitButtonTitle} />
-        </View>
-      </KeyboardAvoidingView>
+          <PrimaryButton style={styles.button} onPress={() => onSubmit(value)} title={submitButtonTitle} />
+        </KeyboardAvoidingView>
+      </View>
     </Modal>
   );
 }
@@ -64,19 +64,17 @@ const styles = StyleSheet.create({
     flex: 1
   },
   container: {
-    backgroundColor: 'white'
-  },
-  optionItem: {
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  optionTitle: {
-    paddingVertical: 20,
-    fontSize: 18
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: '#00000040'
   },
   input: {
     fontSize: 24,
+    backgroundColor: 'white',
     paddingVertical: 16,
     paddingLeft: 8
+  },
+  button: {
+    paddingVertical: 16
   }
 });
