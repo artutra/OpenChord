@@ -63,6 +63,8 @@ export const sentences = [
   'developed_by',
   'home',
   'online_search_not_available',
+  'transpose',
+  'add_to_playlist',
 ] as const;
 export type SentenceID = typeof sentences[number];
 export type LanguageID = typeof languages[number];
@@ -105,9 +107,9 @@ const translations: Languages = {
     invalid_title: 'Invalid Title',
     song_title: 'Song Title',
     auto_scroll: 'Auto Scroll',
-    page_turner: 'Page Turner',
+    page_turner: 'Page-Turner',
     playlists_not_found: 'Playlists not found',
-    show_tabs: 'Show Tabs',
+    show_tabs: 'Show Tablature',
     close: 'Close',
     info: 'Info',
     playlist_saved: 'Playlist saved',
@@ -134,6 +136,8 @@ const translations: Languages = {
     developed_by: 'Developed by',
     home: 'Home',
     online_search_not_available: 'Sorry, ONLINE SEARCH is not available for IOS yet',
+    transpose: 'Transpose',
+    add_to_playlist: 'Add to playlist',
   },
   pt_br: {
     language_name: "Português (Brasil)",
@@ -170,7 +174,7 @@ const translations: Languages = {
     invalid_content: 'Conteúdo inválido',
     song_title: 'Título da Música',
     auto_scroll: 'Rolagem automática',
-    page_turner: 'Passador de páginas',
+    page_turner: 'Passa-páginas',
     playlists_not_found: 'Playlists não encontradas',
     show_tabs: 'Mostrar tablaturas',
     close: 'Fechar',
@@ -199,6 +203,8 @@ const translations: Languages = {
     developed_by: 'Desenvolvido por',
     home: 'Início',
     online_search_not_available: 'Desculpe, a BUSCA ONLINE ainda não está disponivel para IOS',
+    transpose: 'Mudar tom',
+    add_to_playlist: 'Adicionar a playlist'
   }
 }
 export default translations
