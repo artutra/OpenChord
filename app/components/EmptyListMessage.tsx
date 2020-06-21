@@ -24,8 +24,10 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   message: {
+    paddingHorizontal: 30,
     paddingBottom: 20,
-    fontSize: 18
+    fontSize: 18,
+    textAlign: 'center',
   }
 })
 export default EmptyListMessage

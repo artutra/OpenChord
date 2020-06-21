@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent, useRef, useContext } from "react";
-import { StyleSheet, TextInput, Text, Keyboard, StatusBar } from "react-native";
+import { StyleSheet, TextInput, Text, Keyboard, StatusBar, Platform } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import ListItem from "../components/ListItem";
 import { services, getService } from "../services";
@@ -12,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { RootStackParamList, MainTabParamList } from "../AppNavigation";
+import EmptyListMessage from "../components/EmptyListMessage";
 
 type OnlineSearchScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabParamList, 'OnlineSearch'>,
@@ -65,6 +66,15 @@ const OnlineSearch: FunctionComponent<Props> = (props) => {
     return () => Keyboard.removeListener('keyboardDidShow', hideTabBar)
   }, [])
 
+  if (Platform.OS === 'ios') {
+    return (
+      <SafeAreaView style={styles.container}>
+        <EmptyListMessage
+          message={t('online_search_not_available')}
+        />
+      </SafeAreaView>
+    )
+  }
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle='dark-content' backgroundColor='white' />
