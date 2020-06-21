@@ -2,7 +2,6 @@ import React, { useState, useContext, useCallback } from "react";
 import { View, StyleSheet, FlatList, StatusBar } from "react-native";
 import { Artist } from '../db'
 import ListItem from "../components/ListItem";
-import { removeArtist } from "../utils/removeArtist";
 import TextInputModal from "../components/TextInputModal";
 import EmptyListMessage from "../components/EmptyListMessage";
 import { RootStackParamList, MainTabParamList } from "../AppNavigation";
@@ -12,6 +11,7 @@ import { CompositeNavigationProp, useFocusEffect } from "@react-navigation/nativ
 import { StackNavigationProp } from "@react-navigation/stack";
 import CustomHeader from "../components/CustomHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { alertDelete } from "../utils/alertDelete";
 
 type ArtistListScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabParamList, 'ArtistList'>,
@@ -34,7 +34,7 @@ const ArtistList = (props: Props) => {
     props.navigation.navigate('ArtistView', { id, title: name })
   }
   function onPressDeleteArtist(id: string) {
-    removeArtist(id, () => {
+    alertDelete('artist', id, () => {
       setArtists(Artist.getAll())
     })
   }

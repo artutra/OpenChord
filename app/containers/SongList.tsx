@@ -2,7 +2,6 @@ import React, { useState, useEffect, FunctionComponent, useContext, useCallback 
 import { Song } from '../db'
 import ListItem from "../components/ListItem";
 import TouchableIcon from "../components/TouchableIcon";
-import { removeSong } from "../utils/removeSong";
 import { FlatList, StatusBar } from "react-native";
 import SearchBar from "../components/SearchBar";
 import EmptyListMessage from "../components/EmptyListMessage";
@@ -41,7 +40,7 @@ const SongList: FunctionComponent<Props> = (props: Props) => {
     props.navigation.navigate('ArtistView', { id: artist.id, title: artist.name })
   }
   function onPressDeleteSong(id: string) {
-    removeSong(id, () => {
+    alertDelete('song', id, () => {
       setSongs(Song.getAll())
     })
   }

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, FunctionComponent, useContext, useLayoutEffect, useCallback } from "react";
 import { FlatList, View, TouchableOpacity, Text } from "react-native";
 import ListItem, { LeftIconOptions } from "../components/ListItem";
-import { removeSong } from "../utils/removeSong";
 import { Playlist, SortBy } from "../db/Playlist";
 import { RootStackParamList } from "../AppNavigation";
 import TouchableIcon from "../components/TouchableIcon";
@@ -14,6 +13,7 @@ import { Song } from "../db";
 import { List, Results } from "realm";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp, useFocusEffect } from "@react-navigation/native";
+import { alertDelete } from "../utils/alertDelete";
 
 type PlaylistViewScreenRouteProp = RouteProp<RootStackParamList, 'PlaylistView'>;
 type PlaylistViewScreenNavigationProp = StackNavigationProp<
@@ -45,7 +45,7 @@ const PlaylistView: FunctionComponent<Props> = (props: Props) => {
     props.navigation.navigate('SongEdit', { id })
   }
   function onPressDeleteSong(songId: string) {
-    removeSong(songId, () => {
+    alertDelete('song', songId, () => {
       let playlist = Playlist.getById(id)!
       setSongs(playlist.songs)
     })

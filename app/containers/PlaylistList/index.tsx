@@ -4,7 +4,6 @@ import ListItem from "../../components/ListItem";
 import { Playlist } from "../../db/Playlist";
 import { MainTabParamList, RootStackParamList } from "../../AppNavigation";
 import TouchableIcon from "../../components/TouchableIcon";
-import { removePlaylist } from "../../utils/removePlaylist";
 import EmptyListMessage from "../../components/EmptyListMessage";
 import TextInputModal from "../../components/TextInputModal";
 import { createBundle } from "../../db/bundler";
@@ -16,6 +15,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import CustomHeader from "../../components/CustomHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { alertDelete } from "../../utils/alertDelete";
 
 type PlaylistListScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabParamList, 'PlaylistList'>,
@@ -34,7 +34,7 @@ const PlaylistList: FunctionComponent<Props> = (props: Props) => {
     props.navigation.navigate('PlaylistView', { id, title: name })
   }
   function onPressDeletePlaylist(id: string) {
-    removePlaylist(id, () => {
+    alertDelete('playlist', id, () => {
       setPlaylists(Playlist.getAll())
     })
   }
