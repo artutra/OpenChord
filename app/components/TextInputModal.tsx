@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useRef, useEffect } from "react";
-import { Text, View, TouchableOpacity, StyleSheet, Modal, Button, TextInput } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, Modal, Button, TextInput, KeyboardAvoidingView, Platform } from "react-native";
 import ErrorText from "./ErrorText";
 import PrimaryButton from "./PrimaryButton";
 
@@ -29,7 +29,7 @@ const TextInputModal: FunctionComponent<TextInputModalProps> = (props) => {
   const textInput = useRef<TextInput>(null)
   useEffect(() => {
     if (enabled && textInput.current) {
-      textInput.current.focus()
+      setTimeout(() => textInput.current?.focus(), 100)
     }
   }, [enabled])
   function onChangeText(value: string) {
@@ -41,13 +41,13 @@ const TextInputModal: FunctionComponent<TextInputModalProps> = (props) => {
 
   return (
     <Modal transparent onDismiss={onDismiss}>
-      <View style={styles.backgroundOverlayer}>
+      <View style={styles.container}>
         <TouchableOpacity style={styles.outsideContainer} onPress={onDismiss} />
-        <View style={styles.container}>
-          <TextInput ref={textInput} placeholder={placeholder} onChangeText={onChangeText} value={props.value} />
+        <KeyboardAvoidingView behavior={Platform.OS === 'android' ? 'height' : 'padding'} contentContainerStyle={styles.backgroundOverlayer}>
+          <TextInput style={styles.input} ref={textInput} placeholder={placeholder} onChangeText={onChangeText} value={props.value} />
           <ErrorText>{error}</ErrorText>
-          <PrimaryButton onPress={() => onSubmit(value)} title={submitButtonTitle} />
-        </View>
+          <PrimaryButton style={styles.button} onPress={() => onSubmit(value)} title={submitButtonTitle} />
+        </KeyboardAvoidingView>
       </View>
     </Modal>
   );
@@ -64,14 +64,17 @@ const styles = StyleSheet.create({
     flex: 1
   },
   container: {
-    backgroundColor: 'white'
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: '#00000040'
   },
-  optionItem: {
-    justifyContent: 'center',
-    alignItems: 'center'
+  input: {
+    fontSize: 24,
+    backgroundColor: 'white',
+    paddingVertical: 16,
+    paddingLeft: 8
   },
-  optionTitle: {
-    paddingVertical: 20,
-    fontSize: 18
+  button: {
+    paddingVertical: 16
   }
 });
