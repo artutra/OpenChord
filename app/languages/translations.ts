@@ -62,6 +62,7 @@ export const sentences = [
   'custom_sort',
   'developed_by',
   'home',
+  'online_search_not_available',
 ] as const;
 export type SentenceID = typeof sentences[number];
 export type LanguageID = typeof languages[number];
@@ -132,6 +133,7 @@ const translations: Languages = {
     custom_sort: 'Custom sort',
     developed_by: 'Developed by',
     home: 'Home',
+    online_search_not_available: 'Sorry, ONLINE SEARCH is not available for IOS yet',
   },
   pt_br: {
     language_name: "Português (Brasil)",
@@ -196,6 +198,7 @@ const translations: Languages = {
     custom_sort: 'Classificação personalizada',
     developed_by: 'Desenvolvido por',
     home: 'Início',
+    online_search_not_available: 'Desculpe, a BUSCA ONLINE ainda não está disponivel para IOS',
   }
 }
 export default translations
