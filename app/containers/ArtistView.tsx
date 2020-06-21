@@ -2,11 +2,11 @@ import React, { useState, useContext, FC } from "react";
 import { FlatList } from "react-native";
 import { Song, Artist } from "../db";
 import ListItem from "../components/ListItem";
-import { removeSong } from "../utils/removeSong";
 import LanguageContext from "../languages/LanguageContext";
 import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "../AppNavigation";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { alertDelete } from "../utils/alertDelete";
 
 type ArtistViewScreenRouteProp = RouteProp<RootStackParamList, 'ArtistView'>;
 type ArtistViewScreenNavigationProp = StackNavigationProp<
@@ -30,7 +30,7 @@ const ArtistView: FC<Props> = (props) => {
     props.navigation.navigate('SongEdit', { id })
   }
   function onPressDeleteSong(id: string) {
-    removeSong(id, () => {
+    alertDelete('song', id, () => {
       let songs = Song.getByArtist(artist.id!)
       if (songs.length > 0) {
         setMusics(songs)

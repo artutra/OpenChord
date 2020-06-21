@@ -8,7 +8,6 @@ import Chord from 'chordjs'
 import ChordTab from "../../components/ChordTab";
 import SongTransformer from "../../components/SongTransformer";
 import AutoScrollSlider from "../../components/AutoScrollSlider";
-import { removeSong } from "../../utils/removeSong";
 import { RootStackParamList } from "../../AppNavigation";
 import SelectPlaylist from "./components/SelectPlaylist"
 import PageTurner from "./components/PageTurner";
@@ -18,6 +17,7 @@ import { MAX_FONT_SIZE, MIN_FONT_SIZE, FONT_SIZE_STEP } from "../Settings/FontSi
 import clamp from "../../utils/clamp";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { alertDelete } from "../../utils/alertDelete";
 
 type SongViewScreenRouteProp = RouteProp<RootStackParamList, 'SongView'>
 type SongViewScreenNavigationProp = StackNavigationProp<
@@ -68,7 +68,7 @@ const SongView: FunctionComponent<Props> = (props) => {
   }
   function onPressRemoveSong() {
     let id = props.route.params.id
-    removeSong(id, () => {
+    alertDelete('song', id, () => {
       props.navigation.goBack()
     })
   }
