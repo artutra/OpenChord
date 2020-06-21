@@ -153,7 +153,8 @@ const SongEdit: FunctionComponent<Props> = (props) => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10
+    padding: 10,
+    backgroundColor: 'white'
   },
   tabsContainer: {
     flexDirection: 'row'
@@ -172,7 +173,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff'
   },
   input: {
-    fontSize: 16,
+    fontSize: 20,
+    paddingVertical: 14,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
     marginBottom: 5
