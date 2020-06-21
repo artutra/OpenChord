@@ -1,18 +1,14 @@
-import React, { useState, useEffect, useContext } from "react";
-import { NavigationScreenProp } from "react-navigation"
+import React, { useState, FC } from "react";
 import Slider from "@react-native-community/slider";
 import { View, Text, StyleSheet } from "react-native";
 import SongTransformer from "../../components/SongTransformer";
 import SongRender from "../../components/SongRender";
 import { GlobalSettings } from "../../db/GlobalSettings";
 
-interface Props {
-  navigation: NavigationScreenProp<any, any>
-}
 export const MIN_FONT_SIZE = 14
 export const MAX_FONT_SIZE = 24
 export const FONT_SIZE_STEP = 2
-const FontSizeSelect = (props: Props) => {
+const FontSizeSelect: FC = () => {
   const [fontSize, setFontSize] = useState(GlobalSettings.get().fontSize)
 
   let chordSheet = "" +

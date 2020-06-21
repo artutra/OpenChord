@@ -1,32 +1,35 @@
 import React, { useState, useEffect, FunctionComponent, useContext } from "react";
 import { View, TouchableOpacity, StyleSheet, Alert } from "react-native";
-import { NavigationScreenComponent } from "react-navigation";
-import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
 import SongRender from "../components/SongRender";
 import SongTransformer from "../components/SongTransformer";
 import { getService } from "../services";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import ChordSheetJS from 'chordsheetjs';
 import { Artist, Song } from "../db";
-import { ROUTES } from "../AppNavigation";
-import { SongViewParams } from "./SongView";
+import { RootStackParamList } from "../AppNavigation";
 import LoadingIndicator from "../components/LoadingIndicator";
 import LanguageContext from "../languages/LanguageContext";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
 
-interface SongPreviewProps {
-  navigation: NavigationStackProp<{}, { path: string, serviceName: string }>
+type SongPreviewScreenRouteProp = RouteProp<RootStackParamList, 'SongPreview'>;
+type SongPreviewScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'SongPreview'
+>;
+
+type Props = {
+  route: SongPreviewScreenRouteProp
+  navigation: SongPreviewScreenNavigationProp;
 }
-const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenComponent<
-  NavigationStackOptions,
-  NavigationStackProp
-> = (props) => {
+const SongPreview: FunctionComponent<Props> = (props) => {
   const [chordSheet, setChordCheet] = useState<string | null>(null)
   const [isSaving, setIsSaving] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const { t } = useContext(LanguageContext)
-  let serviceName = props.navigation.getParam('serviceName')
-  let path = props.navigation.getParam('path')
+  let serviceName = props.route.params.serviceName
+  let path = props.route.params.path
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,8 +68,7 @@ const SongPreview: FunctionComponent<SongPreviewProps> & NavigationScreenCompone
     }
     let song = Song.create(artist, songTitle, headerlessContent)
 
-    let params: SongViewParams = { id: song.id, title: song.title }
-    props.navigation.replace(ROUTES.SongView, params)
+    props.navigation.replace('SongView', { id: song.id, title: song.title })
     Alert.alert(t('info'), t('song_downloaded'))
   }
 

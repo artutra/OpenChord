@@ -3,8 +3,8 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 interface Props {
   focused: boolean
-  horizontal: boolean
-  tintColor: string
+  color: string
+  size: number
   name: string
 }
 
@@ -16,6 +16,6 @@ const TabBarIcon = (props: Props) => {
   return <MaterialCommunityIcons
     name={props.focused ? props.name : nameUnfocused}
     size={25}
-    color={props.tintColor} />;
+    color={props.color} />;
 }
 export default TabBarIcon

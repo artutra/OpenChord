@@ -1,24 +1,28 @@
-import React, { useState, useEffect, FunctionComponent, useContext } from "react";
-import { NavigationScreenProp, NavigationScreenComponent, withNavigationFocus } from "react-navigation"
+import React, { useState, useEffect, FunctionComponent, useContext, useCallback } from "react";
 import { Song } from '../db'
 import ListItem from "../components/ListItem";
 import TouchableIcon from "../components/TouchableIcon";
-import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
 import { removeSong } from "../utils/removeSong";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StatusBar } from "react-native";
 import SearchBar from "../components/SearchBar";
 import EmptyListMessage from "../components/EmptyListMessage";
-import { ROUTES } from "../AppNavigation";
+import { MainTabParamList, RootStackParamList } from "../AppNavigation";
 import LanguageContext from "../languages/LanguageContext";
+import { CompositeNavigationProp, useFocusEffect } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { StackNavigationProp } from "@react-navigation/stack";
+import CustomHeader from "../components/CustomHeader";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-interface Props {
-  navigation: NavigationScreenProp<any, { addSong: () => void }>
-  isFocused: boolean
+type SongListScreenNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<MainTabParamList, 'SongList'>,
+  StackNavigationProp<RootStackParamList, 'MainTab'>
+>
+type Props = {
+  navigation: SongListScreenNavigationProp
 }
-const SongList: FunctionComponent<Props> & NavigationScreenComponent<
-  NavigationStackOptions,
-  NavigationStackProp
-> = (props: Props) => {
+const SongList: FunctionComponent<Props> = (props: Props) => {
+  const { navigation } = props
   const [songs, setSongs] = useState(Song.getAll())
   const [query, setQuery] = useState('')
   const { t } = useContext(LanguageContext)
@@ -50,20 +54,23 @@ const SongList: FunctionComponent<Props> & NavigationScreenComponent<
     }
   }, [query])
 
-  useEffect(() => {
-    props.navigation.setParams({ 'addSong': addNewSong })
-  }, [songs])
-
-  useEffect(() => {
-    if (query != '') {
-      setSongs(Song.search(query))
-    } else {
-      setSongs(Song.getAll())
-    }
-  }, [props.isFocused])
+  useFocusEffect(
+    useCallback(() => {
+      if (query != '') {
+        setSongs(Song.search(query))
+      } else {
+        setSongs(Song.getAll())
+      }
+    }, [])
+  )
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <StatusBar barStyle='dark-content' backgroundColor='white' />
+      <CustomHeader
+        title={t('songs')}
+        headerRight={<TouchableIcon onPress={addNewSong} name="plus" />}
+      />
       <SearchBar
         onChangeText={(value) => setQuery(value)}
         query={query}
@@ -75,7 +82,7 @@ const SongList: FunctionComponent<Props> & NavigationScreenComponent<
         ListEmptyComponent={
           <EmptyListMessage
             message={t('you_havent_downloaded_any_song_yet')}
-            onPress={() => { props.navigation.navigate(ROUTES.OnlineSearch) }}
+            onPress={() => { props.navigation.navigate('OnlineSearch') }}
             buttonTitle={t('go_to_online_search').toUpperCase()}
           />
         }
@@ -95,19 +102,8 @@ const SongList: FunctionComponent<Props> & NavigationScreenComponent<
           )
         }}
       />
-    </View>
+    </SafeAreaView>
   )
 }
-SongList.navigationOptions = ({ navigation }) => {
-  return {
-    headerRight: <TouchableIcon onPress={navigation.getParam('addSong')} name="plus" />,
-  }
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-})
-
-export default withNavigationFocus(SongList)
+export default SongList

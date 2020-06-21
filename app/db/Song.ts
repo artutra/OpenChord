@@ -72,7 +72,7 @@ export class Song {
           title,
           content,
           artist,
-          updated_at: new Date()
+          updated_at: new Date().toJSON()
         })
       })
     } else {

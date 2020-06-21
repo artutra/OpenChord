@@ -1,9 +1,9 @@
 import React, { useState, useEffect, FunctionComponent, useContext } from "react";
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, TextInputProps } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-interface SearchBarProps {
+interface SearchBarProps extends TextInputProps {
   query: string
   inputRef?: React.RefObject<TextInput> | null | undefined
   onChangeText: (text: string) => void
@@ -19,14 +19,13 @@ const SearchBar: FunctionComponent<SearchBarProps> = (props) => {
           ref={props.inputRef}
           style={styles.searchText}
           keyboardType="default"
-          placeholder={props.placeholder}
           placeholderTextColor="#aaa"
           autoFocus={false}
           autoCorrect={false}
           autoCapitalize='none'
           onSubmitEditing={props.onSubmitEditing}
-          onChangeText={props.onChangeText}
           value={props.query}
+          {...props}
         />
       </View>
     </View>

@@ -1,29 +1,30 @@
 import React, { useState, useEffect, FunctionComponent, useRef, useContext } from "react";
-import { View, StyleSheet, Picker, TextInput, Text } from "react-native";
+import { StyleSheet, TextInput, Text, Keyboard, StatusBar } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import ListItem from "../components/ListItem";
-import { NavigationStackProp, NavigationStackOptions } from "react-navigation-stack/lib/typescript/types";
-import { NavigationScreenComponent, withNavigationFocus } from "react-navigation";
 import { services, getService } from "../services";
 import { Doc } from "../services/BaseService";
-import { Header } from "react-navigation-stack";
 import SearchBar from "../components/SearchBar";
-import SafeAreaView from "react-native-safe-area-view";
 import LoadingIndicator from "../components/LoadingIndicator";
 import LanguageContext from "../languages/LanguageContext";
+import { CompositeNavigationProp } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { RootStackParamList, MainTabParamList } from "../AppNavigation";
 
-interface OnlineSearchProps {
-  navigation: NavigationStackProp<{}, {}>
-  isFocused: boolean // Provided by the withNavigationFocus HOC
+type OnlineSearchScreenNavigationProp = CompositeNavigationProp<
+  BottomTabNavigationProp<MainTabParamList, 'OnlineSearch'>,
+  StackNavigationProp<RootStackParamList, 'MainTab'>
+>;
+
+type Props = {
+  navigation: OnlineSearchScreenNavigationProp;
 }
 
-const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenComponent<
-  NavigationStackOptions,
-  NavigationStackProp
-> = (props) => {
+const OnlineSearch: FunctionComponent<Props> = (props) => {
   const searchInput = useRef<TextInput>(null)
-  const [baseServices] = useState(services)
-  const [serviceName, setServiceName] = useState(services[0].name)
+  const [serviceName] = useState(services[0].name)
   const [docs, setDocs] = useState<Doc[] | null>(null)
   const [query, setQuery] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -53,23 +54,20 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
   }
 
   useEffect(() => {
-    if (searchInput.current && props.isFocused) {
-      searchInput.current.focus()
-    }
-  }, [props.isFocused])
+    const showTabBar = () => props.navigation.setOptions({ tabBarVisible: true })
+    Keyboard.addListener('keyboardDidHide', showTabBar)
+    return () => Keyboard.removeListener('keyboardDidHide', showTabBar)
+  }, [])
+
+  useEffect(() => {
+    const hideTabBar = () => props.navigation.setOptions({ tabBarVisible: false })
+    Keyboard.addListener('keyboardDidShow', hideTabBar)
+    return () => Keyboard.removeListener('keyboardDidShow', hideTabBar)
+  }, [])
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.customHeader}>
-        <Picker
-          selectedValue={serviceName}
-          style={styles.picker}
-          onValueChange={(value) => setServiceName(value)}>
-          {baseServices.map(service => {
-            return <Picker.Item key={service.name} label={service.name} value={service.name} />
-          })}
-        </Picker>
-      </View>
+      <StatusBar barStyle='dark-content' backgroundColor='white' />
       <SearchBar
         inputRef={searchInput}
         onSubmitEditing={makeSearch}
@@ -106,7 +104,7 @@ const OnlineSearch: FunctionComponent<OnlineSearchProps> & NavigationScreenCompo
     </SafeAreaView>
   );
 }
-export default withNavigationFocus(OnlineSearch)
+export default OnlineSearch
 
 const styles = StyleSheet.create({
   container: {
@@ -115,12 +113,6 @@ const styles = StyleSheet.create({
   msgInfo: {
     textAlign: 'center',
     color: '#aaa'
-  },
-  customHeader: {
-    height: Header.HEIGHT,
-    backgroundColor: 'white',
-    elevation: 4,
-    justifyContent: 'center'
   },
   picker: {
     marginHorizontal: 10

@@ -1,11 +1,9 @@
-import React, { useState, useEffect, FunctionComponent, useContext } from "react";
+import React, { useState, useEffect, FunctionComponent, useContext, useLayoutEffect, useCallback } from "react";
 import { FlatList, View, TouchableOpacity, Text } from "react-native";
-import { NavigationScreenProp, withNavigationFocus, NavigationScreenComponent } from "react-navigation"
 import ListItem, { LeftIconOptions } from "../components/ListItem";
 import { removeSong } from "../utils/removeSong";
 import { Playlist, SortBy } from "../db/Playlist";
-import { ROUTES } from "../AppNavigation";
-import { NavigationStackOptions, NavigationStackProp } from "react-navigation-stack/lib/typescript/types";
+import { RootStackParamList } from "../AppNavigation";
 import TouchableIcon from "../components/TouchableIcon";
 import EmptyListMessage from "../components/EmptyListMessage";
 import PrimaryButton from "../components/PrimaryButton";
@@ -14,21 +12,22 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import PickerModal, { PickerOption } from "../components/PickerModal";
 import { Song } from "../db";
 import { List, Results } from "realm";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp, useFocusEffect } from "@react-navigation/native";
 
-interface Params {
-  id: string
-  title?: string
-  onPressEditPlaylist: () => void
+type PlaylistViewScreenRouteProp = RouteProp<RootStackParamList, 'PlaylistView'>;
+type PlaylistViewScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'PlaylistView'
+>;
+
+type Props = {
+  route: PlaylistViewScreenRouteProp
+  navigation: PlaylistViewScreenNavigationProp;
 }
-interface Props {
-  navigation: NavigationScreenProp<any, Params>
-  isFocused: boolean
-}
-const PlaylistView: FunctionComponent<Props> & NavigationScreenComponent<
-  NavigationStackOptions,
-  NavigationStackProp
-> = (props: Props) => {
-  let id = props.navigation.getParam('id')
+const PlaylistView: FunctionComponent<Props> = (props: Props) => {
+  const { route, navigation } = props
+  let id = route.params.id
   let playlist = Playlist.getById(id)!
   const [name, setName] = useState(playlist.name)
   const [songs, setSongs] = useState<Results<Song> | List<Song> | Song[]>(playlist.songs)
@@ -52,21 +51,18 @@ const PlaylistView: FunctionComponent<Props> & NavigationScreenComponent<
     })
   }
   function onPressAddSongs() {
-    props.navigation.navigate(ROUTES.PlaylistAddSongs, { id })
+    props.navigation.navigate('PlaylistAddSongs', { id })
   }
   function onPressEditPlaylist() {
-    props.navigation.navigate(ROUTES.PlaylistEdit, { id })
+    props.navigation.navigate('PlaylistEdit', { id })
   }
 
-  useEffect(() => {
-    setSongs(playlist.songs)
-    setName(playlist.name)
-  }, [props.isFocused])
-
-  useEffect(() => {
-    props.navigation.setParams({ 'onPressEditPlaylist': onPressEditPlaylist })
-    props.navigation.setParams({ 'title': name })
-  }, [songs, name])
+  useFocusEffect(
+    useCallback(() => {
+      setSongs(playlist.songs)
+      setName(playlist.name)
+    }, [])
+  );
 
   function onChangeSortBy(value: SortBy) {
     if (value === sortBy) {
@@ -97,6 +93,11 @@ const PlaylistView: FunctionComponent<Props> & NavigationScreenComponent<
     setSongs(sortedSongs)
   }, [reverse, sortBy, t])
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <TouchableIcon onPress={onPressEditPlaylist} name="pencil" />
+    });
+  }, [navigation]);
   return (
     <>
       <FlatList
@@ -150,11 +151,5 @@ const PlaylistView: FunctionComponent<Props> & NavigationScreenComponent<
     </>
   );
 }
-PlaylistView.navigationOptions = ({ navigation }) => {
-  return {
-    headerRight: <TouchableIcon onPress={navigation.getParam('onPressEditPlaylist')} name="pencil" />,
-    title: navigation.getParam('title')
-  }
-}
 
-export default withNavigationFocus(PlaylistView)
+export default PlaylistView

@@ -1,37 +1,36 @@
-import React, { useState, useEffect, FunctionComponent, useRef, useContext } from "react";
-import { Text, View, StyleSheet, Alert, Switch, Slider, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, FunctionComponent, useRef, useContext, useLayoutEffect } from "react";
+import { Text, View, StyleSheet, Switch, TouchableOpacity } from "react-native";
 import { Song } from '../../db'
-import { NavigationScreenComponent } from "react-navigation";
 import SideMenu from 'react-native-side-menu'
 import SongRender, { SongRenderRef } from "../../components/SongRender";
 import TouchableIcon from "../../components/TouchableIcon";
-import { NavigationStackOptions, NavigationStackProp, } from "react-navigation-stack/lib/typescript/types";
 import Chord from 'chordjs'
 import ChordTab from "../../components/ChordTab";
 import SongTransformer from "../../components/SongTransformer";
 import AutoScrollSlider from "../../components/AutoScrollSlider";
 import { removeSong } from "../../utils/removeSong";
-import { ROUTES } from "../../AppNavigation";
-import { ArtistViewParams } from "./../ArtistView";
-import { SongEditParams } from "./../SongEdit";
+import { RootStackParamList } from "../../AppNavigation";
 import SelectPlaylist from "./components/SelectPlaylist"
 import PageTurner from "./components/PageTurner";
 import LanguageContext from "../../languages/LanguageContext";
 import { GlobalSettings } from "../../db/GlobalSettings";
 import { MAX_FONT_SIZE, MIN_FONT_SIZE, FONT_SIZE_STEP } from "../Settings/FontSizeSelect";
 import clamp from "../../utils/clamp";
+import { RouteProp } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 
-export type SongViewParams = { id: string, title: string, openSideMenu?: () => void }
-
+type SongViewScreenRouteProp = RouteProp<RootStackParamList, 'SongView'>
+type SongViewScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'SongView'
+>
 type Props = {
-  navigation: NavigationStackProp<{}, SongViewParams>
+  route: SongViewScreenRouteProp
+  navigation: SongViewScreenNavigationProp;
 }
-
-const SongView: FunctionComponent<Props> & NavigationScreenComponent<
-  NavigationStackOptions,
-  NavigationStackProp
-> = (props) => {
-  const songId = props.navigation.getParam('id')
+const SongView: FunctionComponent<Props> = (props) => {
+  const { navigation } = props
+  const songId = props.route.params.id
   const [content, setContent] = useState<string>("")
   const [isSideMenuOpen, setIsSideMenuOpen] = useState<boolean>(false)
   const [tone, setTone] = useState<number>(0)
@@ -65,20 +64,17 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
     selectChord(allChords.find(c => c.toString() == chordString)!)
   }
   function editSong() {
-    let params: SongEditParams = { id: props.navigation.getParam('id') }
-    props.navigation.replace(ROUTES.SongEdit, params)
+    props.navigation.replace('SongEdit', { id: songId })
   }
   function onPressRemoveSong() {
-    let id = props.navigation.getParam('id')
+    let id = props.route.params.id
     removeSong(id, () => {
       props.navigation.goBack()
     })
   }
   function onPressArtist() {
-    let id = props.navigation.getParam('id')
-    let song = Song.getById(id)!
-    let params: ArtistViewParams = { id: song.artist.id!, title: song.artist.name }
-    props.navigation.navigate(ROUTES.ArtistView, params)
+    let song = Song.getById(songId)!
+    props.navigation.navigate('ArtistView', { id: song.artist.id!, title: song.artist.name })
   }
   function tooglePageTurner(value: boolean) {
     if (value) {
@@ -89,8 +85,7 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   }
 
   useEffect(() => {
-    let id = props.navigation.getParam('id')
-    let song = Song.getById(id)!
+    let song = Song.getById(songId)!
     setContent(Song.getChordPro(song))
     setTone(song.transposeAmount ? song.transposeAmount : 0)
     if (song.fontSize != null) {
@@ -106,9 +101,11 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
     Song.setPreferences(song, { transposeAmount: tone })
   }, [tone])
 
-  useEffect(() => {
-    props.navigation.setParams({ 'openSideMenu': openSideMenu })
-  }, [isSideMenuOpen])
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <TouchableIcon onPress={openSideMenu} name="settings" />
+    });
+  }, [navigation, isSideMenuOpen]);
 
   return (
     <SideMenu
@@ -212,12 +209,6 @@ const SongView: FunctionComponent<Props> & NavigationScreenComponent<
   );
 }
 
-SongView.navigationOptions = ({ navigation }) => {
-  return {
-    title: navigation.getParam('title'),
-    headerRight: <TouchableIcon onPress={navigation.getParam('openSideMenu')} name="settings" />,
-  }
-}
 const styles = StyleSheet.create({
   sideMenuContainer: {
     backgroundColor: '#eee',

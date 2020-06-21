@@ -1,26 +1,25 @@
-import React, { useState, useEffect, FunctionComponent, useContext } from "react";
-import { Text, View, StyleSheet, TextInput, KeyboardAvoidingView, Button, Platform } from "react-native";
+import React, { useState, useEffect, FunctionComponent, useContext, useLayoutEffect } from "react";
+import { Text, View, StyleSheet, TextInput, KeyboardAvoidingView, Platform } from "react-native";
 import { Song, Artist } from '../db'
-import { NavigationScreenComponent } from "react-navigation";
 import TouchableIcon from "../components/TouchableIcon";
-import { NavigationStackOptions, NavigationStackProp, } from "react-navigation-stack/lib/typescript/types";
 import ChordSheetJS from 'chordsheetjs'
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { ROUTES } from "../AppNavigation";
-import { HeaderBackButton } from "react-navigation-stack";
-import StackHeaderTitle from "../navigation/StackHeaderTitle";
+import { RootStackParamList } from "../AppNavigation";
 import LanguageContext from "../languages/LanguageContext";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RouteProp } from "@react-navigation/native";
 
-export type SongEditParams = { id: string | null | undefined, saveSong?: () => void }
-
+type SongEditScreenRouteProp = RouteProp<RootStackParamList, 'SongEdit'>
+type SongEditScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'SongEdit'
+>
 type Props = {
-  navigation: NavigationStackProp<{}, SongEditParams>
+  route: SongEditScreenRouteProp
+  navigation: SongEditScreenNavigationProp;
 }
-
-const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
-  NavigationStackOptions,
-  NavigationStackProp
-> = (props) => {
+const SongEdit: FunctionComponent<Props> = (props) => {
+  const { navigation } = props
   const [title, setTitle] = useState("")
   const [artist, setArtist] = useState("")
   const [content, setContent] = useState("")
@@ -36,7 +35,7 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
     return text
   }
   useEffect(() => {
-    let id = props.navigation.getParam('id')
+    let id = props.route.params?.id
     if (id != null) {
       let song = Song.getById(id)!
       setTitle(song.title)
@@ -57,7 +56,7 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
       let chordSheetSong = new ChordSheetJS.ChordSheetParser({ preserveWhitespace: false }).parse(content)
       chordPro = formatter.format(chordSheetSong)
     }
-    let songId = props.navigation.getParam('id')
+    let songId = props.route.params?.id
     let artistDb: Artist | undefined = Artist.getByName(artistName)
     if (artistDb == null) {
       artistDb = Artist.create(artistName)
@@ -68,12 +67,8 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
       let song = Song.create(artistDb, songTitle, chordPro)
       songId = song.id
     }
-    props.navigation.replace(ROUTES.SongView, { id: songId, title: songTitle })
+    props.navigation.replace('SongView', { id: songId, title: songTitle })
   }
-
-  useEffect(() => {
-    props.navigation.setParams({ 'saveSong': saveSong })
-  }, [artist, title, content])
 
   function switchToChordPro() {
     let song = new ChordSheetJS.ChordSheetParser({ preserveWhitespace: false }).parse(content)
@@ -87,6 +82,12 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
     setContent(plainText)
     setMode('CHORD_SHEET')
   }
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <TouchableIcon onPress={saveSong} name="content-save" />,
+    });
+  }, [navigation, title, content, artist]);
 
   const contentPlaceholder = mode == 'CHORD_PRO' ?
     "You can edit any song here\n" +
@@ -150,12 +151,6 @@ const SongEdit: FunctionComponent<Props> & NavigationScreenComponent<
   );
 }
 
-SongEdit.navigationOptions = ({ navigation }): NavigationStackOptions => {
-  return {
-    headerTitle: <StackHeaderTitle text='edit_song' />,
-    headerRight: <TouchableIcon onPress={navigation.getParam('saveSong')} name="content-save" />,
-  }
-}
 const styles = StyleSheet.create({
   container: {
     padding: 10
