@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useRef, useEffect } from "react";
-import { Text, View, TouchableOpacity, StyleSheet, Modal, Button, TextInput, KeyboardAvoidingView } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, Modal, Button, TextInput, KeyboardAvoidingView, Platform } from "react-native";
 import ErrorText from "./ErrorText";
 import PrimaryButton from "./PrimaryButton";
 
@@ -43,7 +43,7 @@ const TextInputModal: FunctionComponent<TextInputModalProps> = (props) => {
     <Modal transparent onDismiss={onDismiss}>
       <View style={styles.container}>
         <TouchableOpacity style={styles.outsideContainer} onPress={onDismiss} />
-        <KeyboardAvoidingView behavior='height' contentContainerStyle={styles.backgroundOverlayer}>
+        <KeyboardAvoidingView behavior={Platform.OS === 'android' ? 'height' : 'padding'} contentContainerStyle={styles.backgroundOverlayer}>
           <TextInput style={styles.input} ref={textInput} placeholder={placeholder} onChangeText={onChangeText} value={props.value} />
           <ErrorText>{error}</ErrorText>
           <PrimaryButton style={styles.button} onPress={() => onSubmit(value)} title={submitButtonTitle} />
