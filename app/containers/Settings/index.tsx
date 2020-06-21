@@ -49,7 +49,7 @@ const Settings: FC<Props> = (props) => {
         title: t('permission_title'),
         message: t('permission_message'),
         buttonNegative: t('permission_button_negative'),
-        buttonPositive: t('permission_button_negative')
+        buttonPositive: t('permission_button_positive')
       }
     )
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
@@ -76,7 +76,7 @@ const Settings: FC<Props> = (props) => {
       let day = pad(today.getDate())
       let month = pad(today.getMonth() + 1)
       let year = today.getFullYear()
-      let path = await createFile(`backup-${year}_${month}_${day}`, bundleString)
+      let path = await createFile('downloads', `backup-${year}_${month}_${day}`, bundleString)
       if (Platform.OS === 'android') {
         Alert.alert(t('success'), t('backup_saved_at_path') + ': ' + path)
       } else {
