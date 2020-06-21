@@ -42,7 +42,7 @@ const PlaylistList: FunctionComponent<Props> = (props: Props) => {
     try {
       let bundle = createBundle([id], [])
       let bundleString = JSON.stringify(bundle)
-      let path = await createFile('playlist_' + name.toLowerCase(), bundleString)
+      let path = await createFile('documents', 'playlist_' + name.toLowerCase(), bundleString)
       await Share.open({
         url: "file://" + path,
         message: t('share_message')
