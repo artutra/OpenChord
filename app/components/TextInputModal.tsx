@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useRef, useEffect } from "react";
-import { Text, View, TouchableOpacity, StyleSheet, Modal, Button, TextInput } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, Modal, Button, TextInput, KeyboardAvoidingView } from "react-native";
 import ErrorText from "./ErrorText";
 import PrimaryButton from "./PrimaryButton";
 
@@ -41,14 +41,14 @@ const TextInputModal: FunctionComponent<TextInputModalProps> = (props) => {
 
   return (
     <Modal transparent onDismiss={onDismiss}>
-      <View style={styles.backgroundOverlayer}>
+      <KeyboardAvoidingView behavior='height' style={styles.backgroundOverlayer}>
         <TouchableOpacity style={styles.outsideContainer} onPress={onDismiss} />
         <View style={styles.container}>
-          <TextInput ref={textInput} placeholder={placeholder} onChangeText={onChangeText} value={props.value} />
+          <TextInput style={styles.input} ref={textInput} placeholder={placeholder} onChangeText={onChangeText} value={props.value} />
           <ErrorText>{error}</ErrorText>
           <PrimaryButton onPress={() => onSubmit(value)} title={submitButtonTitle} />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
@@ -73,5 +73,10 @@ const styles = StyleSheet.create({
   optionTitle: {
     paddingVertical: 20,
     fontSize: 18
+  },
+  input: {
+    fontSize: 24,
+    paddingVertical: 16,
+    paddingLeft: 8
   }
 });
