@@ -65,12 +65,16 @@ const PlaylistView: FunctionComponent<Props> = (props: Props) => {
   );
 
   function onChangeSortBy(value: SortBy) {
-    if (value === sortBy) {
+    if (value === sortBy && value !== 'CUSTOM') {
       setReverse(!reverse)
     } else {
       setSortBy(value)
+      if (value === 'CUSTOM') {
+        setReverse(false)
+      }
     }
   }
+
   useEffect(() => {
     let sortOptionsValues: { label: string, value: SortBy }[] = [
       { label: t('custom_sort'), value: 'CUSTOM' },
@@ -106,7 +110,7 @@ const PlaylistView: FunctionComponent<Props> = (props: Props) => {
         ListHeaderComponent={() => {
           if (songs.length > 0)
             return (
-              <View>
+              <View style={{ backgroundColor: 'white' }}>
                 <PrimaryButton style={{ margin: 10 }} onPress={onPressAddSongs} title={t('add_songs').toUpperCase()} outline />
                 <TouchableOpacity style={{ flexDirection: 'row', paddingVertical: 18, borderBottomWidth: 1, borderColor: '#eee', paddingLeft: 20, alignItems: 'center' }} onPress={() => setEnableSortSelect(true)}>
                   <Text style={{ color: '#777' }}>{sortOptions.find(o => o.value === sortBy)?.label.toUpperCase()}</Text>
