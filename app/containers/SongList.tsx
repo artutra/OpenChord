@@ -12,6 +12,7 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { StackNavigationProp } from "@react-navigation/stack";
 import CustomHeader from "../components/CustomHeader";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { alertDelete } from "../utils/alertDelete";
 
 type SongListScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabParamList, 'SongList'>,
