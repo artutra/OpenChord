@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* OpenChordTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* OpenChordTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -19,10 +18,7 @@
 		6B4B888A9006C1B240FDE8D5 /* libPods-OpenChord-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EB9801FE4BFECC15744D2ED /* libPods-OpenChord-tvOSTests.a */; };
 		70C6F3ED7AA1373F03C566D8 /* libPods-OpenChord-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 307D91456AF64413E2B97CAB /* libPods-OpenChord-tvOS.a */; };
 		7A3D34C67E57417B76B77F49 /* libPods-OpenChordTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FD290FDBB4B8DC6AD8238C5F /* libPods-OpenChordTests.a */; };
-		8373398E2A26416A825BD58B /* libRealmReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C57565183B7D4F659B028919 /* libRealmReact.a */; };
 		B96D68021BBB76E670F29EE8 /* libPods-OpenChord.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 21BE2E583766FEF118F99E82 /* libPods-OpenChord.a */; };
-		E51BAE01CEC348A68DD900AA /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4113F8218917416C8E79A01C /* libz.tbd */; };
-		F81FCF3F76EA422C9D612FF0 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 436A60062CD64DE9906FDE4D /* libc++.tbd */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,13 +35,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "OpenChord-tvOS";
-		};
-		C3E1AB812346A72900B3BAB1 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 855DC0BBC254485EB71C2EF4 /* RealmReact.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = F60690131CA2766F0003FB26;
-			remoteInfo = RealmReact;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -70,14 +59,10 @@
 		2D02E47B1E0B4A5D006451C7 /* OpenChord-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenChord-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* OpenChord-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OpenChord-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		307D91456AF64413E2B97CAB /* libPods-OpenChord-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OpenChord-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4113F8218917416C8E79A01C /* libz.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
-		436A60062CD64DE9906FDE4D /* libc++.tbd */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		575750EFBC018A86CB4880F0 /* Pods-OpenChord-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpenChord-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-OpenChord-tvOSTests/Pods-OpenChord-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		62B187E2D55868D97981F0A4 /* Pods-OpenChord.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpenChord.release.xcconfig"; path = "Target Support Files/Pods-OpenChord/Pods-OpenChord.release.xcconfig"; sourceTree = "<group>"; };
 		79A4B284727C9F3581EE2C7B /* Pods-OpenChord-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpenChord-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-OpenChord-tvOS/Pods-OpenChord-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		855DC0BBC254485EB71C2EF4 /* RealmReact.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RealmReact.xcodeproj; path = "../node_modules/realm/react-native/ios/RealmReact.xcodeproj"; sourceTree = "<group>"; };
 		8EB9801FE4BFECC15744D2ED /* libPods-OpenChord-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OpenChord-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C57565183B7D4F659B028919 /* libRealmReact.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRealmReact.a; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		FD290FDBB4B8DC6AD8238C5F /* libPods-OpenChordTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OpenChordTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -97,9 +82,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B96D68021BBB76E670F29EE8 /* libPods-OpenChord.a in Frameworks */,
-				8373398E2A26416A825BD58B /* libRealmReact.a in Frameworks */,
-				F81FCF3F76EA422C9D612FF0 /* libc++.tbd in Frameworks */,
-				E51BAE01CEC348A68DD900AA /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,8 +144,6 @@
 				307D91456AF64413E2B97CAB /* libPods-OpenChord-tvOS.a */,
 				8EB9801FE4BFECC15744D2ED /* libPods-OpenChord-tvOSTests.a */,
 				FD290FDBB4B8DC6AD8238C5F /* libPods-OpenChordTests.a */,
-				436A60062CD64DE9906FDE4D /* libc++.tbd */,
-				4113F8218917416C8E79A01C /* libz.tbd */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -186,7 +166,6 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				855DC0BBC254485EB71C2EF4 /* RealmReact.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -224,14 +203,6 @@
 				C57565183B7D4F659B028919 /* libRealmReact.a */,
 			);
 			name = "Recovered References";
-			sourceTree = "<group>";
-		};
-		C3E1AB7E2346A72700B3BAB1 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				C3E1AB822346A72900B3BAB1 /* libRealmReact.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -356,10 +327,6 @@
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
-				{
-					ProductGroup = C3E1AB7E2346A72700B3BAB1 /* Products */;
-					ProjectRef = 855DC0BBC254485EB71C2EF4 /* RealmReact.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -372,13 +339,6 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		C3E1AB822346A72900B3BAB1 /* libRealmReact.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRealmReact.a;
-			remoteRef = C3E1AB812346A72900B3BAB1 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -694,14 +654,12 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = OpenChordTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -722,14 +680,12 @@
 				COPY_PHASE_STRIP = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = OpenChordTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
@@ -752,7 +708,6 @@
 				DEVELOPMENT_TEAM = J6CEQ7V85Z;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = OpenChord/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -777,7 +732,6 @@
 				DEVELOPMENT_TEAM = J6CEQ7V85Z;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = OpenChord/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -808,13 +762,11 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = "OpenChord-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -844,13 +796,11 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = "OpenChord-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -879,13 +829,11 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = "OpenChord-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -914,13 +862,11 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/realm/src/**",
 				);
 				INFOPLIST_FILE = "OpenChord-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",

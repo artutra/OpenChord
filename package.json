@@ -34,7 +34,7 @@
     "react-navigation": "^4.0.10",
     "react-navigation-stack": "^1.5.5",
     "react-navigation-tabs": "^2.5.5",
-    "realm": "^3.4.2",
+    "realm": "^6.0.1",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
