@@ -18,7 +18,7 @@ const SideMenu: FC<Props> = ({ isOpen, onDismiss, children }) => {
     <Modal transparent onDismiss={onDismiss}  >
       <TouchableOpacity style={styles.backgroundOverlayer} onPress={onDismiss} />
       <SafeAreaView style={[styles.fixed, heightStyle]}>
-        <ScrollView contentContainerStyle={[styles.card]}>
+        <ScrollView bounces={false} contentContainerStyle={[styles.card]}>
           {children}
         </ScrollView>
       </SafeAreaView>
