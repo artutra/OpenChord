@@ -1,7 +1,7 @@
-import React, { useState, useEffect, FunctionComponent, useRef, useContext, useLayoutEffect } from "react";
-import { Text, View, StyleSheet, Switch, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, FunctionComponent, useRef, useContext, useLayoutEffect, FC } from "react";
+import { Text, View, StyleSheet, Switch, TouchableHighlight } from "react-native";
 import { Song } from '../../db'
-import SideMenu from 'react-native-side-menu'
+import SideMenu from './components/SideMenu'
 import SongRender, { SongRenderRef } from "../../components/SongRender";
 import TouchableIcon from "../../components/TouchableIcon";
 import Chord from 'chordjs'
@@ -17,7 +17,6 @@ import { MAX_FONT_SIZE, MIN_FONT_SIZE, FONT_SIZE_STEP } from "../Settings/FontSi
 import clamp from "../../utils/clamp";
 import { RouteProp } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { alertDelete } from "../../utils/alertDelete";
 
 type SongViewScreenRouteProp = RouteProp<RootStackParamList, 'SongView'>
 type SongViewScreenNavigationProp = StackNavigationProp<
@@ -28,6 +27,16 @@ type Props = {
   route: SongViewScreenRouteProp
   navigation: SongViewScreenNavigationProp;
 }
+interface ToolButtonProps {
+  onPress: () => void
+  name: string
+}
+const ToolButton: FC<ToolButtonProps> = ({ onPress, name }) => (
+  <TouchableIcon style={{ borderWidth: 1, borderRadius: 2, marginLeft: 8 }} size={25} onPress={onPress} name={name} />
+)
+const Divider: FC = () => (
+  <View style={{ borderBottomWidth: .5, borderColor: '#00000020' }} />
+)
 const SongView: FunctionComponent<Props> = (props) => {
   const { navigation } = props
   const songId = props.route.params.id
@@ -66,11 +75,10 @@ const SongView: FunctionComponent<Props> = (props) => {
   function editSong() {
     props.navigation.replace('SongEdit', { id: songId })
   }
-  function onPressRemoveSong() {
-    let id = props.route.params.id
-    alertDelete('song', id, () => {
-      props.navigation.goBack()
-    })
+  function showTone(tone: number) {
+    if (tone === 0) return null
+    if (tone > 0) return '+' + tone
+    return tone
   }
   function onPressArtist() {
     let song = Song.getById(songId)!
@@ -103,69 +111,78 @@ const SongView: FunctionComponent<Props> = (props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => <TouchableIcon onPress={openSideMenu} name="settings" />
+      headerRight: () => (
+        <View style={styles.flexRow}>
+          <TouchableIcon onPress={editSong} name="pencil" />
+          <TouchableIcon onPress={openSideMenu} name="settings" />
+        </View>
+      )
     });
   }, [navigation, isSideMenuOpen]);
 
   return (
-    <SideMenu
-      menu={
-        <View style={styles.sideMenuContainer}>
-          <View style={styles.toolbarContainer}>
-            <View style={styles.tool}>
-              <TouchableIcon size={25} onPress={transposeUp} name="plus" />
-              <Text>{tone}</Text>
-              <TouchableIcon size={25} onPress={transposeDown} name="minus" />
-            </View>
-            <View style={styles.tool}>
-              <TouchableIcon size={25} onPress={increaseFontSize} name="format-font-size-increase" />
-              <TouchableIcon size={25} onPress={decreaseFontSize} name="format-font-size-decrease" />
-            </View>
-            <View style={styles.tool}>
-              <TouchableOpacity onPress={() => {
-                setShowPageTurner(false)
-                setIsSideMenuOpen(false)
-                setShowAutoScrollSlider(true)
-              }}>
-                <Text style={styles.toolLabel}>{t('auto_scroll')}</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.tool}>
-              <Switch onValueChange={onChangeShowTabs} value={showTabs} />
-              <Text style={styles.toolLabel}>{t('show_tabs')}</Text>
-            </View>
-            <View style={styles.tool}>
-              <Switch onValueChange={tooglePageTurner} value={showPageTurner} />
-              <Text style={styles.toolLabel}>{t('page_turner')}</Text>
-            </View>
-            <View style={styles.tool}>
-              <TouchableIcon
-                onPress={() => {
-                  setIsSideMenuOpen(false)
-                  setShowPlaylistSelection(!showPlaylistSelection)
-                }}
-                size={25}
-                name="playlist-plus" />
-            </View>
+    <>
+      <SideMenu isOpen={isSideMenuOpen} onDismiss={() => { setIsSideMenuOpen(false) }}>
+        <View style={styles.tool}>
+          <View style={styles.toolLabel}>
+            <Text style={styles.toolLabelSmall} >{t('transpose')}</Text>
+            <Text style={styles.toolBadge}>{showTone(tone)}</Text>
           </View>
-          <View style={styles.secondaryToolbarContainer}>
-            <TouchableIcon onPress={editSong} name="pencil" />
-            <TouchableIcon
-              style={styles.deleteButton}
-              onPress={onPressRemoveSong}
-              name="trash-can"
-              color="white"
-              size={20}
-            />
+          <View style={styles.toolButtonContainer}>
+            <ToolButton onPress={transposeDown} name="minus" />
+            <ToolButton onPress={transposeUp} name="plus" />
           </View>
         </View>
-      }
-      onChange={(isOpen) => { setIsSideMenuOpen(isOpen) }}
-      openMenuOffset={50}
-      isOpen={isSideMenuOpen}
-      menuPosition="right"
-      disableGestures={true}
-    >
+        <Divider />
+        <View style={styles.tool}>
+          <View style={styles.toolLabel}>
+            <Text style={styles.toolLabelSmall}>{t('text_size')}</Text>
+            <Text style={styles.toolBadge}>{fontSize}</Text>
+          </View>
+          <View style={styles.toolButtonContainer}>
+            <ToolButton onPress={decreaseFontSize} name="format-font-size-decrease" />
+            <ToolButton onPress={increaseFontSize} name="format-font-size-increase" />
+          </View>
+        </View>
+        <Divider />
+        <TouchableHighlight underlayColor='#ccc' onPress={() => {
+          setShowPageTurner(false)
+          setIsSideMenuOpen(false)
+          setShowAutoScrollSlider(true)
+        }} style={styles.tool}>
+          <Text style={styles.toolLabel}>{t('auto_scroll')}</Text>
+        </TouchableHighlight>
+        <Divider />
+        <TouchableHighlight underlayColor='#ccc' onPress={() => onChangeShowTabs(!showTabs)}>
+          <View style={styles.tool}>
+            <Text style={styles.toolLabel}>{t('show_tabs')}</Text>
+            <Switch onValueChange={onChangeShowTabs} value={showTabs} />
+          </View>
+        </TouchableHighlight>
+        <Divider />
+        <TouchableHighlight underlayColor='#ccc' onPress={() => tooglePageTurner(!showPageTurner)}>
+          <View style={styles.tool}>
+            <Text style={styles.toolLabel}>{t('page_turner')}</Text>
+            <Switch onValueChange={tooglePageTurner} value={showPageTurner} />
+          </View>
+        </TouchableHighlight>
+        <Divider />
+        <TouchableHighlight underlayColor='#ccc' onPress={() => {
+          setIsSideMenuOpen(false)
+          setShowPlaylistSelection(!showPlaylistSelection)
+        }}>
+          <View style={styles.tool}>
+            <Text style={styles.toolLabel}>{t('add_to_playlist')}</Text>
+            <TouchableIcon
+              onPress={() => {
+                setIsSideMenuOpen(false)
+                setShowPlaylistSelection(!showPlaylistSelection)
+              }}
+              size={25}
+              name="playlist-plus" />
+          </View>
+        </TouchableHighlight>
+      </SideMenu>
       <SongTransformer
         chordProSong={content}
         transposeDelta={tone}
@@ -205,38 +222,43 @@ const SongView: FunctionComponent<Props> = (props) => {
           </View>
         )}
       </SongTransformer>
-    </SideMenu>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  sideMenuContainer: {
-    backgroundColor: '#eee',
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  toolbarContainer: {
-    justifyContent: 'center',
-    alignItems: 'stretch',
+  flexRow: {
+    flexDirection: 'row',
   },
   tool: {
-    backgroundColor: '#ccc',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 5,
-    paddingVertical: 5,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+  },
+  toolButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  toolLabelSmall: {
+    maxWidth: 100,
+    paddingRight: 0,
+    textTransform: 'uppercase',
   },
   toolLabel: {
-    textAlign: 'center'
+    position: 'relative',
+    textAlign: 'left',
+    textTransform: 'uppercase',
+    paddingVertical: 10,
   },
-  secondaryToolbarContainer: {
-    flex: 1,
-    justifyContent: 'flex-end'
+  toolBadge: {
+    position: 'absolute',
+    top: -5,
+    right: -15,
+    width: 30,
+    height: 20,
+    color: 'tomato'
   },
-  deleteButton: {
-    backgroundColor: '#e74c3c',
-    borderRadius: 3,
-    margin: 5
-  }
 })
 export default SongView

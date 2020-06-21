@@ -26,7 +26,7 @@ const SongRender: RefForwardingComponent<SongRenderRef, Props> = (props, ref) =>
   useImperativeHandle(ref, () => ({
     nextPage() {
       if (webRef.current) {
-        webRef.current.injectJavaScript(scriptScrollBy(height * 0.8))
+        webRef.current.injectJavaScript(scriptScrollBy(height * 0.7))
       }
     },
     previousPage() {
