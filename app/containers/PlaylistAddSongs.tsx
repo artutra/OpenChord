@@ -3,17 +3,20 @@ import { FlatList, View, TextInput, StyleSheet } from "react-native";
 import { Song } from "../db";
 import ListItem from "../components/ListItem";
 import { Playlist } from "../db/Playlist";
-import { RootStackParamList } from "../AppNavigation";
+import { RootStackParamList, MainTabParamList } from "../AppNavigation";
 import SearchBar from "../components/SearchBar";
 import LanguageContext from "../languages/LanguageContext";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RouteProp } from "@react-navigation/native";
+import { RouteProp, CompositeNavigationProp } from "@react-navigation/native";
+import EmptyListMessage from "../components/EmptyListMessage";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 
+type PlaylistAddSongsScreenNavigationProp = CompositeNavigationProp<
+  StackNavigationProp<RootStackParamList, 'PlaylistAddSongs'>,
+  BottomTabNavigationProp<MainTabParamList, 'PlaylistList'>
+>;
 type PlaylistAddSongsScreenRouteProp = RouteProp<RootStackParamList, 'PlaylistAddSongs'>
-type PlaylistAddSongsScreenNavigationProp = StackNavigationProp<
-  RootStackParamList,
-  'PlaylistAddSongs'
->
+
 type Props = {
   route: PlaylistAddSongsScreenRouteProp
   navigation: PlaylistAddSongsScreenNavigationProp
@@ -43,7 +46,7 @@ const PlaylistAddSongs = (props: Props) => {
   }, [query])
 
   return (
-    <View style={styles.container}>
+    <>
       <SearchBar
         inputRef={searchInput}
         onSubmitEditing={onSubmitEditing}
@@ -52,7 +55,15 @@ const PlaylistAddSongs = (props: Props) => {
         placeholder={t('search')}
       />
       <FlatList
+        contentContainerStyle={styles.container}
         data={songs}
+        ListEmptyComponent={
+          <EmptyListMessage
+            message={t('you_havent_downloaded_any_song_yet')}
+            onPress={() => { props.navigation.navigate('OnlineSearch') }}
+            buttonTitle={t('go_to_online_search').toUpperCase()}
+          />
+        }
         renderItem={({ item }) => {
           return <ListItem
             key={item.id!}
@@ -63,7 +74,7 @@ const PlaylistAddSongs = (props: Props) => {
           />
         }}
       />
-    </View>
+    </>
   );
 }
 const styles = StyleSheet.create({
