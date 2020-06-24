@@ -690,13 +690,13 @@
 			baseConfigurationReference = 27E8962E91C80467AA89C02C /* Pods-OpenChord.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = J6CEQ7V85Z;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = OpenChord/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = "0.5.0 ";
+				MARKETING_VERSION = 0.5.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -714,12 +714,12 @@
 			baseConfigurationReference = 62B187E2D55868D97981F0A4 /* Pods-OpenChord.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = J6CEQ7V85Z;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = OpenChord/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = "0.5.0 ";
+				MARKETING_VERSION = 0.5.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
