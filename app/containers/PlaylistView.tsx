@@ -127,7 +127,7 @@ const PlaylistView: FunctionComponent<Props> = (props: Props) => {
         }}
         ListEmptyComponent={
           <EmptyListMessage
-            message={t('you_havent_downloaded_any_song_yet')}
+            message={t('you_havent_added_any_song_to_this_playlist_yet')}
             onPress={onPressAddSongs}
             buttonTitle={t('add_songs').toUpperCase()}
           />
