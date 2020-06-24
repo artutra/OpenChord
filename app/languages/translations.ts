@@ -19,6 +19,7 @@ export const sentences = [
   'create_new_playlist',
   'you_havent_created_any_playlist_yet',
   'you_havent_downloaded_any_song_yet',
+  'you_havent_added_any_song_to_this_playlist_yet',
   'search',
   'create',
   'playlist_name',
@@ -67,6 +68,8 @@ export const sentences = [
   'add_to_playlist',
   'error',
   'invalid_file',
+  'you_can_still_create_songs_manually',
+  'create_song',
 ] as const;
 export type SentenceID = typeof sentences[number];
 export type LanguageID = typeof languages[number];
@@ -94,6 +97,7 @@ const translations: Languages = {
     create_new_playlist: 'Create New Playlist',
     you_havent_created_any_playlist_yet: "You haven't created any playlist yet",
     you_havent_downloaded_any_song_yet: "You haven't downloaded any song yet",
+    you_havent_added_any_song_to_this_playlist_yet: "You haven't added any song to this playlist yet",
     search: 'Search',
     create: 'Create',
     playlist_name: 'Playlist name',
@@ -141,7 +145,9 @@ const translations: Languages = {
     transpose: 'Transpose',
     add_to_playlist: 'Add to playlist',
     error: 'Error',
-    invalid_file: 'Invalid file'
+    invalid_file: 'Invalid file',
+    you_can_still_create_songs_manually: 'You can still create songs manually',
+    create_song: 'Create song',
   },
   pt_br: {
     language_name: "Português (Brasil)",
@@ -163,6 +169,7 @@ const translations: Languages = {
     create_new_playlist: 'Criar nova Playlist',
     you_havent_created_any_playlist_yet: 'Você não criou nenhuma playlist ainda',
     you_havent_downloaded_any_song_yet: "Você não baixou nenhuma música ainda",
+    you_havent_added_any_song_to_this_playlist_yet: "Você ainda não adicionou nenhuma música para essa playlist",
     search: 'Busca',
     create: 'Criar',
     playlist_name: 'Nome da Playlist',
@@ -210,7 +217,9 @@ const translations: Languages = {
     transpose: 'Mudar tom',
     add_to_playlist: 'Adicionar a playlist',
     error: 'Erro',
-    invalid_file: 'Arquivo inválido'
+    invalid_file: 'Arquivo inválido',
+    you_can_still_create_songs_manually: 'Você ainda pode criar músicas manualmente',
+    create_song: 'Criar música',
   }
 }
 export default translations
