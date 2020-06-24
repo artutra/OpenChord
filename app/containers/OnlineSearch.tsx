@@ -70,7 +70,12 @@ const OnlineSearch: FunctionComponent<Props> = (props) => {
     return (
       <SafeAreaView style={styles.container}>
         <EmptyListMessage
-          message={t('online_search_not_available')}
+          message={
+            t('online_search_not_available') + '. ' +
+            t('you_can_still_create_songs_manually')
+          }
+          buttonTitle={t('create_song').toUpperCase()}
+          onPress={() => props.navigation.navigate('SongEdit')}
         />
       </SafeAreaView>
     )
