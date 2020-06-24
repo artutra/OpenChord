@@ -93,10 +93,12 @@ const Settings: FC<Props> = (props) => {
     if (loading) return
     setLoading(true)
     try {
-      const iosAllFileTypes: any = 'public.item'
-      const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.allFiles, iosAllFileTypes],
-      });
+      let type = [DocumentPicker.types.allFiles]
+      if (Platform.OS === 'ios') {
+        const iosAllFileTypes: any = 'public.item'
+        type = [iosAllFileTypes]
+      }
+      const res = await DocumentPicker.pick({ type });
       let success = await RNFS.readFile(res.uri, 'utf8')
       let bundle = await decodeJsonBundle(success)
       importBundle(bundle)
@@ -104,8 +106,8 @@ const Settings: FC<Props> = (props) => {
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
         // User cancelled the picker, exit any dialogs or menus and move on
-      } else {
-        throw err;
+      } else if (err instanceof Error) {
+        Alert.alert(t('error'), t('invalid_file'))
       }
     }
     setLoading(false)

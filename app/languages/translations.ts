@@ -65,6 +65,8 @@ export const sentences = [
   'online_search_not_available',
   'transpose',
   'add_to_playlist',
+  'error',
+  'invalid_file',
 ] as const;
 export type SentenceID = typeof sentences[number];
 export type LanguageID = typeof languages[number];
@@ -138,13 +140,15 @@ const translations: Languages = {
     online_search_not_available: 'Sorry, ONLINE SEARCH is not available for IOS yet',
     transpose: 'Transpose',
     add_to_playlist: 'Add to playlist',
+    error: 'Error',
+    invalid_file: 'Invalid file'
   },
   pt_br: {
     language_name: "Português (Brasil)",
     language_english_name: "Portuguese (Brazil)",
     language: 'Idioma',
     settings: "Configurações",
-    playlists: 'Listas',
+    playlists: 'Playlists',
     artists: 'Artistas',
     online_search: 'Busca Online',
     songs: 'Músicas',
@@ -204,7 +208,9 @@ const translations: Languages = {
     home: 'Início',
     online_search_not_available: 'Desculpe, a BUSCA ONLINE ainda não está disponivel para IOS',
     transpose: 'Mudar tom',
-    add_to_playlist: 'Adicionar a playlist'
+    add_to_playlist: 'Adicionar a playlist',
+    error: 'Erro',
+    invalid_file: 'Arquivo inválido'
   }
 }
 export default translations
