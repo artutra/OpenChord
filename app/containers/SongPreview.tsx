@@ -2,7 +2,6 @@ import React, { useState, useEffect, FunctionComponent, useContext } from "react
 import { View, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import SongRender from "../components/SongRender";
 import SongTransformer from "../components/SongTransformer";
-import { getService } from "../services";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import ChordSheetJS from 'chordsheetjs';
 import { Artist, Song } from "../db";
@@ -11,6 +10,7 @@ import LoadingIndicator from "../components/LoadingIndicator";
 import LanguageContext from "../languages/LanguageContext";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RouteProp } from "@react-navigation/native";
+import CifraboxService from "../services/CifraboxService";
 
 type SongPreviewScreenRouteProp = RouteProp<RootStackParamList, 'SongPreview'>;
 type SongPreviewScreenNavigationProp = StackNavigationProp<
@@ -28,15 +28,19 @@ const SongPreview: FunctionComponent<Props> = (props) => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const { t } = useContext(LanguageContext)
-  let serviceName = props.route.params.serviceName
-  let path = props.route.params.path
+  let slug = props.route.params.slug
+  let artist_slug = props.route.params.artist_slug
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let service = getService(serviceName)!
-        let chordPro = await service.getChordProSong(path)
-        setChordCheet(chordPro)
+        let data = await CifraboxService.getChordProSong(artist_slug, slug)
+        let chord_pro = data.chord_pro
+        let header =
+          `{title: ${data.song.title}}\n` +
+          `{artist: ${data.song.artist.name}}\n` +
+          `{x_cifrabox_username: ${t('sent_by')}: ${data.user.username}}\n`
+        setChordCheet(header + chord_pro)
         setIsLoading(false)
       } catch (e) {
         if (e instanceof Error) {

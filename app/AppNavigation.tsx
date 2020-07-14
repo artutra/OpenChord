@@ -71,8 +71,8 @@ const MainTab = () => {
 
 export type RootStackParamList = {
   MainTab: undefined
-  OnlineArtistView: { serviceName: string, path: string, title: string }
-  SongPreview: { serviceName: string, path: string }
+  OnlineArtistView: { slug: string, title: string }
+  SongPreview: { slug: string, artist_slug: string }
   ArtistView: { id: string, title: string }
   SongView: { id: string, title: string }
   SongEdit: undefined | { id: string }
