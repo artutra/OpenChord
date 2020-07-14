@@ -1,13 +1,13 @@
 export interface ArtistDoc {
   name: string
-  path: string
-  type: 'artist'
+  slug: string
+  artist_name?: null
 }
 export interface SongDoc {
   title: string
-  artist: string
-  path: string
-  type: 'song'
+  artist_name: string
+  artist_slug: string
+  slug: string
 }
 export type Doc = ArtistDoc | SongDoc
 
