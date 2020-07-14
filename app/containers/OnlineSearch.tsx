@@ -1,8 +1,7 @@
 import React, { useState, useEffect, FunctionComponent, useRef, useContext } from "react";
-import { StyleSheet, TextInput, Text, Keyboard, StatusBar, Platform } from "react-native";
+import { StyleSheet, TextInput, Text, Keyboard, StatusBar, Platform, View, Linking } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
 import ListItem from "../components/ListItem";
-import { services, getService } from "../services";
 import { Doc } from "../services/BaseService";
 import SearchBar from "../components/SearchBar";
 import LoadingIndicator from "../components/LoadingIndicator";
@@ -13,6 +12,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { RootStackParamList, MainTabParamList } from "../AppNavigation";
 import EmptyListMessage from "../components/EmptyListMessage";
+import CifraboxService from "../services/CifraboxService";
 
 type OnlineSearchScreenNavigationProp = CompositeNavigationProp<
   BottomTabNavigationProp<MainTabParamList, 'OnlineSearch'>,
@@ -25,7 +25,6 @@ type Props = {
 
 const OnlineSearch: FunctionComponent<Props> = (props) => {
   const searchInput = useRef<TextInput>(null)
-  const [serviceName] = useState(services[0].name)
   const [docs, setDocs] = useState<Doc[] | null>(null)
   const [query, setQuery] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -35,8 +34,10 @@ const OnlineSearch: FunctionComponent<Props> = (props) => {
   async function makeSearch() {
     if (query.length > 0) {
       const fetchData = async () => {
-        const docs = await getService(serviceName)!.getSearch(query)
-        setDocs(docs)
+        const data = await CifraboxService.getSearch(query)
+        let artistDocs: Doc[] = data.artists
+        let songDocs: Doc[] = data.songs
+        setDocs(artistDocs.concat(songDocs))
       }
       try {
         setIsLoading(true)
@@ -66,20 +67,14 @@ const OnlineSearch: FunctionComponent<Props> = (props) => {
     return () => Keyboard.removeListener('keyboardDidShow', hideTabBar)
   }, [])
 
-  if (Platform.OS === 'ios') {
-    return (
-      <SafeAreaView style={styles.container}>
-        <EmptyListMessage
-          message={
-            t('online_search_not_available') + '. ' +
-            t('you_can_still_create_songs_manually')
-          }
-          buttonTitle={t('create_song').toUpperCase()}
-          onPress={() => props.navigation.navigate('SongEdit')}
-        />
-      </SafeAreaView>
-    )
+  async function goToSendSongUrl() {
+    try {
+      await Linking.openURL('https://cifrabox.com/enviar-musica/passo-1')
+    } catch (e) {
+      console.warn(e)
+    }
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle='dark-content' backgroundColor='white' />
@@ -91,27 +86,35 @@ const OnlineSearch: FunctionComponent<Props> = (props) => {
         placeholder={t('search')}
       />
       <FlatList
-        keyExtractor={(item) => item.path}
+        keyExtractor={(item) => item.slug}
         data={docs}
+        contentContainerStyle={{ flexGrow: 1 }}
         ListEmptyComponent={() => {
           return (docs != null && !isLoading) ?
-            <Text style={styles.msgInfo}>{t('artist_or_song_not_found')}</Text> :
-            null
+            <View style={{ flex: 1 }}>
+              <Text style={styles.msgInfo}>{t('artist_or_song_not_found')}</Text>
+              <EmptyListMessage
+                message={t('help_us_and_send')}
+                buttonTitle={t('send_song').toUpperCase()}
+                onPress={goToSendSongUrl}
+              />
+            </View>
+            : null
         }}
         ListHeaderComponent={<LoadingIndicator error={error} loading={isLoading} />}
-        renderItem={({ item, index }) => {
-          if (item.type == 'artist') {
+        renderItem={({ item }) => {
+          if (item.artist_name == null) {
             return (
               <ListItem
-                onPress={() => { props.navigation.navigate('OnlineArtistView', { path: item.path, serviceName, title: item.name }) }}
+                onPress={() => { props.navigation.navigate('OnlineArtistView', { slug: item.slug, title: item.name }) }}
                 title={item.name}
               />)
           } else {
             return (
               <ListItem
-                onPress={() => { props.navigation.navigate('SongPreview', { path: item.path, serviceName }) }}
+                onPress={() => { props.navigation.navigate('SongPreview', { slug: item.slug, artist_slug: item.artist_slug }) }}
                 title={item.title}
-                subtitle={item.artist}
+                subtitle={item.artist_name}
               />)
           }
         }}
@@ -123,9 +126,10 @@ export default OnlineSearch
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   msgInfo: {
+    marginTop: 10,
     textAlign: 'center',
     color: '#aaa'
   },
