@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { JsonDecoder } from '@artutra/ts-data-json'
 
-const baseURL = 'http://192.168.15.53:3333'
+const baseURL = 'https://api.cifrabox.com'
 
 const api = axios.create({ baseURL })
 
