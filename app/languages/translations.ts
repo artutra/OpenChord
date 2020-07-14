@@ -70,6 +70,9 @@ export const sentences = [
   'invalid_file',
   'you_can_still_create_songs_manually',
   'create_song',
+  'help_us_and_send',
+  'send_song',
+  'sent_by',
 ] as const;
 export type SentenceID = typeof sentences[number];
 export type LanguageID = typeof languages[number];
@@ -148,6 +151,9 @@ const translations: Languages = {
     invalid_file: 'Invalid file',
     you_can_still_create_songs_manually: 'You can still create songs manually',
     create_song: 'Create song',
+    help_us_and_send: "Didn't find the song you wanted? Help us improve our collection and send a song too!",
+    send_song: 'Send song',
+    sent_by: 'Sent by',
   },
   pt_br: {
     language_name: "Português (Brasil)",
@@ -220,6 +226,9 @@ const translations: Languages = {
     invalid_file: 'Arquivo inválido',
     you_can_still_create_songs_manually: 'Você ainda pode criar músicas manualmente',
     create_song: 'Criar música',
+    help_us_and_send: 'Não encontrou a música que queria? Nos ajude a melhorar nosso acervo e envie uma música também!',
+    send_song: 'Enviar música',
+    sent_by: 'Enviado por',
   }
 }
 export default translations
