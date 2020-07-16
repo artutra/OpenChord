@@ -73,6 +73,12 @@ export const sentences = [
   'help_us_and_send',
   'send_song',
   'sent_by',
+  'accept_terms',
+  'accept_terms_warning',
+  'terms_and_conditions',
+  'privacy_policy',
+  'agree',
+  'cancel',
 ] as const;
 export type SentenceID = typeof sentences[number];
 export type LanguageID = typeof languages[number];
@@ -154,6 +160,12 @@ const translations: Languages = {
     help_us_and_send: "Didn't find the song you wanted? Help us improve our collection and send a song too!",
     send_song: 'Send song',
     sent_by: 'Sent by',
+    accept_terms: 'Accept terms',
+    accept_terms_warning: 'I read and agree to the Cifrabox',
+    terms_and_conditions: 'Terms and Conditions',
+    privacy_policy: 'Privacy Policy',
+    agree: 'agree',
+    cancel: 'Cancel',
   },
   pt_br: {
     language_name: "Português (Brasil)",
@@ -229,6 +241,12 @@ const translations: Languages = {
     help_us_and_send: 'Não encontrou a música que queria? Nos ajude a melhorar nosso acervo e envie uma música também!',
     send_song: 'Enviar música',
     sent_by: 'Enviado por',
+    accept_terms: 'Aceitar termos',
+    accept_terms_warning: 'Eu li e concordo com',
+    terms_and_conditions: 'Termos e Condições',
+    privacy_policy: 'Política de Privacidade',
+    agree: 'Concordo',
+    cancel: 'Cancelar',
   }
 }
 export default translations
