@@ -6,12 +6,14 @@ const DEFAULTS: GlobalSettings = {
   fontSize: 14,
   showTablature: true,
   enablePageTurner: false,
+  termsAndConditions: false,
 }
 export class GlobalSettings {
   language!: LanguageID
   fontSize!: number
   showTablature!: boolean
   enablePageTurner!: boolean
+  termsAndConditions!: boolean
 
   static schema: Realm.ObjectSchema = {
     name: 'GlobalSettings',
@@ -20,6 +22,7 @@ export class GlobalSettings {
       fontSize: { type: 'int', default: DEFAULTS.fontSize },
       showTablature: { type: 'bool', default: DEFAULTS.showTablature },
       enablePageTurner: { type: 'bool', default: DEFAULTS.enablePageTurner },
+      termsAndConditions: { type: 'bool', default: DEFAULTS.termsAndConditions }
     }
   }
 
@@ -60,6 +63,13 @@ export class GlobalSettings {
     let globalSettings = this.get()
     realm.write(() => {
       globalSettings.enablePageTurner = enablePageTurner
+    })
+  }
+
+  static setTermsAndConditions(termsAndConditions: boolean) {
+    let globalSettings = this.get()
+    realm.write(() => {
+      globalSettings.termsAndConditions = termsAndConditions
     })
   }
 }

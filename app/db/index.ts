@@ -11,7 +11,7 @@ var realm = new Realm({
     Playlist.schema,
     GlobalSettings.schema,
   ],
-  schemaVersion: 8,
+  schemaVersion: 9,
   migration: () => { }
 })
 export default realm;
