@@ -1,7 +1,7 @@
 import React, { useState, FC, useContext, useCallback } from "react";
 import { createBundle, importBundle, decodeJsonBundle } from '../../db/bundler'
 import ListItem from "../../components/ListItem";
-import { StyleSheet, Alert, Platform, ScrollView } from "react-native";
+import { StyleSheet, Alert, Platform, ScrollView, Linking } from "react-native";
 import Share from 'react-native-share';
 import RNFS from 'react-native-fs'
 import DocumentPicker from 'react-native-document-picker';
@@ -128,6 +128,9 @@ const Settings: FC<Props> = (props) => {
   function configureFontSize() {
     props.navigation.navigate('FontSizeSelect')
   }
+  function goToTermsAndConditions() {
+    Linking.openURL('https://cifrabox.com/termos-e-condicoes?lang=' + language)
+  }
 
   useFocusEffect(
     useCallback(() => {
@@ -149,6 +152,10 @@ const Settings: FC<Props> = (props) => {
         <ListItem
           onPress={() => setActiveEnablePageTurnerSelect(true)}
           title={enablePageTurnerOptions.find(o => o.value === enablePageTurner)!.label}
+        />
+        <ListItem
+          onPress={() => goToTermsAndConditions()}
+          title={t('terms_and_conditions')}
         />
         <LoadingIndicator loading={loading} />
         <AboutDev />
