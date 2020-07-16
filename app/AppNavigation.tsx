@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack';
 import ArtistList from "./containers/ArtistList";
@@ -17,6 +17,8 @@ import PlaylistEdit from './containers/PlaylistEdit';
 import Settings from './containers/Settings';
 import FontSizeSelect from './containers/Settings/FontSizeSelect';
 import LanguageContext from './languages/LanguageContext';
+import AcceptTerms from './containers/AcceptTerms';
+import { GlobalSettings } from './db/GlobalSettings';
 
 export type SettingsStackParamList = {
   Settings: undefined;
@@ -79,10 +81,33 @@ export type RootStackParamList = {
   PlaylistView: { id: string, title: string }
   PlaylistAddSongs: { id: string }
   PlaylistEdit: { id: string }
+  AcceptTerms: undefined
 }
 const RootStack = createStackNavigator<RootStackParamList>()
 const AppNavigation = () => {
   const { t } = useContext(LanguageContext)
+  const [termsAndConditions, setTermsAndConditions] = useState<boolean>(true)
+
+  useEffect(() => {
+    setTermsAndConditions(GlobalSettings.get().termsAndConditions)
+  }, [])
+
+  function onAgree() {
+    setTermsAndConditions(GlobalSettings.get().termsAndConditions)
+  }
+
+  if (!termsAndConditions) {
+    return (
+      <RootStack.Navigator>
+        <RootStack.Screen
+          options={{ headerShown: false }}
+          name="AcceptTerms">
+          {() => <AcceptTerms onAgree={onAgree} />}
+        </RootStack.Screen>
+      </RootStack.Navigator>
+    )
+  }
+
   return (
     <RootStack.Navigator>
       <RootStack.Screen name="MainTab" component={MainTab} options={{ headerShown: false, title: t('home') }} />
