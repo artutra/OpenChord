@@ -2,7 +2,7 @@ import realm from "."
 import { LanguageID } from "../languages/translations"
 
 const DEFAULTS: GlobalSettings = {
-  language: 'en_us',
+  language: 'pt_br',
   fontSize: 14,
   showTablature: true,
   enablePageTurner: false,
